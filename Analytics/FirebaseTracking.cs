@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Analytics;
+using Firebase.Analytics;
 
 namespace Util.Analytics
 {
     public class FirebaseTracking : ITracker
     {
-        public void Track(string name, Dictionary<string, object> eventData)
+        public ITracker Track(string name, Dictionary<string, object> eventData)
         {
             if (eventData == null)
             {
@@ -28,11 +29,14 @@ namespace Util.Analytics
                     throw new Exception($"Unrecognized tracking type for {kv.Key}: {value.GetType()}");
                 }).ToArray());
             }
+
+            return this;
         }
 
-        public void SetUserProperty(string name, object value)
+        public ITracker SetUserProperty(string name, object value)
         {
             FirebaseAnalytics.SetUserProperty(name, value?.ToString());
+            return this;
         }
     }
 }
