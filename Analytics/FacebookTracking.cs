@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Facebook.Unity;
+﻿#if STENCIL_FACEBOOK
 
-#if STENCIL_FACEBOOK
+using System.Collections.Generic;
+using Facebook.Unity;
 
 namespace Analytics
 {
