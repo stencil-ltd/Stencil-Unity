@@ -128,6 +128,7 @@ namespace Currencies
             SetTotal(total - amount);
             AmountsChanged(oldTotal, oldSpendable);
             Debug.Log($"Spend {Name} x{amount}");
+            Tracking.Instance.Track($"spend_{Name}", "amount", amount);
             return Succeed();
         }
 
