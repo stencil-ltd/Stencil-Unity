@@ -35,7 +35,7 @@ namespace Analytics
         {
             if (!Enabled) return this;
             var json = eventData == null ? "[]" : string.Join(", ", eventData.ToList());
-            Debug.LogWarning($"Track Event {name}\n{json}");
+            Debug.Log($"Track Event {name}\n{json}");
             foreach (var tracker in _trackers) tracker.Track(name, eventData);
             return this;
         }
