@@ -14,6 +14,7 @@ namespace Storage
             Parent = parent;
             Metadata = metadata;
             _value = value;
+            _expired = false;
         }
 
         public T? Value
