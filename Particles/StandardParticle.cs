@@ -14,8 +14,6 @@ namespace Particles
             Destroy
         }
         
-        [Obsolete]
-        public bool DestroyOnKill = true;
         public DoOnFinish OnFinish = DoOnFinish.Destroy;
 
         [Bind]
@@ -26,7 +24,8 @@ namespace Particles
         {
             foreach (var particle in _particles)
             {
-                particle.startColor = color;
+                var main = particle.main;
+                main.startColor = color;
             }
         }
 
@@ -34,8 +33,6 @@ namespace Particles
         {
             this.Bind();
             _particles = GetComponentsInChildren<ParticleSystem>();
-            if (OnFinish == DoOnFinish.Destroy && DestroyOnKill == false)
-                OnFinish = DoOnFinish.Nothing;
         }
 
         private void Start()
@@ -44,7 +41,8 @@ namespace Particles
             foreach (var particle in _particles)
             {
                 particle.GetComponent<Renderer>().sortingLayerName = "Particles";
-                particle.startColor = top.startColor;
+                var main = particle.main;
+                main.startColor = top.main.startColor;
             }
         }
 
@@ -60,8 +58,6 @@ namespace Particles
                     case DoOnFinish.Destroy:
                         Destroy(gameObject);
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
