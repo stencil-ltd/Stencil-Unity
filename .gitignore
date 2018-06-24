@@ -47,3 +47,4 @@ Backend/functions/lib
 unused_files.log
 LastPlay.mov
 TPS_cache/
+*.meta
