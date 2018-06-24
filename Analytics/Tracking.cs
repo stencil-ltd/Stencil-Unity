@@ -9,14 +9,21 @@ namespace Analytics
 {
     public class Tracking : ITracker
     {
-        public static readonly Tracking Instance = new Tracking();
+        public static Tracking Instance { get; private set; }
+
+        public static void Init(params ITracker[] trackers)
+        {
+            Instance = new Tracking(trackers);
+        }
 
         public bool Enabled => !Developers.Enabled;
-//        public bool Enabled => true;
 
-        private readonly ITracker[] _trackers = {
-            new UnityTracking(),
-        };
+        private readonly ITracker[] _trackers;
+
+        private Tracking(IEnumerable<ITracker> trackers)
+        {
+            _trackers = trackers?.ToArray() ?? new ITracker[]{};
+        }
 
         public ITracker Track(string name, Dictionary<string, object> eventData = null)
         {
