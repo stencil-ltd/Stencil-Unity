@@ -15,16 +15,18 @@ namespace Util.Analytics
             
         }
 
-        public void Track(string name, Dictionary<string, object> eventData)
+        public ITracker Track(string name, Dictionary<string, object> eventData)
         {
             Answers.LogCustom(name, eventData);
             Crashlytics.Log($"{name}: {Json.Serialize(eventData)}");
+            return this;
         }
 
-        public void SetUserProperty(string name, object value)
+        public ITracker SetUserProperty(string name, object value)
         {
             Crashlytics.Log($"Set Property {name} = {value}");
             Crashlytics.SetKeyValue(name, value?.ToString());
+            return this;
         }
     }
 }

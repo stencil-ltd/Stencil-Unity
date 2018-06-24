@@ -1,28 +1,34 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Dev;
-using UnityEngine;
+using Util.Analytics;
 using Debug = UnityEngine.Debug;
 
 namespace Analytics
 {
     public class Tracking : ITracker
     {
-        public static Tracking Instance { get; private set; }
+        public static readonly Tracking Instance = new Tracking(); 
 
-        public static void Init(params ITracker[] trackers)
+//        public bool Enabled => !Developers.Enabled;
+        public bool Enabled = true;
+
+        private readonly List<ITracker> _trackers = new List<ITracker>();
+
+        private Tracking()
         {
-            Instance = new Tracking(trackers);
-        }
-
-        public bool Enabled => !Developers.Enabled;
-
-        private readonly ITracker[] _trackers;
-
-        private Tracking(IEnumerable<ITracker> trackers)
-        {
-            _trackers = trackers?.ToArray() ?? new ITracker[]{};
+            _trackers.Add(new UnityTracking());
+            
+            #if STENCIL_FIREBASE
+            _trackers.Add(new FirebaseTracking());
+            #endif
+            
+            #if STENCIL_FABRIC
+            _trackers.Add(new FabricTracking());
+            #endif
+            
+            #if STENCIL_FACEBOOK
+            _trackers.Add(new FacebookTracking());
+            #endif
         }
 
         public ITracker Track(string name, Dictionary<string, object> eventData = null)
