@@ -6,12 +6,22 @@ namespace Storage
     {
         #region Getters
         
-        private PrefValue<T> GetStruct<T>(string key) where T : struct 
-            => new PrefValue<T>(this, (T?) _map[key], GetMeta(key));
-        
-        private PrefObject<T> GetClass<T>(string key) where T : class 
-            => new PrefObject<T>(this, (T) _map[key], GetMeta(key));
-        
+        private PrefValue<T> GetStruct<T>(string key) where T : struct
+        {
+            _lock.EnterReadLock();
+            var retval = new PrefValue<T>(this, (T?) _map[key], GetMeta(key));
+            _lock.ExitReadLock();
+            return retval;
+        }
+
+        private PrefObject<T> GetClass<T>(string key) where T : class
+        {
+            _lock.EnterReadLock();
+            var retval = new PrefObject<T>(this, (T) _map[key], GetMeta(key));
+            _lock.ExitReadLock();
+            return retval;
+        }
+
         public PrefValue<bool> GetBool(string key)
             => GetStruct<bool>(key);
 
@@ -38,7 +48,9 @@ namespace Storage
         
         private PrefInsertion SetValue<T>(string key, T value)
         {
+            _lock.EnterWriteLock();
             _map[key] = value;
+            _lock.ExitWriteLock();
             return _meta == null ? new PrefInsertion(this, key) : new PrefInsertion(this, key, UpdateMeta(key));
         }
         
