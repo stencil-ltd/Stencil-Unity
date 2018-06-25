@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Util.Analytics;
 using Debug = UnityEngine.Debug;
 
 namespace Analytics

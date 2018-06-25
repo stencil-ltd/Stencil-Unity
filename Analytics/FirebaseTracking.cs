@@ -5,7 +5,7 @@ using System.Linq;
 using Analytics;
 using Firebase.Analytics;
 
-namespace Util.Analytics
+namespace Analytics
 {
     public class FirebaseTracking : ITracker
     {
