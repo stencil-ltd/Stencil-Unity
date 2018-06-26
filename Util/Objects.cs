@@ -45,5 +45,32 @@ namespace Util
                 SafeDestroy(component.gameObject);
             return null;
         }
+        
+        public static void DestroyAllChildren(this Transform transform)
+        {
+            foreach (var child in transform.GetChildren())
+                Object.Destroy(child.gameObject);
+            transform.DetachChildren();
+        }
+        
+        public static RectTransform[] GetChildren(this RectTransform transform)
+        {
+            var retval = new RectTransform[transform.childCount];
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                retval[i] = (RectTransform) transform.GetChild(i);
+            }
+            return retval;
+        }
+        
+        public static Transform[] GetChildren(this Transform transform)
+        {
+            var retval = new Transform[transform.childCount];
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                retval[i] = transform.GetChild(i);
+            }
+            return retval;
+        }
     }
 }
