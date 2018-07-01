@@ -75,9 +75,30 @@ namespace Storage
         public void Save()
         {
             _lock.EnterReadLock();
-            var str = Json.Serialize(new PrefData(_map, _meta));
-            _lock.ExitReadLock();
-            File.WriteAllText($"StencilPrefs/{_name}.json", str);
+            var name = $"StencilPrefs/{_name}.json";
+            if (_map.Count == 0 && _meta.Count == 0)
+            {
+                File.Delete(name);
+                _lock.ExitReadLock();
+            }
+            else
+            {
+                var str = Json.Serialize(new PrefData(_map, _meta));
+                _lock.ExitReadLock();
+                File.WriteAllText($"StencilPrefs/{_name}.json", str);   
+            }
+        }
+
+        public static void ClearAll()
+        {
+            lock(Instances)
+            {
+                foreach (var kv in Instances)
+                {
+                    kv.Value.Clear();
+                    kv.Value.Save();
+                }
+            }
         }
     }
 }
