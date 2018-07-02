@@ -13,7 +13,7 @@ namespace Prefs
             { typeof(float), new PrefStrategyFloat() },
         };
 
-        public static IPrefStrategy Get(Type t) 
+        internal static IPrefStrategy Get(Type t) 
             => _strategies[t];
         
         public static void RegisterTypeStrategy(Type t, IPrefStrategy strategy)
@@ -21,7 +21,10 @@ namespace Prefs
             _strategies[t] = strategy;
         }
         
-        public static PrefHolder<T> Get<T>(string key, T defaultValue = default(T)) => new PrefHolder<T>(key, defaultValue);
+        public static PrefHolder<T> Get<T>(string key, T defaultValue = default(T))
+        {
+            return new PrefHolder<T>(key, defaultValue);
+        }
 
         public static void Save() => PlayerPrefs.Save();
         public static void Clear(bool andSave = false)
@@ -49,9 +52,15 @@ namespace Prefs
             _strategy = PrefHolders.Get(typeof(T));
         }
 
-        public T Get(T defaultValue = default(T))
+        public T Get() => (T) _strategy.GetValue(Key, Default);
+
+        // Used for random defaults like guids.
+        public PrefHolder<T> PersistDefault(bool andSave = false)
         {
-            return (T) _strategy.GetValue(Key, defaultValue);
+            var get = Get();
+            if (EqualityComparer<T>.Default.Equals(_strategy.GetValue(Key, default(T))))
+                Set(get, andSave);
+            return this;
         }
 
         public void Set(T value, bool andSave = false)
@@ -64,8 +73,13 @@ namespace Prefs
         {
             PlayerPrefs.DeleteKey(Key);
             MaybeSave(andSave);
-        } 
-        
+        }
+
+        public override string ToString()
+        {
+            return Get()?.ToString() ?? "";
+        }
+
         private static void MaybeSave(bool andSave)
         {
             PrefHolders.MaybeSave(andSave);
