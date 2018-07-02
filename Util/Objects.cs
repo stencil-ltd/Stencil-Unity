@@ -8,6 +8,12 @@ namespace Util
 {
     public static class Objects
     {
+        public static void Configure()
+        {
+            new GameObject("Main Thread Dispatch")
+                .AddComponent<UnityMainThreadDispatcher>();
+        }
+        
         public static void Enqueue(this object any, Action action)
         {
             Enqueue(action);
