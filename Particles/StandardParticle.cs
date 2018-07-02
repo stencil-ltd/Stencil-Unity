@@ -17,7 +17,7 @@ namespace Particles
         public DoOnFinish OnFinish = DoOnFinish.Destroy;
 
         [Bind]
-        public ParticleSystem ParticleSystem;
+        public ParticleSystem ParticleSystem { get; set; }
         private ParticleSystem[] _particles;
 
         public void SetColor(Color color)
