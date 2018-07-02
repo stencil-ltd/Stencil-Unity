@@ -44,6 +44,8 @@ namespace Storage
         public readonly Prefs Prefs;
         public readonly string Key;
 
+        [CanBeNull] private T _init;
+
         public PrefObjectHolder(Prefs prefs, string key)
         {
             Prefs = prefs;
@@ -52,12 +54,24 @@ namespace Storage
 
         public PrefObject<T> Get()
         {
-            return Prefs.GetClass<T>(Key);
+            var retval = Prefs.GetClass<T>(Key);
+            if (retval.Value == null && _init != null)
+            {
+                Set(_init).AndSave();
+                retval = Prefs.GetClass<T>(Key);
+            }
+            return retval;
         }
 
         public PrefInsertion Set(T value)
         {
             return Prefs.SetValue(Key, value);
+        }
+
+        public PrefObjectHolder<T> InitializeTo(T initialValue)
+        {
+            _init = initialValue;
+            return this;
         }
 
         public override string ToString()

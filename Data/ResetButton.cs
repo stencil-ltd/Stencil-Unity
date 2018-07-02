@@ -1,6 +1,8 @@
 ﻿using System;
 using Binding;
+using Plugins.Util;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Util;
 
@@ -25,6 +27,7 @@ namespace Plugins.Data
                 Storage.Prefs.ClearAll();
                 OnReset?.Invoke();
                 OnGlobalReset?.Invoke();
+                Scenes.Reload();
             });
         }
     }
