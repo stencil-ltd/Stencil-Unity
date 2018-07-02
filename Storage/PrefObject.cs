@@ -31,6 +31,40 @@ namespace Storage
             }
         }
 
+        public override string ToString()
+        {
+            return $"{Value}";
+        }
+
         public static implicit operator T(PrefObject<T> obj) => obj.Value;
+    }
+    
+    public class PrefObjectHolder<T> where T : class
+    {
+        public readonly Prefs Prefs;
+        public readonly string Key;
+
+        public PrefObjectHolder(Prefs prefs, string key)
+        {
+            Prefs = prefs;
+            Key = key;
+        }
+
+        public PrefObject<T> Get()
+        {
+            return Prefs.GetClass<T>(Key);
+        }
+
+        public PrefInsertion Set(T value)
+        {
+            return Prefs.SetValue(Key, value);
+        }
+
+        public override string ToString()
+        {
+            return $"{Get()}";
+        }
+
+        public static implicit operator T(PrefObjectHolder<T> obj) => obj.Get();  
     }
 }

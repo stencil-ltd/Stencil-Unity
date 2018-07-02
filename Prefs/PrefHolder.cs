@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace Prefs
 {
+    [Obsolete]
     public static class PrefHolders
     {
         private static Dictionary<Type, IPrefStrategy> _strategies = new Dictionary<Type, IPrefStrategy>
         {
             { typeof(string), new PrefStrategyString() },
             { typeof(int), new PrefStrategyInt() },
+            { typeof(bool), new PrefStrategyBool() },
             { typeof(float), new PrefStrategyFloat() },
         };
 
@@ -39,6 +41,7 @@ namespace Prefs
         } 
     }
     
+    [Obsolete]
     public class PrefHolder<T>
     {
         public readonly string Key;

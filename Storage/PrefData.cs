@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Storage
 {
     [Serializable]
-    internal class PrefData
+    public class PrefData
     {
-        [SerializeField]
         public Dictionary<string, object> Values;
-        [SerializeField]
         public Dictionary<string, PrefMetadata> Metadata;
 
+        public PrefData() {}
         public PrefData(Dictionary<string, object> values, Dictionary<string, PrefMetadata> metadata)
         {
-            Values = values;
-            Metadata = metadata;
+            Values = new Dictionary<string, object>(values);
+            Metadata = new Dictionary<string, PrefMetadata>(metadata);
         }
     }
 }

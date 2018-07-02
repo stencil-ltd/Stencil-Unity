@@ -23,6 +23,9 @@ namespace Storage
         }
 
         PrefInsertion Expire(DateTime? expiration) => Parent.Expire(ref this, expiration);
-        public void AndSave() => Parent.Save();
+        public void AndSave()
+        {
+            Parent.Save();
+        }
     }
 }

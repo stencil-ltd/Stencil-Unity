@@ -26,7 +26,9 @@ namespace Storage
         {
             if (_meta == null) return null;
             _lock.EnterReadLock();
-            var retval = _meta?[key];
+            PrefMetadata? retval = null;
+            if (_meta.ContainsKey(key))
+                retval = _meta[key];
             _lock.ExitReadLock();
             return retval;
         }

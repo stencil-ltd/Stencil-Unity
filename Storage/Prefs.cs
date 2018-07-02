@@ -1,49 +1,92 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using JetBrains.Annotations;
 using Stencil.Util;
+using UnityEngine;
 
 namespace Storage
 {
-    // TODO: write on exit
     // TODO: observe writes
     // TODO: background saves
+    // TODO: transactions
     
     public partial class Prefs : IPrefs
     {
-        static Prefs()
-        {
-            Directory.CreateDirectory("StencilPrefs");
-        }
+        static Prefs() { Directory.CreateDirectory("StencilPrefs"); }
         
+        private static bool _init;
         private static readonly Dictionary<string, Prefs> Instances 
             = new Dictionary<string, Prefs>();
 
-        public static Prefs Get(string path)
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void CreateObject()
         {
+            if (_init) return;
+            _init = true;
+            var obj = new GameObject("Prefs").AddComponent<PrefsBehaviour>();
+            Object.DontDestroyOnLoad(obj.gameObject);
+        }
+
+        public static Prefs Get(string path = "default")
+        {
+            Prefs retval;
             lock (Instances)
             {
-                var retval = Instances[path];
-                if (retval != null) return retval;
+                if (Instances.TryGetValue(path, out retval))
+                    return retval;
                 retval = new Prefs(path);
                 Instances[path] = retval;
-                return retval;
             }
+            retval.Init();
+            return retval;
         }
         
         private readonly string _name;
-        private readonly Dictionary<string, object> _map;
-        [CanBeNull] private readonly Dictionary<string, PrefMetadata> _meta;
+        private Dictionary<string, object> _map;
+        [CanBeNull] private Dictionary<string, PrefMetadata> _meta;
         
         private ReaderWriterLockSlim _lock 
             = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        private string Path => $"StencilPrefs/{_name}.json";
 
         private Prefs(string name)
         {
             _name = name;
             _map = new Dictionary<string, object>();
             _meta = new Dictionary<string, PrefMetadata>();
+        }
+
+        private void Init()
+        {
+            _lock.EnterWriteLock();
+            var path = Path;
+            if (File.Exists(path))
+            {
+                var json = File.ReadAllText(path);
+                var map = (Dictionary<string, object>) Json.Deserialize(json);
+                _map = map["map"] as Dictionary<string, object>;
+                if (map.ContainsKey("meta"))
+                {
+                    var meta = map["meta"] as Dictionary<string, object>;
+                    if (meta == null)
+                    {
+                        Debug.LogWarning($"Could not read meta info: {map["meta"]}");
+                    }
+                    else
+                    {
+                        foreach (var kv in meta)
+                        {
+                            var pmeta = PrefMetadata.FromDict(kv.Value as Dictionary<string, object>);
+                            if (pmeta.HasValue)
+                                _meta[kv.Key] = pmeta.Value; 
+                        }
+                    }
+                }
+            }
+            _lock.ExitWriteLock();
         }
 
         public string Name() => _name;
@@ -76,17 +119,36 @@ namespace Storage
         {
             _lock.EnterReadLock();
             var name = $"StencilPrefs/{_name}.json";
-            if (_map.Count == 0 && _meta.Count == 0)
+            if (_map.Count == 0 && _meta?.Count == 0)
             {
                 File.Delete(name);
                 _lock.ExitReadLock();
             }
             else
             {
-                var str = Json.Serialize(new PrefData(_map, _meta));
+                Dictionary<string, Dictionary<string, object>> meta = null;
+                if (_meta != null)
+                {
+                    meta = new Dictionary<string, Dictionary<string, object>>();
+                    foreach (var kv in _meta)
+                        meta[kv.Key] = _meta[kv.Key].ToDict();
+                }
+                var data = new Dictionary<string, object>
+                {
+                    { "map", _map },
+                    { "meta", meta }
+                };
+                var str = Json.Serialize(data);
                 _lock.ExitReadLock();
-                File.WriteAllText($"StencilPrefs/{_name}.json", str);   
+                File.WriteAllText(Path, str);
             }
+        }
+        
+        public static void SaveAll()
+        {
+            lock (Instances)
+                foreach (var kv in Instances)
+                    kv.Value.Save();
         }
 
         public static void ClearAll()

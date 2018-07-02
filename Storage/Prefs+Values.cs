@@ -6,18 +6,18 @@ namespace Storage
     {
         #region Getters
         
-        private PrefValue<T> GetStruct<T>(string key) where T : struct
+        internal PrefValue<T> GetStruct<T>(string key) where T : struct
         {
             _lock.EnterReadLock();
-            var retval = new PrefValue<T>(this, (T?) _map[key], GetMeta(key));
+            var retval = new PrefValue<T>(this, (T?) (_map.ContainsKey(key) ? _map[key] : null), GetMeta(key));
             _lock.ExitReadLock();
             return retval;
         }
 
-        private PrefObject<T> GetClass<T>(string key) where T : class
+        internal PrefObject<T> GetClass<T>(string key) where T : class
         {
             _lock.EnterReadLock();
-            var retval = new PrefObject<T>(this, (T) _map[key], GetMeta(key));
+            var retval = new PrefObject<T>(this, (T) (_map.ContainsKey(key) ? _map[key] : null), GetMeta(key));
             _lock.ExitReadLock();
             return retval;
         }
@@ -41,12 +41,18 @@ namespace Storage
             => GetClass<string>(key);
 
         public PrefValue<DateTime> GetDateTime(string key)
-            => GetStruct<DateTime>(key);
+        {
+            _lock.EnterReadLock();
+            var value = _map.ContainsKey(key) ? (DateTime?) DateTime.FromBinary((long) _map[key]) : null;
+            var retval = new PrefValue<DateTime>(this, value, GetMeta(key));
+            _lock.ExitReadLock();
+            return retval;
+        }
         
         #endregion
         #region Setters
         
-        private PrefInsertion SetValue<T>(string key, T value)
+        internal PrefInsertion SetValue<T>(string key, T value)
         {
             _lock.EnterWriteLock();
             _map[key] = value;
@@ -73,7 +79,7 @@ namespace Storage
             => SetValue(key, value);
 
         public PrefInsertion SetDateTime(string key, DateTime value)
-            => SetValue(key, value);
+            => SetValue(key, value.ToBinary());
         
         #endregion
     }
