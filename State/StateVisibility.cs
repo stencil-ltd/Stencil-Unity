@@ -8,16 +8,21 @@ namespace Plugins.State
     {
         public static T State { get; private set; }
         public static event EventHandler<T> OnChange;
-        public static void RequestState(T state, bool force = false)
+        public static void RequestState(T state, bool force = false, bool notify = true)
         {
             if (!force && state.Equals(State)) return;
             State = state;
+            if (notify) NotifyChanged();
+        }
+
+        public static void NotifyChanged()
+        {
             OnChange?.Invoke(null, State);
         }
 
-        public T[] States;
         public bool Invert;
-        
+        public T[] States;
+
         public StateVisibility()
         {
             if (!typeof(T).IsEnum)
