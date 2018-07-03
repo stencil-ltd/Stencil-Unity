@@ -1,11 +1,9 @@
 ﻿using System;
 using TypeReferences;
-using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.State
 {
-    [AddComponentMenu("State Visibility")]
     public class StateVisibilitySystem : MonoBehaviour
     {
         [ClassImplementsAttribute(typeof(IStateVisibility))]

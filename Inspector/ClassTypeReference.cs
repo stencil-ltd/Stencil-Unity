@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root.
 
 using System;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace TypeReferences {
