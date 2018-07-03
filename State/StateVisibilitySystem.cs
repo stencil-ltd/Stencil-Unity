@@ -1,18 +1,21 @@
 ﻿using System;
+using TypeReferences;
 using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.State
 {
+    [AddComponentMenu("State Visibility")]
     public class StateVisibilitySystem : MonoBehaviour
     {
-        public MonoScript[] Scripts;
+        [ClassImplementsAttribute(typeof(IStateVisibility))]
+        public ClassTypeReference[] Types;
         
         private void Start()
         {
-            foreach (var script in Scripts)
+            foreach (var type in Types)
             {
-                var t = script.GetClass();
+                var t = type.Type;
                 if (t.BaseType?.GetGenericTypeDefinition() != typeof(StateVisibility<>))
                     throw new Exception("Must extend StateVisibility.");
                 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Plugins.State
 {
-    public abstract class StateVisibility<T> : MonoBehaviour where T : struct
+    public abstract class StateVisibility<T> : MonoBehaviour, IStateVisibility where T : struct
     {
         public static T State { get; private set; }
         public static event EventHandler<T> OnChange;
