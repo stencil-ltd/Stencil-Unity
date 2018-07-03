@@ -8,6 +8,7 @@ namespace Storage
         
         internal PrefValue<T> GetStruct<T>(string key) where T : struct
         {
+            Init();
             _lock.EnterReadLock();
             var retval = new PrefValue<T>(this, (T?) (_map.ContainsKey(key) ? _map[key] : null), GetMeta(key));
             _lock.ExitReadLock();
@@ -16,6 +17,7 @@ namespace Storage
 
         internal PrefObject<T> GetClass<T>(string key) where T : class
         {
+            Init();
             _lock.EnterReadLock();
             var retval = new PrefObject<T>(this, (T) (_map.ContainsKey(key) ? _map[key] : null), GetMeta(key));
             _lock.ExitReadLock();
@@ -42,6 +44,7 @@ namespace Storage
 
         public PrefValue<DateTime> GetDateTime(string key)
         {
+            Init();
             _lock.EnterReadLock();
             var value = _map.ContainsKey(key) ? (DateTime?) DateTime.FromBinary((long) _map[key]) : null;
             var retval = new PrefValue<DateTime>(this, value, GetMeta(key));
@@ -54,6 +57,7 @@ namespace Storage
         
         internal PrefInsertion SetValue<T>(string key, T value)
         {
+            Init();
             _lock.EnterWriteLock();
             _map[key] = value;
             _lock.ExitWriteLock();

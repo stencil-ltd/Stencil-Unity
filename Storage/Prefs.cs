@@ -95,6 +95,8 @@ namespace Storage
                     }
                 }
             }
+
+            _init = true;
             _lock.ExitWriteLock();
         }
 
