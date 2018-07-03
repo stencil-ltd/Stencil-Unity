@@ -14,17 +14,15 @@ namespace Storage
     
     public partial class Prefs : IPrefs
     {
-        static Prefs() { Directory.CreateDirectory("StencilPrefs"); }
-        
-        private static bool _init;
+        private static bool _globalInit;
         private static readonly Dictionary<string, Prefs> Instances 
             = new Dictionary<string, Prefs>();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void CreateObject()
         {
-            if (_init) return;
-            _init = true;
+            if (_globalInit) return;
+            _globalInit = true;
             var obj = new GameObject("Prefs").AddComponent<PrefsBehaviour>();
             Object.DontDestroyOnLoad(obj.gameObject);
         }
@@ -39,10 +37,10 @@ namespace Storage
                 retval = new Prefs(path);
                 Instances[path] = retval;
             }
-            retval.Init();
             return retval;
         }
-        
+
+        private bool _init;
         private readonly string _name;
         private Dictionary<string, object> _map;
         [CanBeNull] private Dictionary<string, PrefMetadata> _meta;
@@ -50,7 +48,8 @@ namespace Storage
         private ReaderWriterLockSlim _lock 
             = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-        private string Path => $"StencilPrefs/{_name}.json";
+        private string Dir => $"{Application.persistentDataPath}/StencilPrefs";
+        private string Path => $"{Dir}/{_name}.json";
 
         private Prefs(string name)
         {
@@ -59,9 +58,19 @@ namespace Storage
             _meta = new Dictionary<string, PrefMetadata>();
         }
 
-        private void Init()
+        internal void Init()
         {
+            if (_init) return;
             _lock.EnterWriteLock();
+            if (_init)
+            {
+                _lock.ExitWriteLock();
+                return;
+            }
+
+            if (!Directory.Exists(Dir))
+                Directory.CreateDirectory(Dir);
+            
             var path = Path;
             if (File.Exists(path))
             {
