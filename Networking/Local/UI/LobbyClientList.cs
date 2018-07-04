@@ -1,42 +1,41 @@
 ﻿using System.Collections.Generic;
 using Plugins.Networking.Local.Data;
-using UnityEngine;
 using Util;
 
 namespace Plugins.Networking.Local.UI
 {
-    public class LobbyServerList : LobbyAbstractList<LobbyServerEntry, LobbyServer>
+    public class LobbyClientList : LobbyAbstractList<LobbyClientEntry, LobbyClient>
     {
-        public LobbyServerList() : base(LobbyState.Client)
+        public LobbyClientList() : base(LobbyState.Server)
         {}
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            Lobby.OnServersChanged += OnServersChanged;
-            OnServersChanged(null, Lobby.Servers);
+            Lobby.OnPlayersChanged += OnPlayersChanged;
+            OnPlayersChanged(null, Lobby.Players);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            Lobby.OnServersChanged -= OnServersChanged;
+            Lobby.OnPlayersChanged -= OnPlayersChanged;
         }
 
-        private void OnServersChanged(object sender, List<LobbyServer> e)
+        private void OnPlayersChanged(object sender, List<LobbyClient> e)
         {
             Content.DestroyAllChildren();
             foreach (var result in e)
             {
                 var item = Instantiate(EntryPrefab, Content, false);
-                item.Server = result;
+                item.Client = result;
                 item.Button.onClick.AddListener(() => ItemClicked(item));
             }
         }
 
-        private void ItemClicked(LobbyServerEntry item)
+        private void ItemClicked(LobbyClientEntry item)
         {
-            Lobby.Instance.JoinServer(item.Server);
+            // TODO
         }
     }
 }
