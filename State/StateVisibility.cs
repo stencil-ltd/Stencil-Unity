@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Plugins.State
 {
-    public abstract class StateVisibility<T> : MonoBehaviour, IStateVisibility where T : struct
+    public abstract class StateVisibility<T> : MonoBehaviour, IStateListener where T : struct
     {
         public static T State { get; private set; }
         public static event EventHandler<T> OnChange;
@@ -14,14 +14,14 @@ namespace Plugins.State
             State = state;
             if (notify) NotifyChanged();
         }
+        
+        public bool Invert;
+        public T[] States;
 
         public static void NotifyChanged()
         {
             OnChange?.Invoke(null, State);
         }
-
-        public bool Invert;
-        public T[] States;
 
         public StateVisibility()
         {
@@ -31,16 +31,16 @@ namespace Plugins.State
 
         public void Register()
         {
-            OnChange += UpdateVisibility;
-            UpdateVisibility(null, State);
+            OnChange += Changed;
+            Changed(null, State);
         }
 
         private void OnDestroy()
         {
-            OnChange -= UpdateVisibility;
+            OnChange -= Changed;
         }
 
-        private void UpdateVisibility(object sender, T e)
+        private void Changed(object sender, T e)
         {
             var visible = States.Contains(State);
             if (Invert) visible = !visible;

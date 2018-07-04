@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.UI;
 using Util;
 
@@ -22,16 +24,18 @@ namespace Plugins.Networking
                 var item = Instantiate(ItemPrefab, Content, false);
                 item.Broadcast = result;
                 item.Refresh();
-                item.GetComponent<Button>().onClick.AddListener(() => ItemClicked(item));
+                item.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(ItemClicked(item)));
             }
         }
 
-        private void ItemClicked(NetworkBroadcastItem item)
+        private IEnumerator ItemClicked(NetworkBroadcastItem item)
         {
             var result = item.Broadcast;
             NetworkManager.singleton.networkAddress = result.Address;
             NetworkManager.singleton.networkPort = Convert.ToInt32(result.Port);
-            NetworkManager.singleton.StartClient();
+            var client = NetworkManager.singleton.StartClient();
+            yield return null;
+            client.Send(MsgType.Ready, new ReadyMessage());
             OnClick?.Invoke(this, result);
         }
     }

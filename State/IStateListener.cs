@@ -1,6 +1,6 @@
 ﻿namespace Plugins.State
 {
-    public interface IStateVisibility
+    public interface IStateListener
     {
         
     }

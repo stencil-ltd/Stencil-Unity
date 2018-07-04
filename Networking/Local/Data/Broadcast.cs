@@ -1,4 +1,4 @@
-﻿namespace Plugins.Networking
+﻿namespace Plugins.Networking.Local.Data
 {
     public struct Broadcast
     {

@@ -13,9 +13,8 @@ namespace Plugins.Networking
     public class NetworkBroadcastListener : MonoBehaviour
     {
         public NetworkDiscovery Network;
-        public float Timeout;
+        public float Timeout = 3f;
         public NetworkBroadcastChange OnChangeEvent;
-        public event EventHandler<List<Broadcast>> OnChange;
 
         private List<NetworkBroadcastResult> _list 
             = new List<NetworkBroadcastResult>();
@@ -38,7 +37,6 @@ namespace Plugins.Networking
             if (list.SequenceEqual(_list)) return;
             _list = list;
             Broadcasts = list.Select(result => new Broadcast(result)).ToList();
-            OnChange?.Invoke(this, Broadcasts);
             OnChangeEvent?.Invoke(Broadcasts);
         }
 

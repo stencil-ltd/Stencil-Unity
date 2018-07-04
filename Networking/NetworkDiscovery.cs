@@ -220,7 +220,7 @@ namespace Plugins.Networking
 
             if (m_UseNetworkManager && NetworkManager.singleton != null)
             {
-                m_BroadcastData = "NetworkManager:" + NetworkManager.singleton.networkAddress + ":" + NetworkManager.singleton.networkPort + ":" + m_Name.Replace(":", "\\:");
+                m_BroadcastData = "NetworkManager" + "|" + NetworkManager.singleton.networkAddress + "|" + NetworkManager.singleton.networkPort + "|" + m_Name.Replace("|", "\\|");
                 if (LogFilter.logInfo) { Debug.Log("NetwrokDiscovery set broadbast data to:" + m_BroadcastData); }
             }
 
