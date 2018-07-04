@@ -2,6 +2,7 @@
 using Plugins.Networking.Local.Data;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.NetworkSystem;
 
 namespace Plugins.Networking.Local
 {
@@ -37,6 +38,9 @@ namespace Plugins.Networking.Local
             if (_discovery.running)
                 _discovery.StopBroadcast();
             _manager.StopServer();
+            _manager.StopClient();
+            UnityNetworkClient?.Shutdown();
+            UnityNetworkClient = null;
             LobbyStates.RequestState(LobbyState.None);
         }
 
@@ -56,6 +60,24 @@ namespace Plugins.Networking.Local
             _discovery.Initialize();
             _discovery.StartAsClient();
             LobbyStates.RequestState(LobbyState.Client);
+        }
+
+        public void JoinServer(LobbyServer server)
+        {
+            NetworkManager.singleton.networkAddress = server.Broadcast.Address;
+            NetworkManager.singleton.networkPort = server.Broadcast.Port;
+            UnityNetworkClient = NetworkManager.singleton.StartClient();
+            UnityNetworkClient?.RegisterHandler(MsgType.Connect, msg =>
+            {
+                Debug.Log("Connection Established. Sending ready signal");
+                UnityNetworkClient?.Send(MsgType.Ready, new ReadyMessage());  
+                LobbyStates.RequestState(LobbyState.ClientReady);
+            });
+            UnityNetworkClient?.RegisterHandler(MsgType.Error, msg =>
+            {
+                Debug.LogError($"Connection Error: {msg}");
+                ShutDown();    
+            });
         }
     }
 }

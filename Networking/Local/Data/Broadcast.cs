@@ -1,11 +1,13 @@
-﻿namespace Plugins.Networking.Local.Data
+﻿using System;
+
+namespace Plugins.Networking.Local.Data
 {
     public struct Broadcast
     {
         public readonly string Name;
 //        public readonly string Creator;
         public readonly string Host;
-        public readonly string Port;
+        public readonly int Port;
         public readonly string Address;
 
         public Broadcast(NetworkBroadcastResult result)
@@ -14,7 +16,7 @@
             var items = dataString.Split('|');
 //            Creator = items[0];
             Host = items[1];
-            Port = items[2];
+            Port = Convert.ToInt32(items[2]);
             Name = items.Length == 4 ? items[3].Replace("\\|", "|") : "Unknown";
             Address = result.serverAddress;
         }

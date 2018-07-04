@@ -7,6 +7,7 @@ namespace Plugins.Networking.Local.UI
     public class LobbyServerEntry : MonoBehaviour
     {
         public Text Title;
+        public Button Button;
 
         private LobbyServer _server;
         public LobbyServer Server
