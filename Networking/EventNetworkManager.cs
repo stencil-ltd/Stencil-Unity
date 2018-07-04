@@ -34,7 +34,14 @@ namespace Plugins.Networking
             base.OnServerDisconnect(conn);
             EventOnServerDisconnect?.Invoke(conn);
         }
-        
+
+        public NetworkConnectionError EventOnServerError;
+        public override void OnServerError(NetworkConnection conn, int errorCode)
+        {
+            base.OnServerError(conn, errorCode);
+            EventOnServerError?.Invoke(conn, errorCode);
+        }
+
         public NetworkConnectionEvent EventOnServerReady;
         public override void OnServerReady(NetworkConnection conn)
         {
@@ -83,7 +90,7 @@ namespace Plugins.Networking
             base.OnClientError(conn, errorCode);
             EventOnClientError?.Invoke(conn, errorCode);
         }
-
+        
         public ServerAddPlayerEvent EventOnServerAddPlayer;
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {

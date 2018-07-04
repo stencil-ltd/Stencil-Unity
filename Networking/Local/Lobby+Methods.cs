@@ -10,37 +10,26 @@ namespace Plugins.Networking.Local
     {
         private void InitLobby()
         {
-            _manager.EventOnServerAddPlayer.AddListener(AddPlayer);
-            _manager.EventOnServerRemovePlayer.AddListener(RemovePlayer);
+            _manager.EventOnServerReady.AddListener(AddPlayer);
+            _manager.EventOnServerDisconnect.AddListener(RemovePlayer);
             InitLobbyClient();
         }
 
         private void DestroyLobby()
         {
-            _manager.EventOnServerAddPlayer.RemoveListener(AddPlayer);
-            _manager.EventOnServerRemovePlayer.RemoveListener(RemovePlayer);
-        }
-
-        private void RemovePlayer(NetworkConnection arg0, PlayerController arg1)
-        {
-            Players.RemoveAll(client => client.Broadcast.Address.Equals(arg0.address));
-            OnPlayersChanged?.Invoke(this, Players);
-        }
-
-        private void AddPlayer(NetworkConnection arg0, short arg1)
-        {
-            Players.Add(new LobbyClient(arg1, LookUp(arg0.address)));
-            OnPlayersChanged?.Invoke(this, Players);
+            _manager.EventOnServerReady.RemoveListener(AddPlayer);
+            _manager.EventOnServerDisconnect.RemoveListener(RemovePlayer);
         }
 
         public void ShutDown()
         {
             if (_discovery.running)
                 _discovery.StopBroadcast();
-            _manager.StopServer();
-            _manager.StopClient();
+            UnityNetworkClient?.Disconnect();
             UnityNetworkClient?.Shutdown();
             UnityNetworkClient = null;
+            _manager.StopServer();
+            _manager.StopClient();
             LobbyStates.RequestState(LobbyState.None);
         }
 
@@ -70,7 +59,8 @@ namespace Plugins.Networking.Local
             UnityNetworkClient?.RegisterHandler(MsgType.Connect, msg =>
             {
                 Debug.Log("Connection Established. Sending ready signal");
-                UnityNetworkClient?.Send(MsgType.Ready, new ReadyMessage());  
+                UnityNetworkClient?.Send(MsgType.Ready, new ReadyMessage());
+                UnityNetworkClient?.Send(MsgTypeName, new StringMessage(Name));
                 LobbyStates.RequestState(LobbyState.ClientReady);
             });
             UnityNetworkClient?.RegisterHandler(MsgType.Error, msg =>

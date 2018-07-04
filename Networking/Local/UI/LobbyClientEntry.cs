@@ -22,7 +22,7 @@ namespace Plugins.Networking.Local.UI
 
         private void Refresh()
         {
-            Title.text = Client.Broadcast.Name;
+            Title.text = Client.Name;
         }
     }
 }

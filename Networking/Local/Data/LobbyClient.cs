@@ -1,14 +1,17 @@
-﻿namespace Plugins.Networking.Local.Data
+﻿using UnityEngine.Networking;
+
+namespace Plugins.Networking.Local.Data
 {
     public struct LobbyClient
     {
-        public readonly short PlayerId;
         public readonly Broadcast Broadcast;
+        public readonly NetworkConnection Connection;
+        public string Name => Broadcast.LookUp(Connection.connectionId);
 
-        public LobbyClient(short playerId, Broadcast broadcast)
+        public LobbyClient(Broadcast broadcast, NetworkConnection conn)
         {
-            PlayerId = playerId;
             Broadcast = broadcast;
+            Connection = conn;
         }
     }
 }

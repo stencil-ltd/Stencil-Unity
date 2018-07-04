@@ -21,6 +21,10 @@ namespace Plugins.Networking.Local.UI
         private void Awake()
         {
             LobbyStates.OnChange += OnStateChanged;
+        }
+
+        private void Start()
+        {
             enabled = LobbyStates.State == _visibleState;
         }
 

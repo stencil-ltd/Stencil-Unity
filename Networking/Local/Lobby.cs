@@ -1,5 +1,7 @@
 ﻿using Binding;
+using Plugins.Util;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Plugins.Networking.Local
 {
@@ -12,7 +14,19 @@ namespace Plugins.Networking.Local
     public partial class Lobby : MonoBehaviour
     {
         public static Lobby Instance { get; private set; }
-        
+
+        private string _name = Rando.Guid();
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (string.Equals(_name, value)) return;
+                _name = value;
+                NameUpdated();
+            }
+        }
+
         [Bind] private EventNetworkManager _manager;
         [Bind] private NetworkDiscovery _discovery;
         [Bind] private NetworkBroadcastListener _listener;
