@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Plugins.Networking.Local.Data;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Plugins.Networking

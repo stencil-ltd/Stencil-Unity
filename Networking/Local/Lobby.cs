@@ -16,9 +16,10 @@ namespace Plugins.Networking.Local
         [Bind] private EventNetworkManager _manager;
         [Bind] private NetworkDiscovery _discovery;
         [Bind] private NetworkBroadcastListener _listener;
-        
+
         private void Awake()
         {
+            Debug.Log("Lobby Awake");
             if (Instance != null)
             {
                 Destroy(gameObject);
@@ -28,6 +29,7 @@ namespace Plugins.Networking.Local
             Instance = this;
             this.Bind();
             _listener.Network = _discovery;
+            _listener.Timeout = 3f;
             DontDestroyOnLoad(gameObject);
             InitLobby();
             LobbyStates.OnChange += StateChange;
@@ -38,6 +40,11 @@ namespace Plugins.Networking.Local
             DestroyLobby();
             LobbyStates.OnChange -= StateChange;
             Instance = null;
+        }
+
+        private void Update()
+        {
+            
         }
 
         private void StateChange(object sender, LobbyState e)

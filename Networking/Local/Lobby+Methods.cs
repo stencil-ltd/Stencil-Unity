@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using Plugins.Networking.Local.Data;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Plugins.Networking.Local
 {
@@ -8,14 +9,29 @@ namespace Plugins.Networking.Local
     {
         private void InitLobby()
         {
-            
+            _manager.EventOnServerAddPlayer.AddListener(AddPlayer);
+            _manager.EventOnServerRemovePlayer.AddListener(RemovePlayer);
+            InitLobbyClient();
         }
 
         private void DestroyLobby()
         {
-            
+            _manager.EventOnServerAddPlayer.RemoveListener(AddPlayer);
+            _manager.EventOnServerRemovePlayer.RemoveListener(RemovePlayer);
         }
-        
+
+        private void RemovePlayer(NetworkConnection arg0, PlayerController arg1)
+        {
+            Players.RemoveAll(client => client.Broadcast.Address.Equals(arg0.address));
+            OnPlayersChanged?.Invoke(this, Players);
+        }
+
+        private void AddPlayer(NetworkConnection arg0, short arg1)
+        {
+            Players.Add(new LobbyClient(arg1, LookUp(arg0.address)));
+            OnPlayersChanged?.Invoke(this, Players);
+        }
+
         public void ShutDown()
         {
             if (_discovery.running)

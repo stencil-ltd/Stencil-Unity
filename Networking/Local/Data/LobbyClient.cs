@@ -1,11 +1,13 @@
-﻿namespace Plugins.Networking.Local
+﻿namespace Plugins.Networking.Local.Data
 {
-    public struct LocalNetworkClient
+    public struct LobbyClient
     {
-        public readonly Data.Broadcast Broadcast;
+        public readonly short PlayerId;
+        public readonly Broadcast Broadcast;
 
-        public LocalNetworkClient(Data.Broadcast broadcast)
+        public LobbyClient(short playerId, Broadcast broadcast)
         {
+            PlayerId = playerId;
             Broadcast = broadcast;
         }
     }
