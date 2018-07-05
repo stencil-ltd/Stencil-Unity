@@ -8,6 +8,8 @@ namespace Util
 {
     public static class Objects
     {
+        public static bool IsMainThread => UnityMainThreadDispatcher.IsMainThread;
+        
         public static void Configure()
         {
             new GameObject("Main Thread Dispatch")
@@ -23,6 +25,13 @@ namespace Util
         {
             UnityMainThreadDispatcher.Instance().StartCoroutine(coroutine);
             
+        }
+
+        public static void OnMain(Action Action)
+        {
+            if (IsMainThread)
+                Action();
+            else Enqueue(Action);
         }
         
         public static void Enqueue(Action action)

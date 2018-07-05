@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using Util;
 
 namespace Plugins.State
 {
@@ -13,7 +14,7 @@ namespace Plugins.State
         {
             if (!force && state.Equals(State)) return;
             State = state;
-            if (notify) NotifyChanged();
+            if (notify) Objects.OnMain(NotifyChanged);
         }
         
         public bool Invert;

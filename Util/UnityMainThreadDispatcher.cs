@@ -17,6 +17,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace Util
@@ -26,9 +27,13 @@ namespace Util
 	/// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
 	/// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
 	/// </summary>
-	public class UnityMainThreadDispatcher : MonoBehaviour {
+	public class UnityMainThreadDispatcher : MonoBehaviour
+	{
 
+		public static Thread MainThread;
 		private static readonly Queue<Action> _executionQueue = new Queue<Action>();
+
+		public static bool IsMainThread => Thread.CurrentThread == MainThread;
 
 		public void Update() {
 			lock(_executionQueue) {
@@ -79,7 +84,9 @@ namespace Util
 		}
 
 
-		void Awake() {
+		void Awake()
+		{
+			MainThread = Thread.CurrentThread;
 			if (_instance == null) {
 				_instance = this;
 				DontDestroyOnLoad(this.gameObject);
