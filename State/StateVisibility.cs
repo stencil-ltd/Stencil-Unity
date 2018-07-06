@@ -22,6 +22,7 @@ namespace Plugins.State
 
         public static void NotifyChanged()
         {
+            Debug.Log($"<color=blue>{typeof(T).ShortName()}: {State}</color>");
             OnChange?.Invoke(null, State);
         }
 

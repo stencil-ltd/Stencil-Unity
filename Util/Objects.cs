@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -9,6 +10,11 @@ namespace Util
     public static class Objects
     {
         public static bool IsMainThread => UnityMainThreadDispatcher.IsMainThread;
+
+        public static string ShortName(this Type t)
+        {
+            return t.Name.Split('.').Last();
+        }
         
         public static void Configure()
         {
