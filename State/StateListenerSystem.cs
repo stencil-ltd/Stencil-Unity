@@ -9,7 +9,7 @@ namespace Plugins.State
         [ClassImplements(typeof(IStateListener))]
         public ClassTypeReference[] Types;
         
-        private void Start()
+        private void Awake()
         {
             foreach (var type in Types)
             {
