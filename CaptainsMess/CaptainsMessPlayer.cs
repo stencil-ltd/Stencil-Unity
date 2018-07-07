@@ -18,7 +18,7 @@ public class CaptainsMessPlayer : NetworkBehaviour
 	[SyncVar]
 	public int playerIndex;
 
-	[SyncVar(hook="OnReadyChanged")]
+	[SyncVar(hook=nameof(OnReadyChanged))]
 	public bool ready;
 
 	[SyncVar]
