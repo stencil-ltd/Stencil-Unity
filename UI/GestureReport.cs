@@ -8,6 +8,7 @@ namespace UI
     {
         private void Awake()
         {
+            LogCollector.Init();
             GetComponent<Gestures>().OnGesture += (sender, args) => Report();
         }
         

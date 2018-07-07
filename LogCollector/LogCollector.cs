@@ -53,8 +53,7 @@ public static class LogCollector
     
     public static void Init(int capacity = 200)
     {
-        if (IsInitialized)
-            throw new Exception("Can't double-init the Log Collector");
+        if (IsInitialized) return;
 
         IsInitialized = true;
         Capacity = capacity;
