@@ -13,6 +13,7 @@ namespace Storage
         {
             Parent = parent;
             Key = key;
+            Metadata = default(PrefMetadata);
         }
 
         public PrefInsertion(Prefs parent, string key, PrefMetadata metadata)
