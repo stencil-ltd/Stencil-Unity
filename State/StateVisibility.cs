@@ -22,6 +22,7 @@ namespace Plugins.State
         public T[] States;
 
         private bool _registered;
+        private bool _destroyed;
 
         public static void NotifyChanged()
         {
@@ -35,7 +36,7 @@ namespace Plugins.State
                 throw new Exception("StateVisibility can only handle enums.");
         }
 
-        private void Awake() {
+        private void Start() {
             Register();
         }
 
@@ -49,16 +50,22 @@ namespace Plugins.State
 
         private void OnDestroy()
         {
+            _destroyed = true;
             OnChange -= Changed;
         }
 
         private void Changed(object sender, T e)
         {
-            var visible = States.Contains(State);
-            if (Invert) visible = !visible;
-            gameObject.SetActive(visible);
-            if (DestroyOnInactive && !visible)
-                try { Destroy(gameObject); } catch (Exception) {  };
+            try {
+                if (_destroyed) return;
+                var visible = States.Contains(State);
+                if (Invert) visible = !visible;
+                gameObject.SetActive(visible);
+                if (DestroyOnInactive && !visible)
+                {
+                    Destroy(gameObject);
+                }                
+            } catch (Exception) {}
         }
     }
 }
