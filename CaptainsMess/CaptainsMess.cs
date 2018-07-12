@@ -86,12 +86,12 @@ public class CaptainsMess : MonoBehaviour
 
     public List<CaptainsMessPlayer> Players()
     {
-        return NetworkManager.LobbyPlayers();
+        return NetworkManager?.LobbyPlayers();
     }
 
     public CaptainsMessPlayer LocalPlayer()
     {
-        return NetworkManager.localPlayer;
+        return NetworkManager?.localPlayer;
     }
 
     public void AutoConnect()
