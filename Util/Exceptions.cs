@@ -8,7 +8,7 @@ namespace Plugins.Util
     {
         public static string[] AggregateMessages(this AggregateException ex)
         {
-            return ex.InnerExceptions.Select(it => it.Message).ToArray();
+            return ex.InnerExceptions.Select(it => it.Source).ToArray();
         }
 
         public static void LogMessages(this AggregateException ex)
