@@ -5,9 +5,6 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
-!Project~/**/*.csproj
-!Project~/**/*.sln
-
 # Visual Studio 2015 cache directory
 /.vs/
 **/.vs/
@@ -52,5 +49,4 @@ unused_files.log
 LastPlay.mov
 TPS_cache/
 *.meta
-**/bin
 **/obj
