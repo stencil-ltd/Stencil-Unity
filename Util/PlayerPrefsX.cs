@@ -52,9 +52,11 @@ namespace Util
         
         public static void RegisterStrategies()
         {
+#pragma warning disable 612
             PrefHolders.RegisterTypeStrategy(typeof(bool), new BoolStrategy());
             PrefHolders.RegisterTypeStrategy(typeof(long), new LongStrategy());
             PrefHolders.RegisterTypeStrategy(typeof(DateTime?), new DateTimeStrategy());
+#pragma warning restore 612
         }
         
         public static bool GetBool(string key, bool defaultValue = false)

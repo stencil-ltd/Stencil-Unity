@@ -7,7 +7,7 @@ public class CaptainsMessListener : MonoBehaviour
 	[HideInInspector]
 	public CaptainsMess mess;
 
-	public void Awake()
+	public virtual void Awake()
 	{
 		mess = FindObjectOfType(typeof(CaptainsMess)) as CaptainsMess;
 	}
