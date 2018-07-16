@@ -12,7 +12,7 @@ public class StateGate<T1, T2> : ActiveGate where T1 : StateMachine<T1, T2>, new
     public bool Invert;
     public bool AndDestroy;
 
-    public T2 State;
+    public T2 State => _machine.State;
 
     static StateGate()
     {
@@ -52,7 +52,6 @@ public class StateGate<T1, T2> : ActiveGate where T1 : StateMachine<T1, T2>, new
 
     private void Changed(object sender, T2 e)
     {
-        State = e;
         ActiveManager.Check();
     }
 }

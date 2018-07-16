@@ -2,7 +2,7 @@
 
 namespace Plugins.UI
 {
-    public abstract class Controller<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class Controller<T> : MonoBehaviour where T : Controller<T>
     {
         public static T Instance { get; private set; }
 
@@ -11,7 +11,7 @@ namespace Plugins.UI
 
         protected void Awake()
         {
-            Instance = (T) (object) this;
+            Instance = (T) this;
             ControllerAwake();
         }
 

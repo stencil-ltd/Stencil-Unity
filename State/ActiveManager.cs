@@ -28,6 +28,7 @@ namespace Plugins.State
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
                 g.Register(this);
+            Check();
         }
 
         public void Check() 
