@@ -11,28 +11,22 @@ public class StateMachineScriptable : Singleton<StateMachineScriptable>
     [NotNull] public ScriptableState DefaultState;
 
     public ScriptableState[] ValidStates;
-    ISet<ScriptableState> _valid;
+    HashSet<ScriptableState> _valid;
 
     [NotNull] public ScriptableState State;
     public event EventHandler<ScriptableState> OnChange;
 
     void Awake()
     {
-        Debug.Log($"{Name} is awake...");
-        if (Application.isPlaying) 
-            RequestState(DefaultState, true, true); 
+        if (Application.isPlaying)
+            Reset();
     }
 
-#if UNITY_EDITOR
-    void Update() 
+    public void Reset()
     {
-        if (!Application.isPlaying)
-        {
-            _valid = ValidStates.ToSet();
-            Validate(DefaultState);
-        }
+        _valid = new HashSet<ScriptableState>(ValidStates);
+        RequestState(DefaultState, true, true);
     }
-#endif
 
     public void Click_RequestState(ScriptableState state)
     {

@@ -6,22 +6,14 @@ namespace Plugins.UI
     {
         public static T Instance { get; private set; }
 
-        protected virtual void ControllerAwake()
-        {}
-
-        protected void Awake()
+        protected virtual void Awake()
         {
             Instance = (T) this;
-            ControllerAwake();
         }
 
-        protected virtual void ControllerDestroyed()
-        {}
-
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             Instance = Instance == this ? null : Instance;
-            ControllerDestroyed();
         }
     }
 }
