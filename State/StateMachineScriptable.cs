@@ -44,7 +44,7 @@ public class StateMachineScriptable : Singleton<StateMachineScriptable>
     void Validate(ScriptableState state) 
     {
         if (state == null) throw new Exception("Default state cannot be null. Create a null instance if you want.");
-        if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}");
+        if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}"); 
     }
 
     void NotifyChanged()

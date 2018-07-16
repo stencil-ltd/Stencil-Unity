@@ -13,6 +13,7 @@ namespace Plugins.State
         public Operation Op = Operation.Or;
 
         public readonly List<ActiveGate> Gates = new List<ActiveGate>();
+        public bool ActiveInEditor;
         
         protected bool IsRegistered { get; private set; }
 
@@ -24,6 +25,7 @@ namespace Plugins.State
         public void Register()
         {
             if (IsRegistered) return;
+            if (!Application.isPlaying && !ActiveInEditor) return;
             IsRegistered = true;
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
@@ -33,6 +35,7 @@ namespace Plugins.State
 
         public void Check() 
         {
+            if (!Application.isPlaying && !ActiveInEditor) return;
             if (Gates.Count == 0) return;
             var active = Op == Operation.And;
             foreach(var g in Gates) 

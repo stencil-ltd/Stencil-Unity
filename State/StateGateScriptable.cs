@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Plugins.State;
+using UnityEngine;
 
 public class StateGateScriptable : ActiveGate
 {

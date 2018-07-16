@@ -1,6 +1,7 @@
 using Plugins.State;
 using TypeReferences;
 using UnityEngine;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,15 +9,25 @@ using UnityEditor;
 
 public class ActiveEventSystem : MonoBehaviour
 {
-        private void Awake()
-        {
-                Debug.Log("ActiveEventSystem Awake");
-                foreach (var res in Resources.FindObjectsOfTypeAll<ActiveManager>())
-                {
-                        #if UNITY_EDITOR
-                        if (EditorUtility.IsPersistent(res)) continue;
-                        #endif
-                        res.Register();
-                }
-        }
+    private ActiveManager[] _managers;
+
+    private void Awake()
+    {
+        Debug.Log("ActiveEventSystem Awake");
+        _managers = Resources.FindObjectsOfTypeAll<ActiveManager>();
+#if UNITY_EDITOR
+        _managers = _managers.Where((arg) => !EditorUtility.IsPersistent(arg))
+                             .ToArray();
+#endif
+
+        if (Application.isPlaying)
+            foreach (var res in _managers)
+                res.Register();
+    }
+
+    public void Check() 
+    {
+        foreach (var res in _managers)
+            res.Check();   
+    }
 }
