@@ -10,7 +10,7 @@ namespace Plugins.State
 {
     public class StateListenerSystem : MonoBehaviour
     {
-        [ClassImplements(typeof(IStateListener))]
+        [ClassImplements(typeof(IStateListenerLegacy))]
         public ClassTypeReference[] Types;
         
         private void Awake()

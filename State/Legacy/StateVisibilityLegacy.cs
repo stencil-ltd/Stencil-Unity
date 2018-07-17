@@ -6,7 +6,7 @@ using Util;
 
 namespace Plugins.State
 {
-    public abstract class StateVisibility<T> : MonoBehaviour, IStateListener where T : struct
+    public abstract class StateVisibilityLegacy<T> : MonoBehaviour, IStateListenerLegacy where T : struct
     {
         public static T State { get; private set; }
         public static event EventHandler<T> OnChange;
@@ -30,7 +30,7 @@ namespace Plugins.State
             OnChange?.Invoke(null, State);
         }
 
-        public StateVisibility()
+        public StateVisibilityLegacy()
         {
             if (!typeof(T).IsEnum)
                 throw new Exception("StateVisibility can only handle enums.");

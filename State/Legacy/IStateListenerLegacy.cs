@@ -1,6 +1,6 @@
 ﻿namespace Plugins.State
 {
-    public interface IStateListener
+    public interface IStateListenerLegacy
     {
         
     }
