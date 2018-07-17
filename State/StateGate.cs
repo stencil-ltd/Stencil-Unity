@@ -44,7 +44,7 @@ public class StateGate : ActiveGate
         }
     }
 
-    private void Changed(object sender, State e)
+    private void Changed(object sender, StateChange e)
     {
         ActiveManager.Check();
     }

@@ -17,7 +17,7 @@ public class StateMachine : Singleton<StateMachine>
     HashSet<State> _valid;
 
     [NotNull] public State State;
-    public event EventHandler<State> OnChange;
+    public event EventHandler<StateChange> OnChange;
 
     void Awake()
     {
@@ -40,8 +40,9 @@ public class StateMachine : Singleton<StateMachine>
     {
         if (!force && state.Equals(State)) return;
         Validate(state);
+        var old = State;
         State = state;
-        if (notify) Objects.OnMain(NotifyChanged); 
+        if (notify) Objects.OnMain(() => NotifyChanged(old)); 
     }
 
     public void Validate(State state) 
@@ -50,11 +51,11 @@ public class StateMachine : Singleton<StateMachine>
         if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}"); 
     }
 
-    void NotifyChanged()
+    void NotifyChanged(State old)
     {
         var color = Color;
         Debug.Log($"<color={color.LogString()}>{Name} -> {State.Name}</color>");
-        OnChange?.Invoke(this, State);
+        OnChange?.Invoke(this, new StateChange(old, State));
     }
 
     public override string ToString()
