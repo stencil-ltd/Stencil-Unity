@@ -1,24 +1,64 @@
 using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using Plugins.Util;
 using UnityEngine;
 using Util;
 
-public abstract class StateMachine<T1, T2> where T1 : StateMachine<T1, T2>, new()
+[CreateAssetMenu(menuName = "State/Machine")]
+public class StateMachine : Singleton<StateMachine>
 {
-    public static readonly T1 Default = new T1();
+    public string Name;
+    public Color Color;
 
-    public T2 State { get; private set; }
-    public event EventHandler<T2> OnChange;
+    [NotNull] public State DefaultState;
 
-    public void RequestState(T2 state, bool force = false, bool notify = true)
+    public State[] ValidStates;
+    HashSet<State> _valid;
+
+    [NotNull] public State State;
+    public event EventHandler<State> OnChange;
+
+    void Awake()
     {
-        if (!force && state.Equals(State)) return;
-        State = state;
-        if (notify) Objects.OnMain(NotifyChanged);
+        if (Application.isPlaying)
+            Reset();
     }
 
-    private void NotifyChanged()
-    {        
-        Debug.Log($"<color=blue>{typeof(T2).ShortName()}: {State}</color>");
+    public void Reset()
+    {
+        _valid = ValidStates == null ? new HashSet<State>() : new HashSet<State>(ValidStates);
+        RequestState(DefaultState, true, true);
+    }
+
+    public void Click_RequestState(State state)
+    {
+        RequestState(state);
+    }
+
+    public void RequestState([NotNull] State state, bool force = false, bool notify = true)
+    {
+        if (!force && state.Equals(State)) return;
+        Validate(state);
+        State = state;
+        if (notify) Objects.OnMain(NotifyChanged); 
+    }
+
+    public void Validate(State state) 
+    {
+        if (state == null) throw new Exception("Default state cannot be null. Create a null instance if you want.");
+        if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}"); 
+    }
+
+    void NotifyChanged()
+    {
+        var color = Color;
+        Debug.Log($"<color={color.LogString()}>{Name} -> {State.Name}</color>");
         OnChange?.Invoke(this, State);
+    }
+
+    public override string ToString()
+    {
+        return Name;
     }
 }

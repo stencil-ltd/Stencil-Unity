@@ -1,38 +1,32 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using Plugins.State;
-using UnityEngine;
 
-public class StateGate<T1, T2> : ActiveGate where T1 : StateMachine<T1, T2>, new() where T2 : struct
+public class StateGate : ActiveGate
 {
-    private static readonly T1 _machine;
+    public StateMachine Machine;
 
-    public T2[] States;
+    public State[] States;
     public bool Invert;
     public bool AndDestroy;
 
-    public T2 State => _machine.State;
+    public State State => Machine.State;
 
-    static StateGate()
+    private void Start()
     {
-        if (!typeof(T2).IsEnum)
-            throw new Exception("StateVisibility can only handle enums.");
-        var t = typeof(T1);
-        var f = t.BaseType.GetField("Default", BindingFlags.Public | BindingFlags.Static);
-        _machine = (T1) f.GetValue(null);
-        Debug.Log($"Found Machine: {_machine}"); 
+        foreach (var s in States)
+            Machine.Validate(s);
     }
 
     public override void Register(ActiveManager manager)
     {
         base.Register(manager);
-        _machine.OnChange += Changed;
+        Machine.OnChange += Changed;
     }
 
     public override void Unregister()
     {
-        _machine.OnChange -= Changed;
+        Machine.OnChange -= Changed;
     }
 
     public override bool? Check()
@@ -50,7 +44,7 @@ public class StateGate<T1, T2> : ActiveGate where T1 : StateMachine<T1, T2>, new
         }
     }
 
-    private void Changed(object sender, T2 e)
+    private void Changed(object sender, State e)
     {
         ActiveManager.Check();
     }

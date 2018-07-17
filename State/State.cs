@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "State/State")]
-public class ScriptableState : ScriptableObject
+public class State : ScriptableObject
 {
     public string Name;
 
