@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Plugins.Util;
 using UnityEngine;
 using Util;
 
@@ -8,6 +9,8 @@ using Util;
 public class StateMachineScriptable : Singleton<StateMachineScriptable>
 {
     public string Name;
+    public Color Color;
+
     [NotNull] public ScriptableState DefaultState;
 
     public ScriptableState[] ValidStates;
@@ -24,7 +27,7 @@ public class StateMachineScriptable : Singleton<StateMachineScriptable>
 
     public void Reset()
     {
-        _valid = new HashSet<ScriptableState>(ValidStates);
+        _valid = ValidStates == null ? new HashSet<ScriptableState>() : new HashSet<ScriptableState>(ValidStates);
         RequestState(DefaultState, true, true);
     }
 
@@ -41,7 +44,7 @@ public class StateMachineScriptable : Singleton<StateMachineScriptable>
         if (notify) Objects.OnMain(NotifyChanged); 
     }
 
-    void Validate(ScriptableState state) 
+    public void Validate(ScriptableState state) 
     {
         if (state == null) throw new Exception("Default state cannot be null. Create a null instance if you want.");
         if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}"); 
@@ -49,7 +52,8 @@ public class StateMachineScriptable : Singleton<StateMachineScriptable>
 
     void NotifyChanged()
     {
-        Debug.Log($"<color=blue>{typeof(ScriptableState).ShortName()}: {State}</color>");
+        var color = Color;
+        Debug.Log($"<color={color.LogString()}>{Name} -> {State.Name}</color>");
         OnChange?.Invoke(this, State);
     }
 

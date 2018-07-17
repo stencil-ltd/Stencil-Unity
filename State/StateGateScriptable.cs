@@ -13,6 +13,12 @@ public class StateGateScriptable : ActiveGate
 
     public ScriptableState State => Machine.State;
 
+    private void Start()
+    {
+        foreach (var s in States)
+            Machine.Validate(s);
+    }
+
     public override void Register(ActiveManager manager)
     {
         base.Register(manager);
