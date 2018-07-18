@@ -7,6 +7,8 @@ namespace Plugins.Init
 {
     public class GameInit : Permanent<GameInit>
     {
+        public bool Started { get; private set; }
+        
         protected sealed override void Awake()
         {
             base.Awake();
@@ -21,5 +23,10 @@ namespace Plugins.Init
         
         protected virtual void OnInit()
         {}
+        
+        protected virtual void Start()
+        {
+            Started = true;
+        }
     }
 }
