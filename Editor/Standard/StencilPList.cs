@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Share
 {
-    public class SharePhotoPlist
+    public class StencilPlist
     {
         [PostProcessBuild]
         public static void ChangeXcodePlist(BuildTarget buildTarget, string pathToBuiltProject) {
@@ -22,6 +22,7 @@ namespace Share
                 // Get root
                 PlistElementDict rootDict = plist.root;
        
+                rootDict.SetBoolean("ITSAppUsesNonExemptEncryption", false);
                 rootDict.SetString("NSPhotoLibraryUsageDescription", "This app wants to save a photo to your device.");
                 rootDict.SetString("NSPhotoLibraryAddUsageDescription", "This app wants to save a photo to your device.");
        
