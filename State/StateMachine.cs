@@ -1,65 +1,97 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Plugins.Util;
 using UnityEngine;
 using Util;
 
-[CreateAssetMenu(menuName = "State/Machine")]
-public class StateMachine : Singleton<StateMachine>
+namespace Plugins.State
 {
-    public string Name;
-    public Color Color;
-
-    [NotNull] public State DefaultState;
-
-    public State[] ValidStates;
-    HashSet<State> _valid;
-
-    [NotNull] public State State;
-    public event EventHandler<StateChange> OnChange;
-
-    void Awake()
+    public static class StateMachines
     {
-        if (Application.isPlaying)
-            Reset();
+        private static Dictionary<Type, IStateMachine> _instances 
+            = new Dictionary<Type, IStateMachine>();
+
+        internal static void Register<T>(StateMachine<T> machine) where T : struct
+        {
+            _instances[typeof(T)] = machine;
+        }
+        
+        internal static void Unregister<T>(StateMachine<T> machine) where T : struct
+        {
+            IStateMachine current;
+            _instances.TryGetValue(typeof(T), out current);
+            if (current == (object) machine)
+                _instances.Remove(typeof(T));
+        }
+        
+        public static StateMachine<T> Get<T>() where T : struct
+        {
+            return _instances[typeof(T)] as StateMachine<T>;
+        }
+
+        public static void Initialize()
+        {
+            if (!Application.isPlaying) return;
+            foreach (var m in _instances.Values)
+                m.ResetState();
+        }
     }
-
-    public void Reset()
+    
+    public abstract class StateMachine<T> : Singleton<StateMachine<T>>, IStateMachine where T : struct
     {
-        _valid = ValidStates == null ? new HashSet<State>() : new HashSet<State>(ValidStates);
-        RequestState(DefaultState, true, true);
-    }
+        public Color Color;
 
-    public void Click_RequestState(State state)
-    {
-        RequestState(state);
-    }
+        public T InitialState;
+        public T State;
+    
+        public readonly string Name = typeof(T).ShortName();
+    
+        public event EventHandler<StateChange<T>> OnChange;
 
-    public void RequestState([NotNull] State state, bool force = false, bool notify = true)
-    {
-        if (!force && state.Equals(State)) return;
-        Validate(state);
-        var old = State;
-        State = state;
-        if (notify) Objects.OnMain(() => NotifyChanged(old)); 
-    }
+        private void OnEnable()
+        {
+            Debug.Log($"Awake Machine: {this}");
+            StateMachines.Register(this);
+            if (!typeof(T).IsEnum)
+                throw new Exception("StateMachineStatic can only handle enums.");
+            if (Application.isPlaying)
+                ResetState();
+        }
 
-    public void Validate(State state) 
-    {
-        if (state == null) throw new Exception("Default state cannot be null. Create a null instance if you want.");
-        if (!_valid.Contains(state)) throw new Exception($"Don't recognize {state}"); 
-    }
+        private void OnDisable()
+        {
+            Debug.Log($"Unregister Machine: {this}");
+            StateMachines.Unregister(this);
+        }
 
-    void NotifyChanged(State old)
-    {
-        var color = Color;
-        Debug.Log($"<color={color.LogString()}>{Name} -> {State.Name}</color>");
-        OnChange?.Invoke(this, new StateChange(old, State));
-    }
+        public void ResetState()
+        {
+            RequestState(InitialState, true);
+        }
 
-    public override string ToString()
-    {
-        return Name;
+        public void Click_RequestState(T state)
+        {
+            RequestState(state);
+        }
+
+        public void RequestState(T state, bool force = false, bool notify = true)
+        {
+            if (!force && state.Equals(State)) return;
+            var old = State;
+            State = state;
+            if (notify) Objects.OnMain(() => NotifyChanged(old)); 
+        }
+
+        void NotifyChanged(T old)
+        {
+            var color = Color;
+            Debug.Log($"<color={color.LogString()}>{Name} -> {State}</color>");
+            OnChange?.Invoke(this, new StateChange<T>(old, State));
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Binding;
 using System;
+using Plugins.State.Dynamic;
 
 public enum StateTextType
 {
@@ -10,10 +11,10 @@ public enum StateTextType
 }
 
 [RequireComponent(typeof(Text))]
-public class StateText : MonoBehaviour
+public class DynamicStateText : MonoBehaviour
 {
     public StateTextType StateTextType;
-    public StateMachine StateMachine;
+    public DynamicStateMachine StateMachine;
 
     [Bind] private Text _text;
 
@@ -28,7 +29,7 @@ public class StateText : MonoBehaviour
         StateMachine.OnChange -= OnState;   
     }
 
-    private void OnState(object sender, StateChange e)
+    private void OnState(object sender, DynamicStateChange e)
     {
         var text = _text.text;
         if (e.Old != null)
@@ -37,7 +38,7 @@ public class StateText : MonoBehaviour
         _text.text = text;
     }
 
-    private string AppendNew(string text, State @new)
+    private string AppendNew(string text, DynamicState @new)
     {
         var newName = @new.Name;
         switch (StateTextType)
@@ -53,7 +54,7 @@ public class StateText : MonoBehaviour
         }
     }
 
-    private string StripOld(string text, State old)
+    private string StripOld(string text, DynamicState old)
     {
         var oldName = old.Name;
         switch (StateTextType)
@@ -71,7 +72,7 @@ public class StateText : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        OnState(null, new StateChange(StateMachine.State, StateMachine.State));
+        OnState(null, new DynamicStateChange(StateMachine.State, StateMachine.State));
     }
 
     // Update is called once per frame

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Plugins.State;
+using Plugins.State.Dynamic;
 using UnityEngine;
 
 namespace Binding
@@ -26,7 +27,7 @@ namespace Binding
         {
             var attr = typeof(BindState);
             var type = obj.GetType();
-            var states = Resources.FindObjectsOfTypeAll<State>();
+            var states = Resources.FindObjectsOfTypeAll<DynamicState>();
 
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(field => field.IsDefined(attr, true));
@@ -45,7 +46,7 @@ namespace Binding
             }
         }
 
-        private static State Find(string name, State[] states)
+        private static DynamicState Find(string name, DynamicState[] states)
         {
             var find = states.FirstOrDefault((arg) => arg.Name.Replace(" ", "") == name);
             if (find == null)

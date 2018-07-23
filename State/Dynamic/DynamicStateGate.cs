@@ -1,22 +1,27 @@
 using System;
 using System.Linq;
 
-namespace Plugins.State
+namespace Plugins.State.Dynamic
 {
-    public abstract class StateGate<StateType> : ActiveGate where StateType : struct
+    public class DynamicStateGate : ActiveGate
     {
-        public StateType[] States;
+        public DynamicStateMachine Machine;
+
+        public DynamicState[] States;
         public bool Invert;
         public bool AndDestroy;
 
-        public StateMachine<StateType> Machine;
-        public StateType State => Machine.State;
+        public DynamicState State => Machine.State;
+
+        private void Start()
+        {
+            foreach (var s in States)
+                Machine.Validate(s);
+        }
 
         public override void Register(ActiveManager manager)
         {
             base.Register(manager);
-            if (Machine == null)
-                Machine = StateMachines.Get<StateType>();
             Machine.OnChange += Changed;
         }
 
@@ -40,7 +45,7 @@ namespace Plugins.State
             }
         }
 
-        private void Changed(object sender, StateChange<StateType> e)
+        private void Changed(object sender, DynamicStateChange e)
         {
             ActiveManager.Check();
         }

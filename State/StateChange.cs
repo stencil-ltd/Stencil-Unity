@@ -1,12 +1,14 @@
-﻿using System;
-public struct StateChange
+﻿namespace Plugins.State
 {
-    public readonly State Old;
-    public readonly State New;
-
-    public StateChange(State old, State @new)
+    public struct StateChange<T> where T : struct
     {
-        Old = old;
-        New = @new;
+        public readonly T? Old;
+        public readonly T New;
+
+        public StateChange(T? old, T @new)
+        {
+            Old = old;
+            New = @new;
+        }
     }
 }

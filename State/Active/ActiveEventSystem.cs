@@ -2,7 +2,7 @@ using Plugins.State;
 using TypeReferences;
 using UnityEngine;
 using System.Linq;
-
+using Util;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,6 +10,8 @@ using UnityEditor;
 public class ActiveEventSystem : MonoBehaviour
 {
     private ActiveManager[] _managers;
+
+    public ScriptableObject[] PermanentObjects;
 
     private void Awake()
     {
