@@ -85,7 +85,7 @@ namespace Plugins.State
         void NotifyChanged(T old)
         {
             var color = Color;
-            Debug.Log($"<color={color.LogString()}>{Name} -> {State}</color>");
+            Debug.Log($"<color={color.LogString()}>{GetType().ShortName()} -></color> {State}");
             OnChange?.Invoke(this, new StateChange<T>(old, State));
         }
 
