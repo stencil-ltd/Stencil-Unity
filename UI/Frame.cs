@@ -15,19 +15,14 @@ namespace UI
     {
         public static Frame Instance;
 
-        [CanBeNull] 
-        public Action OnClick;
-
         [CanBeNull] public RectMask2D Mask;
         public RectTransform Contents;
 
-        private BoxCollider2D _collider;
         private int lockCount;
         private EventSystem eventSystem;
 
         private void Awake()
         {
-            this.Bind(ref _collider);
             eventSystem = EventSystem.current;
             ApplyNotch();
         }
@@ -36,16 +31,6 @@ namespace UI
         {
             Instance = this;
             if(Mask != null) Mask.enabled = true;
-        }
-
-        void OnMouseUpAsButton()
-        {
-            OnClick?.Invoke();
-        }
-
-        void Update()
-        {
-            if (_collider != null) _collider.enabled = OnClick != null;
         }
 
         void OnDestroy()
