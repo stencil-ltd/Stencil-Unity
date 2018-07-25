@@ -13,8 +13,8 @@ namespace UI
 {
     public class Frame : MonoBehaviour
     {
-        public static Frame Instance;
-
+        public static float TopSafePadding { get; private set; }
+        
         [CanBeNull] public RectMask2D Mask;
         public RectTransform Contents;
 
@@ -29,13 +29,7 @@ namespace UI
 
         void Start()
         {
-            Instance = this;
             if(Mask != null) Mask.enabled = true;
-        }
-
-        void OnDestroy()
-        {
-            if (Instance == this) Instance = null;
         }
 
         public void Lock()
@@ -57,6 +51,7 @@ namespace UI
             }
 #endif
             
+            TopSafePadding = Screen.height - safe.yMax;
             var offsetMin = new Vector2Int((int) safe.xMin, (int) safe.yMin);
             var offsetMax = new Vector2Int((int) (Screen.width - safe.xMax), (int) (Screen.height - safe.yMax));
             Contents.offsetMin += offsetMin;
