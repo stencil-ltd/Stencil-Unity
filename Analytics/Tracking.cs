@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dev;
 using Debug = UnityEngine.Debug;
 
 namespace Analytics
@@ -8,8 +9,7 @@ namespace Analytics
     {
         public static readonly Tracking Instance = new Tracking(); 
 
-//        public bool Enabled => !Developers.Enabled;
-        public bool Enabled = true;
+        public bool Enabled => !Developers.Enabled;
 
         private readonly List<ITracker> _trackers = new List<ITracker>();
 
