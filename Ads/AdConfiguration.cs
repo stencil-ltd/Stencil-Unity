@@ -4,6 +4,12 @@ namespace Plugins.Ads
 {
     public class AdConfiguration
     {
+        public static implicit operator string(AdConfiguration configuration) 
+            => configuration.UnitId.Value;
+
+        public static implicit operator PlatformValue<string>(AdConfiguration configuration)
+            => configuration.UnitId;
+
         public readonly PlatformValue<string> UnitId;
         public AdConfiguration(string android, string ios, string debugAndroid, string debugIos)
         {
@@ -11,6 +17,16 @@ namespace Plugins.Ads
                 .WithAndroid(android, developer: debugAndroid)
                 .WithIos(ios, developer: debugIos);
         }
+    }
+
+    public class AppIdConfiguration : AdConfiguration
+    {
+        public AppIdConfiguration(string android, string ios) 
+            : base(android, 
+                   ios, 
+                   "ca-app-pub-3940256099942544~3347511713", 
+                   "ca-app-pub-3940256099942544~1458002511")
+        {}
     }
 
     public class BannerConfiguration : AdConfiguration
