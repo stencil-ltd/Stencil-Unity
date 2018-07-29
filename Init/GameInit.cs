@@ -1,7 +1,7 @@
-﻿using Plugins.UI;
+﻿using System.Collections;
+using Plugins.UI;
 using UI;
 using UnityEngine;
-using Util;
 
 namespace Plugins.Init
 {
@@ -14,8 +14,6 @@ namespace Plugins.Init
             base.Awake();
             if (!Valid) return;
             Application.targetFrameRate = 60;
-//            new GameObject("Main Thread Dispatch")
-//                .AddComponent<UnityMainThreadDispatcher>();
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
             OnInit();
@@ -23,10 +21,15 @@ namespace Plugins.Init
         
         protected virtual void OnInit()
         {}
+
+        protected virtual void OnSettled()
+        {}
         
-        protected virtual void Start()
+        protected virtual IEnumerator Start()
         {
             Started = true;
+            yield return null;
+            OnSettled();
         }
     }
 }

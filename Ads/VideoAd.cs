@@ -41,19 +41,19 @@ namespace Plugins.Ads
                 Objects.StartCoroutine(FakeShow());
                 return;
             }
-            OnShow();
+            ShowInternal();
         }
 
         public virtual bool SupportsEditor => true;
         public abstract bool IsReady { get; }
 
-        protected abstract void OnShow();
-        protected abstract void OnLoad();
+        protected abstract void ShowInternal();
+        protected abstract void LoadInternal();
 
         public void Load()
         {
             IsLoading = true;
-            OnLoad();
+            LoadInternal();
         }
 
         protected void NotifyLoad()

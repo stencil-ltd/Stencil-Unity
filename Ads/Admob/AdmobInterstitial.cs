@@ -1,4 +1,5 @@
 ﻿using GoogleMobileAds.Api;
+using UnityEngine;
 using Util;
 
 namespace Plugins.Ads.Admob
@@ -12,9 +13,9 @@ namespace Plugins.Ads.Admob
 
         public override bool SupportsEditor => false;
         public override bool IsReady => _ad?.IsLoaded() ?? false;
-        protected override void OnShow() => _ad.Show();
+        protected override void ShowInternal() => _ad.Show();
 
-        protected override void OnLoad()
+        protected override void LoadInternal()
         {
             _ad?.Destroy();
             _ad = new InterstitialAd(UnitId);

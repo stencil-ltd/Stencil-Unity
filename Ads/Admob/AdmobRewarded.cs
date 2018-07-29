@@ -1,18 +1,19 @@
 ﻿using GoogleMobileAds.Api;
+using UnityEngine;
 using Util;
 
 namespace Plugins.Ads.Admob
 {
     public class AdmobRewarded : VideoAd
     {
-        private RewardBasedVideoAd _ad = RewardBasedVideoAd.Instance;
+        private RewardBasedVideoAd _ad => RewardBasedVideoAd.Instance;
         
         public AdmobRewarded(AdConfiguration config) : base(config)
         {}
 
         public override bool SupportsEditor => false;
         public override bool IsReady => _ad?.IsLoaded() ?? false;
-        protected override void OnShow() => _ad.Show();
+        protected override void ShowInternal() => _ad.Show();
 
         public override void Init()
         {
@@ -23,7 +24,7 @@ namespace Plugins.Ads.Admob
             _ad.OnAdFailedToLoad += (sender, args) => Objects.Enqueue(NotifyError);
         }
 
-        protected override void OnLoad()
+        protected override void LoadInternal()
         {
             _ad.LoadAd(new AdRequest.Builder().Build(), UnitId);
         }
