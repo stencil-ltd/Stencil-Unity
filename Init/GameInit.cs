@@ -14,8 +14,8 @@ namespace Plugins.Init
             base.Awake();
             if (!Valid) return;
             Application.targetFrameRate = 60;
-            new GameObject("Main Thread Dispatch")
-                .AddComponent<UnityMainThreadDispatcher>();
+//            new GameObject("Main Thread Dispatch")
+//                .AddComponent<UnityMainThreadDispatcher>();
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
             OnInit();
