@@ -66,6 +66,8 @@ namespace Plugins.State
 
         public void ResetState()
         {
+            var color = Color;
+            Debug.Log($"<color={color.LogString()}>{GetType().ShortName()}</color>: Reset");
             RequestState(InitialState, true);
         }
 
