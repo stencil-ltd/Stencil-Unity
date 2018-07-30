@@ -1,4 +1,6 @@
-﻿using GoogleMobileAds.Api;
+﻿#if STENCIL_ADMOB
+
+using GoogleMobileAds.Api;
 using UnityEngine;
 using Util;
 
@@ -6,10 +8,10 @@ namespace Plugins.Ads.Admob
 {
     public class AdmobInterstitial : VideoAd
     {
-        private InterstitialAd _ad; 
-        
+        private InterstitialAd _ad;
+
         public AdmobInterstitial(AdConfiguration config) : base(config)
-        {}
+        { }
 
         public override bool SupportsEditor => false;
         public override bool IsReady => _ad?.IsLoaded() ?? false;
@@ -30,3 +32,5 @@ namespace Plugins.Ads.Admob
         }
     }
 }
+
+#endif
