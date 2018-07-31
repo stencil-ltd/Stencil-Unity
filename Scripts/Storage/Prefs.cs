@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using JetBrains.Annotations;
 using Stencil.Util;
@@ -11,7 +10,7 @@ namespace Storage
     // TODO: observe writes
     // TODO: background saves
     // TODO: transactions
-    
+
     public partial class Prefs : IPrefs
     {
         private static bool _globalInit;
@@ -132,7 +131,8 @@ namespace Storage
             var name = $"StencilPrefs/{_name}.json";
             if (_map.Count == 0 && _meta?.Count == 0)
             {
-                File.Delete(name);
+                if (File.Exists(name))
+                    File.Delete(name);
                 _lock.ExitReadLock();
             }
             else

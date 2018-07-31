@@ -50,6 +50,10 @@ namespace Storage
             Key = key;
         }
 
+        public PrefValueHolder(string key) : this(Prefs.Get(), key)
+        {
+        }
+
         public PrefValue<T> Get()
         {
             var retval = Prefs.GetStruct<T>(Key);
@@ -77,6 +81,7 @@ namespace Storage
             return $"{Get()}";
         }
         
-        public static implicit operator T?(PrefValueHolder<T> obj) => obj.Get();  
+        public static implicit operator T?(PrefValueHolder<T> obj) => obj.Get();
+        public static implicit operator T(PrefValueHolder<T> obj) => obj.Get().Value ?? default(T);
     }
 }

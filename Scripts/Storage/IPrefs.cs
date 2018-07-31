@@ -13,13 +13,7 @@ namespace Storage
 
         PrefValue<bool> GetBool(string key);
         PrefInsertion SetBool(string key, bool value);
-        
-        PrefValue<int> GetInt(string key);
-        PrefInsertion SetInt(string key, int value);
 
-        PrefValue<float> GetFloat(string key);
-        PrefInsertion SetFloat(string key, float value);
-        
         PrefValue<long> GetLong(string key);
         PrefInsertion SetLong(string key, long value);
         
