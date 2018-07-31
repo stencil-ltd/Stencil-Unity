@@ -22,7 +22,8 @@ namespace Plugins.UI
 
         protected virtual void OnDestroy()
         {
-            Instance = null;
+            if (Instance == this)
+                Instance = null;
         }
     }
 }
