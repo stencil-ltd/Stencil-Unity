@@ -37,7 +37,7 @@ namespace Currencies.UI
 
         private void MyUpdate()
         {
-            _text.text = $"{Prefix}{Currency.Spendable():N0}";
+            _text.text = $"{Prefix}{Currency.Spendable()}";
         }
     }
 }

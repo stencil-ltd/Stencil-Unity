@@ -55,7 +55,7 @@ namespace Store
             var equipped = Buyable.Equipped;
             Icon.sprite = Buyable.Icon;
             CoinSection.gameObject.SetActive(!acquired);
-            CoinText.text = $"x{Buyable.Price:N0}";
+            CoinText.text = $"x{Buyable.Price}";
             Checkmark.gameObject.SetActive(equipped);
             Equip.gameObject.SetActive(!Checkmark.gameObject.activeSelf);
             if (Highlight != null)
