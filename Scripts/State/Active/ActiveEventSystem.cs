@@ -10,7 +10,6 @@ using UnityEditor;
 public class ActiveEventSystem : MonoBehaviour
 {
     private ActiveManager[] _managers;
-
     public ScriptableObject[] PermanentObjects;
 
     private void Awake()
@@ -22,9 +21,17 @@ public class ActiveEventSystem : MonoBehaviour
                              .ToArray();
 #endif
 
+
+
         if (Application.isPlaying)
+        {
             foreach (var res in _managers)
                 res.Register();
+
+            var registers = Resources.FindObjectsOfTypeAll<RegisterableBehaviour>();
+            foreach (var res in registers)
+                res.Register();
+        }
     }
 
     public void Check() 

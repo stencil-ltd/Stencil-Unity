@@ -8,9 +8,13 @@ namespace Plugins.State
         public StateType[] States;
         public bool Invert;
         public bool AndDestroy;
+        public bool RevertOnExit;
+        public bool TakeStateOnActive;
 
         public StateMachine<StateType> Machine;
         public StateType State => Machine.State;
+
+        private StateType? RevertState;
 
         public override void Register(ActiveManager manager)
         {
@@ -23,6 +27,21 @@ namespace Plugins.State
         public override void Unregister()
         {
             Machine.OnChange -= Changed;
+        }
+
+        private void OnEnable()
+        {
+            if (TakeStateOnActive)
+                Machine.RequestState(States[0]);
+        }
+
+        private void OnDisable()
+        {
+            if (RevertOnExit && RevertState != null)
+            {
+                Machine.RequestState(RevertState.Value);   
+                RevertState = null;
+            }
         }
 
         public override bool? Check()
@@ -42,7 +61,9 @@ namespace Plugins.State
 
         private void Changed(object sender, StateChange<StateType> e)
         {
-            ActiveManager.Check();
+            if (RevertOnExit && e.Old != null && !States.Contains(e.Old.Value))
+                RevertState = e.Old.Value;
+            if (ActiveManager != null) ActiveManager.Check();
         }
     }
 }
