@@ -19,12 +19,15 @@ namespace Store
         [Header("Money")]
         public Currency Currency;
         public long Price;
+        public bool InitialGrant;
         
         public BuyableManager Manager { get; internal set; }
 
         public string Key => $"buyable_{Manager.Id}_{Id}";
         
         public event EventHandler<Buyable> OnAcquired;
+
+        private bool _blockEvents;
  
         public DateTime? DateAcquired => PlayerPrefsX.GetDateTime(Key);
         public bool Acquired
@@ -37,13 +40,21 @@ namespace Store
                     PlayerPrefsX.SetDateTime(Key, DateTime.Now);
                 else PlayerPrefs.DeleteKey(Key);
                 PlayerPrefs.Save();
-                if (value) OnAcquired?.Invoke(this, this);
+                if (value && !_blockEvents) OnAcquired?.Invoke(this, this);
             }
         }
         
         public override string ToString()
         {
             return $"[{Id}] - Buyable {Title} ({Manager})";
+        }
+
+        private void Awake()
+        {
+            if (!Application.isPlaying || !InitialGrant || Acquired) return;
+            _blockEvents = true;
+            Acquired = true;
+            _blockEvents = false;
         }
     }
 }
