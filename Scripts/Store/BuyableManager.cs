@@ -12,24 +12,53 @@ namespace Store
             = new Dictionary<string, BuyableManager>();
 
         public string Id;
+        public bool SingleEquip;
+        
         public Buyable[] Buyables;
-        public EventHandler<Buyable> OnAcquired;
+        
+        public EventHandler<Buyable> OnAcquireChanged;
+        public EventHandler<Buyable> OnEquipChanged;
 
-        private void Awake()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void LoadInit()
+        {
+            foreach (var bm in Resources.FindObjectsOfTypeAll<BuyableManager>())
+                bm.Init();
+        }
+
+        private void Init()
         {
             Registry[Id] = this;
             foreach (var b in Buyables)
             {
-                if (b.Manager != null) throw new Exception("each buyable can have one manager.");
-                b.Manager = this;
-                b.OnAcquired += _OnAcquired;
+                b.Init(this);
+                b.OnAcquireChanged += OnAcquireChanged;
+                b.OnEquipChanged += _OnEquip;
+            }
+        }
+
+        private void _OnEquip(object sender, Buyable e)
+        {
+            if (!SingleEquip)
+            {
+                OnEquipChanged?.Invoke(sender, e);
+                return;
+            }
+            
+            if (e.Equipped)
+            {
+                foreach (var buyable in Buyables)
+                    buyable.Equipped = buyable != e;
+                OnEquipChanged?.Invoke(sender, e);
+            }
+            else
+            {
+                OnEquipChanged?.Invoke(sender, e);
             }
         }
 
         public static BuyableManager GetManager(string id) => Registry[id];
         public Buyable Find(string id) => Buyables.First(b => b.Id == id);
-        
-        private void _OnAcquired(object sender, Buyable e) => OnAcquired?.Invoke(sender, e);
         
         public override string ToString()
         {
