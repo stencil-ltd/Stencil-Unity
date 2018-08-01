@@ -16,21 +16,21 @@ namespace Ads.Admob
     public class BannerEvent : UnityEvent
     {}
     
-    public class AdmobBannerArea : Permanent<AdmobBannerArea>
-    {
+    public class AdmobBannerArea : Controller<AdmobBannerArea>
+    {            
+        public static BannerEvent OnChange;
+
+        private static BannerView _banner;
+        private static BannerConfiguration _config;
+        private static bool _bannerFailed;
+        
+        private static bool _visible;
+        public static bool IsBannerVisible() => _visible;
+                
         public RectTransform Content;
         public RectTransform Scrim;
-            
-        public BannerEvent OnChange;
-
-        private BannerView _banner;
-        private BannerConfiguration _config;
-        private bool _bannerFailed;
         
-        private bool _visible;
-        public bool IsBannerVisible() => _visible;
-        
-        public float BannerHeight
+        public static float BannerHeight
         {
             get
             {
@@ -42,7 +42,7 @@ namespace Ads.Admob
             }
         }
         
-        public void ShowBanner()
+        public static void ShowBanner()
         {
             if (_visible) return;
             _visible = true;
@@ -50,7 +50,7 @@ namespace Ads.Admob
             Change();
         }
 
-        public void HideBanner()
+        public static void HideBanner()
         {
             if (!_visible) return;
             _visible = false;
@@ -58,41 +58,35 @@ namespace Ads.Admob
             Change();
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-            if (!Valid) return;
-            _config = AdSettings.Instance.BannerConfiguration;
-            SceneManager.sceneLoaded += OnSceneLoad;
-        }
-
+        private static bool _init;
         private void Start()
         {            
-            MobileAds.Initialize(AdSettings.Instance.AppConfiguration);
-            MobileAds.SetiOSAppPauseOnBackground(true);
+            if (!_init)
+            {
+                _init = true;
+                _config = AdSettings.Instance.BannerConfiguration;
+                MobileAds.Initialize(AdSettings.Instance.AppConfiguration);
+                MobileAds.SetiOSAppPauseOnBackground(true);
             
-            _banner = new BannerView(_config, AdSize.SmartBanner, AdPosition.Bottom);
-            _banner.LoadAd(new AdRequest.Builder().Build());
-            _banner.OnAdFailedToLoad += (sender, args) => _bannerFailed = true;
-            ShowBanner();
-        }
+                _banner = new BannerView(_config, AdSize.SmartBanner, AdPosition.Bottom);
+                _banner.LoadAd(new AdRequest.Builder().Build());
+                _banner.OnAdFailedToLoad += (sender, args) => _bannerFailed = true;
+                
+                ShowBanner();
+            }
 
-        protected override void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoad;
-        }
-
-        private void OnSceneLoad(Scene arg0, LoadSceneMode arg1)
-        {
+            if (_bannerFailed)
+            {
+                _bannerFailed = false;
+                _banner.LoadAd(new AdRequest.Builder().Build());                
+            }
+            
             Change();
-            if (!_bannerFailed) return;
-            _bannerFailed = false;
-            _banner.LoadAd(new AdRequest.Builder().Build());
         }
-
-        private void Change()
+        
+        private static void Change()
         {
-            SetBannerSize(BannerHeight);
+            Instance.SetBannerSize(BannerHeight);
             OnChange?.Invoke();
         }
         
@@ -103,7 +97,8 @@ namespace Ads.Admob
             pixelHeight *= ratio;
             Scrim.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, pixelHeight);
             Content.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, pixelHeight, 
-                ((RectTransform) Content.parent).rect.height - pixelHeight);   
+                ((RectTransform) Content.parent).rect.height - pixelHeight);  
+            Debug.Log($"Setting banner height to {pixelHeight}");
         }
     }
 }
