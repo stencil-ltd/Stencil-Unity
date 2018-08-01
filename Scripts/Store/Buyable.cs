@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Currencies;
 using Util;
@@ -8,6 +9,8 @@ namespace Store
     [CreateAssetMenu(menuName = "Buyables/Buyable")]
     public class Buyable : ScriptableObject
     {
+        private static string GetKey(BuyableManager mgr, string id) => $"buy_{mgr.Id}_{id}";
+
         public string Id;
         public string Title;
         
@@ -27,12 +30,12 @@ namespace Store
         
         public BuyableManager Manager { get; internal set; }
 
-        public string Key => $"buyable_{Manager.Id}_{Id}";
+        public string Key => GetKey(Manager, Id);
         
         public event EventHandler<Buyable> OnAcquireChanged;
         public event EventHandler<Buyable> OnEquipChanged;
 
-        private bool _unsafe;
+        internal bool _unsafe;
  
         public DateTime? DateAcquired => PlayerPrefsX.GetDateTime(Key);
         public bool Acquired
@@ -45,7 +48,7 @@ namespace Store
                     PlayerPrefsX.SetDateTime(Key, DateTime.Now);
                 else PlayerPrefs.DeleteKey(Key);
                 PlayerPrefs.Save();
-                if (!_unsafe) OnAcquireChanged?.Invoke(this, this);
+                if (!_unsafe) OnAcquireChanged?.Invoke(this);
             }
         }
 
@@ -58,10 +61,14 @@ namespace Store
                 if (!Equippable) throw new Exception("This cannot be equipped");
                 PlayerPrefsX.SetBool($"{Key}_equip", value);
                 PlayerPrefs.Save();
-                if (!_unsafe) OnEquipChanged?.Invoke(this, this);
+                if (!_unsafe)
+                {
+                    Manager._OnEquip(this);
+                    OnEquipChanged?.Invoke(this);
+                }
             }
         }
-
+        
         public bool AttemptToBuy()
         {
             if (Currency.Spend(Price).AndSave())
@@ -74,24 +81,24 @@ namespace Store
         
         public override string ToString()
         {
-            return $"[{Id}] - Buyable {Title} ({Manager})";
+            return Key;
         }
 
-        private bool _init;
         internal void Init(BuyableManager manager)
         {
             if (!Application.isPlaying) return;
-            if (_init) throw new Exception($"Double initialized {this}");
-            _init = true;
             Manager = manager;
-            Reconfigure();
+            ConfigureDefaults();
+            Debug.Log($"Init {this}");
         }
 
-        public void Reconfigure()
+        public void ConfigureDefaults()
         {
             _unsafe = true;
-            Acquired = InitialGrant;
-            Equipped = InitialEquip && Equippable;
+            if (InitialGrant)
+                Acquired = true;
+            if (InitialEquip && Equippable)
+                Equipped = true;
             _unsafe = false;
         }
     }

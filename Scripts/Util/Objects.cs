@@ -44,6 +44,11 @@ namespace Util
         {
             UnityMainThreadDispatcher.Instance().Enqueue(action);
         }
+
+        public static void Invoke<T>([CanBeNull] this EventHandler<T> handler, T obj)
+        {
+            handler?.Invoke(null, obj);    
+        }
         
         public static void Invoke([CanBeNull] this EventHandler handler, object sender = null)
         {

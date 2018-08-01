@@ -1,47 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using JetBrains.Annotations;
 using Plugins.Data;
 using UnityEngine;
 
 namespace Store
 {
+
     [CreateAssetMenu(menuName = "Buyables/Manager")]
     public class BuyableManager : ScriptableObject
     {
         private static readonly Dictionary<string, BuyableManager> Registry 
             = new Dictionary<string, BuyableManager>();
+        public static BuyableManager GetManager(string id) => Registry[id];
 
         public string Id;
         public bool SingleEquip;
         
         public Buyable[] Buyables;
         
-        public EventHandler<Buyable> OnAcquireChanged;
-        public EventHandler<Buyable> OnEquipChanged;
-
-        static BuyableManager()
-        {
-            ResetButton.OnGlobalReset += (sender, args) =>
-            {
-                foreach (var b in Resources.FindObjectsOfTypeAll<BuyableManager>())
-                    b.OnReset(sender, args);
-            };
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [CanBeNull] public Buyable SingleEquipped;
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void OnLoad()
         {
-            foreach (var b in Resources.FindObjectsOfTypeAll<BuyableManager>())
-                b.Init();
+            foreach (var r in Resources.FindObjectsOfTypeAll<BuyableManager>())
+                r.Init();
         }
 
-        private bool _hasInit;
         private void Init()
         {
-            if (_hasInit) return;
+            Debug.Log($"Init {this}");
             if (!Application.isPlaying) return;
-            _hasInit = true;
             Registry[Id] = this;
             
             var ids = new HashSet<string>();
@@ -50,39 +40,41 @@ namespace Store
                 if (ids.Contains(b.Id)) throw new Exception($"Duplicate id {b.Id}");
                 ids.Add(b.Id);
                 b.Init(this);
-                b.OnAcquireChanged += OnAcquireChanged;
-                b.OnEquipChanged += _OnEquip;
+                if (SingleEquip && b.Equipped)
+                {
+                    if (SingleEquipped == null)
+                        SingleEquipped = b;
+                    else b.Equipped = false;
+                }
             }
+            ResetButton.OnGlobalReset += OnReset;
         }
 
         private void OnReset(object sender, EventArgs eventArgs)
         {
             foreach (var b in Buyables)
-                b.Reconfigure();
+                b.ConfigureDefaults();
         }
 
-        private void _OnEquip(object sender, Buyable e)
+        internal void _OnEquip(Buyable e)
         {
             if (!SingleEquip)
             {
-                OnEquipChanged?.Invoke(sender, e);
                 return;
             }
-            
+
             if (e.Equipped)
             {
-                foreach (var buyable in Buyables)
-                    buyable.Equipped = buyable != e;
-                OnEquipChanged?.Invoke(sender, e);
-            }
-            else
+                var old = SingleEquipped;
+                SingleEquipped = e;
+                if (old != null)
+                    old.Equipped = false;
+            } 
+            else if (SingleEquipped == e)
             {
-                OnEquipChanged?.Invoke(sender, e);
+                SingleEquipped = null;
             }
         }
-
-        public static BuyableManager GetManager(string id) => Registry[id];
-        public Buyable Find(string id) => Buyables.First(b => b.Id == id);
         
         public override string ToString()
         {

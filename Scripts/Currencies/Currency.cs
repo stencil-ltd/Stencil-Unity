@@ -2,6 +2,7 @@
 using System.Linq;
 using Analytics;
 using JetBrains.Annotations;
+using Plugins.Data;
 using UnityEngine;
 using Util;
 
@@ -49,6 +50,7 @@ namespace Currencies
         private void OnEnable()
         {
             InitializeData(false);
+            ResetButton.OnGlobalReset += (sender, args) => Clear();
         }
 
         public void Clear()

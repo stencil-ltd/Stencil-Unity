@@ -19,19 +19,19 @@ namespace Store
             UpdateBuyable();
         }
 
-        private void OnEquipChanged(object sender, Buyable e)
+        private void OnEquipChanged(object sender, Buyable buyable)
         {
             UpdateBuyable();
         }
 
-        private void OnAcquireChanged(object sender, Buyable e)
+        private void OnAcquireChanged(object sender, Buyable buyable)
         {
             UpdateBuyable();
         }
 
         protected virtual void OnDestroy()
         {
-            Buyable.OnAcquireChanged -= OnAcquireChanged;
+            Buyable.OnEquipChanged -= OnEquipChanged;
             Buyable.OnEquipChanged -= OnEquipChanged;
         }
 
