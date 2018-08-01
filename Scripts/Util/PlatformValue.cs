@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace Util
 {
-    public class PlatformValue<T>
+    public struct PlatformValue<T>
     {
         public static implicit operator T(PlatformValue<T> plat) => plat.Value;
         
         public T Value { get; private set; }
         public bool IsDeveloper => Developers.Enabled;
-
-        public PlatformValue()
-        {
-        }
 
         public PlatformValue(T value)
         {

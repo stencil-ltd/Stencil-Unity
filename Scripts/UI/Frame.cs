@@ -13,16 +13,24 @@ namespace UI
 {
     public class Frame : MonoBehaviour
     {
-        public static float TopSafePadding { get; private set; }
-        
+        public static Frame Instance;
+
+        [CanBeNull] 
+        public Action OnClick;
+
         [CanBeNull] public RectMask2D Mask;
         public RectTransform Contents;
 
+        public float TopSafePadding { get; private set; }
+
+        private BoxCollider2D _collider;
         private int lockCount;
         private EventSystem eventSystem;
 
         private void Awake()
         {
+            Instance = this;
+            this.Bind(ref _collider);
             eventSystem = EventSystem.current;
             ApplyNotch();
         }
@@ -30,6 +38,21 @@ namespace UI
         void Start()
         {
             if(Mask != null) Mask.enabled = true;
+        }
+
+        void OnMouseUpAsButton()
+        {
+            OnClick?.Invoke();
+        }
+
+        void Update()
+        {
+            if (_collider != null) _collider.enabled = OnClick != null;
+        }
+
+        void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         public void Lock()
@@ -50,7 +73,7 @@ namespace UI
                 safe.yMax -= 150;
             }
 #endif
-            
+
             TopSafePadding = Screen.height - safe.yMax;
             var offsetMin = new Vector2Int((int) safe.xMin, (int) safe.yMin);
             var offsetMax = new Vector2Int((int) (Screen.width - safe.xMax), (int) (Screen.height - safe.yMax));
