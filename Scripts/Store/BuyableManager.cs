@@ -40,27 +40,38 @@ namespace Store
             Registry[Id] = this;
             
             var ids = new HashSet<string>();
-            SingleEquipped = null;
             foreach (var b in Buyables)
             {
                 if (ids.Contains(b.Id)) throw new Exception($"Duplicate id {b.Id}");
                 ids.Add(b.Id);
                 if (b.Init(this))
                     b.OnAcquireChanged += (sender, args) => OnAcquireChanged?.Invoke(sender, null);
+            }
+            ConfigureSingleEquipped();
+            ResetButton.OnGlobalReset += OnReset;
+        }
+
+        private void ConfigureSingleEquipped()
+        {
+            SingleEquipped = null;
+            foreach (var b in Buyables)
+            {
                 if (SingleEquip && b.Equipped)
                 {
                     if (SingleEquipped == null || SingleEquipped == b)
                         SingleEquipped = b;
                     else b.Equipped = false;
-                }
+                }                
             }
-            ResetButton.OnGlobalReset += OnReset;
         }
 
         private void OnReset(object sender, EventArgs eventArgs)
         {
             foreach (var b in Buyables)
                 b.ConfigureDefaults();
+            ConfigureSingleEquipped();
+            OnAcquireChanged?.Invoke();
+            OnEquipChanged?.Invoke();
         }
 
         private bool _recursing;
