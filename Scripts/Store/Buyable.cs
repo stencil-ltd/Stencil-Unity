@@ -31,6 +31,8 @@ namespace Store
         
         public event EventHandler<Buyable> OnAcquireChanged;
         public event EventHandler<Buyable> OnEquipChanged;
+
+        private bool _unsafe;
  
         public DateTime? DateAcquired => PlayerPrefsX.GetDateTime(Key);
         public bool Acquired
@@ -38,12 +40,12 @@ namespace Store
             get { return DateAcquired != null; }
             set
             {
-                if (Acquired == value) return;
+                if (!_unsafe && Acquired == value) return;
                 if (value)
                     PlayerPrefsX.SetDateTime(Key, DateTime.Now);
                 else PlayerPrefs.DeleteKey(Key);
                 PlayerPrefs.Save();
-                OnAcquireChanged?.Invoke(this, this);
+                if (!_unsafe) OnAcquireChanged?.Invoke(this, this);
             }
         }
 
@@ -52,11 +54,11 @@ namespace Store
             get { return PlayerPrefsX.GetBool($"{Key}_equip"); }
             set
             {
-                if (value == Equipped) return;
+                if (!_unsafe && value == Equipped) return;
                 if (!Equippable) throw new Exception("This cannot be equipped");
                 PlayerPrefsX.SetBool($"{Key}_equip", value);
                 PlayerPrefs.Save();
-                OnEquipChanged?.Invoke(this, this);
+                if (!_unsafe) OnEquipChanged?.Invoke(this, this);
             }
         }
 
@@ -75,15 +77,22 @@ namespace Store
             return $"[{Id}] - Buyable {Title} ({Manager})";
         }
 
+        private bool _init;
         internal void Init(BuyableManager manager)
         {
             if (!Application.isPlaying) return;
-            if (Manager != null) throw new Exception($"Already initialized by {Manager}");
+            if (_init) throw new Exception($"Double initialized {this}");
+            _init = true;
             Manager = manager;
-            if (InitialGrant && !Acquired)
-                Acquired = true;
-            if (InitialEquip && Equippable && !Equipped)
-                Equipped = true;
+            Reconfigure();
+        }
+
+        public void Reconfigure()
+        {
+            _unsafe = true;
+            Acquired = InitialGrant;
+            Equipped = InitialEquip && Equippable;
+            _unsafe = false;
         }
     }
 }

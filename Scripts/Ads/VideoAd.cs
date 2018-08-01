@@ -14,6 +14,7 @@ namespace Plugins.Ads
         public event EventHandler OnError;
         public event EventHandler OnComplete;
         public event EventHandler OnClose; // these will be the same for some ad types.
+        public event EventHandler<bool> OnResult; // single callback for close or rewarded.
 
         public bool IsLoading { get; private set; }
 
@@ -68,8 +69,17 @@ namespace Plugins.Ads
             OnError?.Invoke();
         }
 
-        protected void NotifyComplete() => OnComplete?.Invoke();
-        protected void NotifyClose() => OnClose?.Invoke();
+        protected void NotifyComplete()
+        {
+            OnComplete?.Invoke();
+            OnResult?.Invoke(null, true);
+        }
+
+        protected void NotifyClose()
+        {
+            OnClose?.Invoke();
+            OnResult?.Invoke(null, false);
+        }
 
         private IEnumerator HandleError(EventArgs args)
         {

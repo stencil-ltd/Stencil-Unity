@@ -1,11 +1,12 @@
-﻿using Binding;
+﻿using System.Net.Configuration;
+using Binding;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Store
 {
     [RequireComponent(typeof(Button))]
-    public class BuyableListing2D : MonoBehaviour
+    public class BuyableListing2D : BuyableListing
     {
         public Image Icon;
         
@@ -15,8 +16,6 @@ namespace Store
         public GameObject Highlight;
         public Image Checkmark;
         public GameObject Equip;
-
-        public Buyable Buyable;
 
         [Bind] 
         private Button _button;
@@ -33,23 +32,7 @@ namespace Store
             });
         }
 
-        private void Start()
-        {
-            Buyable.OnAcquireChanged += OnAcquireChanged;
-            UpdateBuyable();
-        }
-
-        private void OnDestroy()
-        {
-            Buyable.OnAcquireChanged += OnAcquireChanged;
-        }
-
-        private void OnAcquireChanged(object sender, Buyable e)
-        {
-            UpdateBuyable();
-        }
-
-        private void UpdateBuyable()
+        protected override void UpdateBuyable()
         {
             var acquired = Buyable.Acquired;
             var equipped = Buyable.Equipped;
@@ -57,7 +40,7 @@ namespace Store
             CoinSection.gameObject.SetActive(!acquired);
             CoinText.text = $"x{Buyable.Price}";
             Checkmark.gameObject.SetActive(equipped);
-            Equip.gameObject.SetActive(!Checkmark.gameObject.activeSelf);
+            Equip.gameObject.SetActive(acquired && !equipped);
             if (Highlight != null)
                 Highlight.SetActive(equipped);
         }
