@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Util
 {
@@ -20,5 +21,25 @@ namespace Util
                 return _instance;
             }
         }
+
+        protected virtual void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoad;
+        }
+
+        protected virtual void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoad;
+        }
+
+        public void OnSceneLoad(Scene arg0, LoadSceneMode loadSceneMode)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoad;
+            Debug.Log($"Singleton Awake: {typeof(T).Name}");
+            ((Singleton<T>) (object) Instance).OnFirstLoad();
+        }
+        
+        protected virtual void OnFirstLoad()
+        {}        
     }
 }

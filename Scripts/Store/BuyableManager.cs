@@ -26,7 +26,7 @@ namespace Store
         [Header("Debug")]
         [CanBeNull] public Buyable SingleEquipped;
         
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnLoad()
         {
             foreach (var r in Resources.FindObjectsOfTypeAll<BuyableManager>())

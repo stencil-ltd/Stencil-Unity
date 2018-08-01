@@ -48,20 +48,21 @@ namespace State
     
         public event EventHandler<StateChange<T>> OnChange;
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            Debug.Log($"Awake Machine: {this}");
-            StateMachines.Register(this);
+            base.OnEnable();
             if (!typeof(T).IsEnum)
-                throw new Exception("StateMachineStatic can only handle enums.");
-            if (Application.isPlaying)
-                ResetState();
+                throw new Exception("StateMachine can only handle enums.");
+            Debug.Log($"Register Machine: {this}");
+            StateMachines.Register(this);
         }
 
-        private void OnDisable()
+        protected override void OnFirstLoad()
         {
-            Debug.Log($"Unregister Machine: {this}");
-            StateMachines.Unregister(this);
+            base.OnFirstLoad();
+            Debug.Log($"Awake Machine: {this}");
+            if (Application.isPlaying)
+                ResetState();
         }
 
         public void ResetState()

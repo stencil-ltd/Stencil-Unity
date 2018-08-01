@@ -2,6 +2,7 @@
 using Plugins.UI;
 using UI;
 using UnityEngine;
+using Util;
 
 namespace Plugins.Init
 {
@@ -16,6 +17,7 @@ namespace Plugins.Init
             Application.targetFrameRate = 60;
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
+            new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
             OnInit();
         }
         

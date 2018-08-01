@@ -71,7 +71,7 @@ namespace Ads.Admob
             MobileAds.Initialize(AdSettings.Instance.AppConfiguration);
             MobileAds.SetiOSAppPauseOnBackground(true);
             
-            _banner = new BannerView(_config, AdSize.SmartBanner, AdPosition.Top);
+            _banner = new BannerView(_config, AdSize.SmartBanner, AdPosition.Bottom);
             _banner.LoadAd(new AdRequest.Builder().Build());
             _banner.OnAdFailedToLoad += (sender, args) => _bannerFailed = true;
             ShowBanner();
@@ -84,6 +84,7 @@ namespace Ads.Admob
 
         private void OnSceneLoad(Scene arg0, LoadSceneMode arg1)
         {
+            Change();
             if (!_bannerFailed) return;
             _bannerFailed = false;
             _banner.LoadAd(new AdRequest.Builder().Build());
@@ -103,7 +104,6 @@ namespace Ads.Admob
             Scrim.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, pixelHeight);
             Content.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, pixelHeight, 
                 ((RectTransform) Content.parent).rect.height - pixelHeight);   
-//            Debug.Log($"Banner height is {pixelHeight}. Setting content offset to {offset} [factor = {ratio}]");
         }
     }
 }
