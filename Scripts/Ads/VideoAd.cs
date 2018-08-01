@@ -16,6 +16,7 @@ namespace Plugins.Ads
         public event EventHandler OnClose; // these will be the same for some ad types.
         public event EventHandler<bool> OnResult; // single callback for close or rewarded.
 
+        public bool HasError { get; private set; }
         public bool IsLoading { get; private set; }
 
         public VideoAd(PlatformValue<string> unitId)
@@ -60,12 +61,14 @@ namespace Plugins.Ads
         protected void NotifyLoad()
         {
             IsLoading = false;
+            HasError = false;
             OnLoaded?.Invoke();
         }
 
         protected void NotifyError()
         {
             IsLoading = false;
+            HasError = true;
             OnError?.Invoke();
         }
 
