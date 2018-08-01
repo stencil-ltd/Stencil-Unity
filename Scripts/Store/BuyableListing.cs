@@ -32,7 +32,7 @@ namespace Store
         protected virtual void OnDestroy()
         {
             Buyable.OnEquipChanged -= OnEquipChanged;
-            Buyable.OnEquipChanged -= OnEquipChanged;
+            Buyable.OnAcquireChanged -= OnAcquireChanged;
         }
 
         protected abstract void UpdateBuyable();

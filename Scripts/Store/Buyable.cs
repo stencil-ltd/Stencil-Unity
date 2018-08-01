@@ -85,12 +85,16 @@ namespace Store
             return Key;
         }
 
-        internal void Init(BuyableManager manager)
+        private bool _init;
+        internal bool Init(BuyableManager manager)
         {
-            if (!Application.isPlaying) return;
+            if (_init) return false;
+            if (!Application.isPlaying) return false;
+            _init = true;
             Manager = manager;
             ConfigureDefaults();
             Debug.Log($"Init {this}");
+            return true;
         }
 
         public void ConfigureDefaults()

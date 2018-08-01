@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Plugins.Data;
 using UnityEngine;
+using Util;
 
 namespace Store
 {
@@ -18,7 +19,11 @@ namespace Store
         public bool SingleEquip;
         
         public Buyable[] Buyables;
-        
+
+        public event EventHandler OnAcquireChanged;
+        public event EventHandler OnEquipChanged;
+
+        [Header("Debug")]
         [CanBeNull] public Buyable SingleEquipped;
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -40,7 +45,8 @@ namespace Store
             {
                 if (ids.Contains(b.Id)) throw new Exception($"Duplicate id {b.Id}");
                 ids.Add(b.Id);
-                b.Init(this);
+                if (b.Init(this))
+                    b.OnAcquireChanged += (sender, args) => OnAcquireChanged?.Invoke(sender, null);
                 if (SingleEquip && b.Equipped)
                 {
                     if (SingleEquipped == null || SingleEquipped == b)
@@ -57,24 +63,31 @@ namespace Store
                 b.ConfigureDefaults();
         }
 
+        private bool _recursing;
         internal void _OnEquip(Buyable e)
         {
             if (!SingleEquip)
             {
+                OnEquipChanged?.Invoke();
                 return;
             }
 
             if (e.Equipped)
             {
+                _recursing = true;
                 var old = SingleEquipped;
                 SingleEquipped = e;
                 if (old != null)
                     old.Equipped = false;
+                _recursing = false;
             } 
             else if (SingleEquipped == e)
             {
                 SingleEquipped = null;
             }
+            
+            if (!_recursing)
+                OnEquipChanged?.Invoke();
         }
         
         public override string ToString()
