@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.UI
+namespace UI
 {
     public abstract class Controller<T> : RegisterableBehaviour where T : Controller<T>
     {
@@ -14,8 +14,11 @@ namespace Plugins.UI
 
         protected virtual void Awake()
         {
-            Instance = (T) this;
+            Register();
         }
+
+        public override void Unregister()
+        {}
 
         protected virtual void OnDestroy()
         {

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 
-public abstract class RegisterableBehaviour : MonoBehaviour
+namespace UI
 {
-    public abstract void Register();
+    public abstract class RegisterableBehaviour : MonoBehaviour
+    {
+        public abstract void Register();
+        public abstract void Unregister();
+    }
 }

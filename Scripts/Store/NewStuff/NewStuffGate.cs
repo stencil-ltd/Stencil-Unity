@@ -32,13 +32,20 @@ namespace Store.NewStuff
         public override void Register(ActiveManager manager)
         {
             base.Register(manager);
-            Currency.OnSpendableChanged += OnChange;            
+            Currency.OnSpendableChanged += OnChange;   
+            Debug.Log($"Register New Stuff {this}");
+        }
+
+        public override void Unregister()
+        {
+            base.Unregister();
+            Currency.OnSpendableChanged -= OnChange;
+            Debug.Log($"Unregister New Stuff {this}");
         }
 
         private void OnDestroy()
         {
             LastBuyableCount = BuyableCount;
-            Currency.OnSpendableChanged -= OnChange;
         }
 
         private void OnChange(object sender, Currency e)

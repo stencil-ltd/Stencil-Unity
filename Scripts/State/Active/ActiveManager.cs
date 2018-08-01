@@ -25,12 +25,20 @@ namespace State.Active
         public void Register()
         {
             if (IsRegistered) return;
-            if (!Application.isPlaying && !ActiveInEditor) return;
+            if (!Application.isPlaying && !ActiveInEditor) return;            
+            Debug.Log($"Register manager: {this}");
             IsRegistered = true;
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
                 g.Register(this);
             Check();
+        }
+
+        public void Unregister()
+        {
+            Debug.Log($"Unregister manager: {this}");
+            foreach(var g in Gates)
+                g.Unregister();            
         }
 
         public void Check() 
@@ -53,12 +61,6 @@ namespace State.Active
                 }
             }
             gameObject.SetActive(active);
-        }
-
-        private void OnDestroy() 
-        {
-            foreach(var g in Gates)
-                g.Unregister();
         }
     }
 }
