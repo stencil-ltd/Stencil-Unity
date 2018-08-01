@@ -17,6 +17,7 @@ namespace Store
         [Header("Assets")]
         public Sprite Icon;
         public Texture Texture;
+        public Mesh Mesh;
         public GameObject Prefab;
         
         [Header("Money")]
