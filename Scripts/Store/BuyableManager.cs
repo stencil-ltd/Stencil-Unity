@@ -35,6 +35,7 @@ namespace Store
             Registry[Id] = this;
             
             var ids = new HashSet<string>();
+            SingleEquipped = null;
             foreach (var b in Buyables)
             {
                 if (ids.Contains(b.Id)) throw new Exception($"Duplicate id {b.Id}");
