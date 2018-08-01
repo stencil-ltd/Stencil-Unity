@@ -16,7 +16,7 @@ namespace Store
         
         [Header("Assets")]
         public Sprite Icon;
-        public Texture Skin;
+        public Texture Texture;
         public GameObject Prefab;
         
         [Header("Money")]
@@ -94,12 +94,15 @@ namespace Store
 
         public void ConfigureDefaults()
         {
+            if (PlayerPrefsX.GetBool($"{Key}_configured")) return;
             _unsafe = true;
             if (InitialGrant)
                 Acquired = true;
             if (InitialEquip && Equippable)
                 Equipped = true;
             _unsafe = false;
+            PlayerPrefsX.SetBool($"{Key}_configured", true);
+            PlayerPrefs.Save();
         }
     }
 }

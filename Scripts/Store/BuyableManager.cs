@@ -42,7 +42,7 @@ namespace Store
                 b.Init(this);
                 if (SingleEquip && b.Equipped)
                 {
-                    if (SingleEquipped == null)
+                    if (SingleEquipped == null || SingleEquipped == b)
                         SingleEquipped = b;
                     else b.Equipped = false;
                 }
