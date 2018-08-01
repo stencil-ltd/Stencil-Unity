@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Plugins.State
+namespace State.Active
 {
     [RequireComponent(typeof(ActiveManager))]
     public abstract class ActiveGate : MonoBehaviour

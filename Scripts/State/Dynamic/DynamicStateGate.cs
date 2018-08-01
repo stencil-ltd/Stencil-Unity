@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using State.Active;
 
-namespace Plugins.State.Dynamic
+namespace State.Dynamic
 {
     public class DynamicStateGate : ActiveGate
     {

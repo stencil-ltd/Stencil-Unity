@@ -4,7 +4,7 @@ using Plugins.Util;
 using UnityEngine;
 using Util;
 
-namespace Plugins.State
+namespace State
 {
     public static class StateMachines
     {

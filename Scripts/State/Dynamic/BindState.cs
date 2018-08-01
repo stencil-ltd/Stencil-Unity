@@ -1,5 +1,6 @@
 ﻿using System;
-namespace Plugins.State
+
+namespace State.Dynamic
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class BindState : Attribute

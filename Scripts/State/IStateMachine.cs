@@ -1,4 +1,4 @@
-﻿namespace Plugins.State
+﻿namespace State
 {
     public interface IStateMachine
     {

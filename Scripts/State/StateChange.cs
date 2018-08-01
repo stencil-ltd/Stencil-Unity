@@ -1,4 +1,4 @@
-﻿namespace Plugins.State
+﻿namespace State
 {
     public struct StateChange<T> where T : struct
     {

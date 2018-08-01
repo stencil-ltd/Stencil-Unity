@@ -5,7 +5,7 @@ using Plugins.Util;
 using UnityEngine;
 using Util;
 
-namespace Plugins.State.Dynamic
+namespace State.Dynamic
 {
     [CreateAssetMenu(menuName = "Dynamic States/Machine")]
     public class DynamicStateMachine : Singleton<DynamicStateMachine>

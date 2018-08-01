@@ -1,4 +1,4 @@
-﻿namespace Plugins.State.Dynamic
+﻿namespace State.Dynamic
 {
     public struct DynamicStateChange
     {

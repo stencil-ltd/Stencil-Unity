@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Plugins.State;
-using Plugins.State.Dynamic;
+using State.Dynamic;
 using UnityEngine;
 
 namespace Binding

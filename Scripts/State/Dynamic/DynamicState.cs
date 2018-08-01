@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.State.Dynamic
+namespace State.Dynamic
 {
     [CreateAssetMenu(menuName = "Dynamic States/State")]
     public class DynamicState : ScriptableObject

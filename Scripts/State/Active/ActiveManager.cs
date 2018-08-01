@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Plugins.State
+namespace State.Active
 {
     public enum Operation
     {

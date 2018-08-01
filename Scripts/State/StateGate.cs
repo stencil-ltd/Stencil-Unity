@@ -1,15 +1,16 @@
 using System;
 using System.Linq;
+using State.Active;
 
-namespace Plugins.State
+namespace State
 {
     public abstract class StateGate<StateType> : ActiveGate where StateType : struct
     {
-        public StateType[] States;
         public bool Invert;
         public bool AndDestroy;
         public bool RevertOnExit;
         public bool TakeStateOnActive;
+        public StateType[] States;
 
         public StateMachine<StateType> Machine;
         public StateType State => Machine.State;

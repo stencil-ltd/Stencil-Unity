@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Plugins.State.Dynamic
+namespace State.Dynamic
 {
     [Serializable]
     public class DynamicStateListenEvent : UnityEvent<DynamicStateChange>
