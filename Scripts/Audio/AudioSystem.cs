@@ -3,7 +3,7 @@ using Plugins.UI;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Plugins.Audio
+namespace Audio
 {
     public class AudioSystem : Permanent<AudioSystem>
     {
