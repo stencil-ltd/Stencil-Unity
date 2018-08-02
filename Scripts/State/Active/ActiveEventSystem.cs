@@ -30,8 +30,11 @@ namespace State.Active
             {
                 foreach (var res in _managers)
                     res.Register();
+                
                 foreach (var res in _registers)
                     res.Register();
+                foreach (var res in _registers)
+                    res.DidRegister();
             }
         }
 
@@ -41,6 +44,9 @@ namespace State.Active
             {
                 foreach (var res in _managers)
                     res.Unregister();
+                
+                foreach (var res in _registers)
+                    res.WillUnregister();
                 foreach (var res in _registers)
                     res.Unregister();
             }            
