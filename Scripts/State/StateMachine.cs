@@ -53,14 +53,12 @@ namespace State
             base.OnEnable();
             if (!typeof(T).IsEnum)
                 throw new Exception("StateMachine can only handle enums.");
-            Debug.Log($"Register Machine: {this}");
             StateMachines.Register(this);
         }
 
         protected override void OnFirstLoad()
         {
             base.OnFirstLoad();
-            Debug.Log($"Awake Machine: {this}");
             if (Application.isPlaying)
                 ResetState();
         }

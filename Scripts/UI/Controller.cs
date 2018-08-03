@@ -8,7 +8,6 @@ namespace UI
 
         public override void Register()
         {
-            Debug.Log($"Register {this}");
             Instance = (T)this;
         }
 

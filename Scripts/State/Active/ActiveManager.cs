@@ -26,7 +26,6 @@ namespace State.Active
         {
             if (IsRegistered) return;
             if (!Application.isPlaying && !ActiveInEditor) return;            
-            Debug.Log($"Register manager: {this}");
             IsRegistered = true;
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
@@ -36,7 +35,6 @@ namespace State.Active
 
         public void Unregister()
         {
-            Debug.Log($"Unregister manager: {this}");
             foreach(var g in Gates)
                 g.Unregister();            
         }
