@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Particles
 {
+    [RequireComponent(typeof(ParticleSystem))]
+    [ExecuteInEditMode]
     public class StandardParticle : MonoBehaviour
     {
         public enum DoOnFinish
@@ -42,12 +44,14 @@ namespace Particles
             {
                 particle.GetComponent<Renderer>().sortingLayerName = "Particles";
                 var main = particle.main;
-                main.startColor = top.main.startColor;
+                if (Application.isPlaying)
+                    main.startColor = top.main.startColor;
             }
         }
 
         private void Update()
         {
+            if (!Application.isPlaying) return;
             if (ParticleSystem.isStopped)
             {
                 switch (OnFinish)
