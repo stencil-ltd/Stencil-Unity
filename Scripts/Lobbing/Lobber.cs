@@ -13,8 +13,12 @@ namespace Lobbing
         [Range(0f, 1f)] 
         public float AmountPerLob = 0.1f;
         [Range(0f, 1f)] 
-        public float Randomize = 0.5f;
+        public float RandomizeAmount = 0.5f;
+        
         public float Interval = 0.2f;
+        public float RandomizeInterval = 0f;
+
+        public float RandomizeDuration = 0f;
     }
     
     [Serializable]
@@ -38,11 +42,18 @@ namespace Lobbing
 
         public ILobFunction Function = new ClassicTweenLob();
 
-        public IEnumerator LobSingle(long amount)
+        public IEnumerator LobSingle(long amount, bool applyRandomization = false)
         {
             var obj = Instantiate(Prefab, To.parent);
             obj.transform.position = From.position;
-            var lob = new Lob(obj, amount, Flight);
+            
+            var style = Flight;
+            if (applyRandomization)
+            {
+                style.Duration += Random.Range(-Division.RandomizeDuration, Division.RandomizeDuration);
+            }
+            
+            var lob = new Lob(obj, amount, style);
             OnLobBegan?.Invoke(lob);
             yield return StartCoroutine(Function.Lob(lob, From, To));
             OnLobEnded?.Invoke(lob);
@@ -55,14 +66,18 @@ namespace Lobbing
             var remaining = amount;
             while (remaining > 0L)
             {
-                var div = Division.AmountPerLob + Random.Range(-Division.Randomize, Division.Randomize);
+                var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
                 var single = (long) (div * amount);
                 if (single < 0) continue;
                 if (single > remaining) single = remaining;
                 remaining -= single;
-                routines.Add(StartCoroutine(LobSingle(single)));
+                routines.Add(StartCoroutine(LobSingle(single, true)));
                 if (remaining > 0)
-                    yield return new WaitForSeconds(Division.Interval);
+                {
+                    var interval = Division.Interval +
+                                   Random.Range(-Division.RandomizeInterval, Division.RandomizeInterval);
+                    yield return new WaitForSeconds(interval);
+                }
             }
 
             foreach (var r in routines)
