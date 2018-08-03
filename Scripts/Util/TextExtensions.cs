@@ -9,8 +9,13 @@ namespace Util
     {
         private static readonly AnimationCurve Curve 
             = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
+        public static void SetAmount(this Text text, string format, string numberType, long to)
+        {
+            text.text = string.Format(format, to.ToString(numberType));
+        }
         
-        public static IEnumerator LerpAmount(this Text text, string format, long to, float duration)
+        public static IEnumerator LerpAmount(this Text text, string format, string numberType, long to, float duration)
         {
             long from = 0;
             long.TryParse(text.text.ToLower().Replace(",", "").Replace("$", "").Replace("x", ""), out from);
@@ -19,7 +24,7 @@ namespace Util
             {
                 var elapsed = (float) (DateTime.UtcNow - start).TotalSeconds;
                 var normed = from + (to - from) * Curve.Evaluate(elapsed / duration);
-                text.text = string.Format(format, (long) normed);
+                text.SetAmount(format, numberType, (long) normed);
                 if (elapsed >= duration) yield break;
                 yield return null;
             }

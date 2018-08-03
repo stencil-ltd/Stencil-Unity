@@ -92,8 +92,8 @@ namespace Plugins.Ads
 
         private IEnumerator FakeShow()
         {
-            Debug.LogWarning("Ad doesn't support editor. Completing in 1 second!");
-            yield return new WaitForSeconds(1f);
+            Debug.LogWarning("Ad doesn't support editor. Completing!");
+            yield return new WaitForSeconds(0.3f);
             NotifyComplete();
         }
 
