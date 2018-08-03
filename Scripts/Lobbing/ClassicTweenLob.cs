@@ -6,11 +6,11 @@ namespace Lobbing
 {
     public class ClassicTweenLob : ILobFunction
     {      
-        public IEnumerator Lob(Lob lob, GameObject origin, GameObject target)
+        public IEnumerator Lob(Lob lob, Transform origin, Transform target)
         {
             var obj = lob.Projectile;
-            obj.transform.position = origin.transform.position;
-            var lt = LeanTween.move(obj, target.transform, lob.Style.Duration);
+            obj.transform.position = origin.position;
+            var lt = LeanTween.move(obj, target, lob.Style.Duration);
             if (lob.Style.Elastic)
             {
                 lt.setEaseInBack();

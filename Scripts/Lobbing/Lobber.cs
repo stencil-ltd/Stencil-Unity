@@ -25,8 +25,8 @@ namespace Lobbing
     {
         [Header("Objects")] 
         public GameObject Prefab;
-        public GameObject From;
-        public GameObject To;
+        public Transform From;
+        public Transform To;
 
         [Header("Style")]
         public LobStyle Flight;
@@ -40,7 +40,7 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount)
         {
-            var obj = Instantiate(Prefab, From.transform.parent);
+            var obj = Instantiate(Prefab, From.parent);
             var lob = new Lob(obj, amount, Flight);
             OnLobBegan?.Invoke(lob);
             yield return StartCoroutine(Function.Lob(lob, From, To));

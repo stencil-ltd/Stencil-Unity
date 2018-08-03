@@ -6,6 +6,6 @@ namespace Lobbing
 {
     public interface ILobFunction
     {
-        IEnumerator Lob(Lob lob, GameObject origin, GameObject target);
+        IEnumerator Lob(Lob lob, Transform origin, Transform target);
     }
 }
