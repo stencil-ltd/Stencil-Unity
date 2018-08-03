@@ -40,7 +40,8 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount)
         {
-            var obj = Instantiate(Prefab, From.parent);
+            var obj = Instantiate(Prefab, To.parent);
+            obj.transform.position = From.position;
             var lob = new Lob(obj, amount, Flight);
             OnLobBegan?.Invoke(lob);
             yield return StartCoroutine(Function.Lob(lob, From, To));
