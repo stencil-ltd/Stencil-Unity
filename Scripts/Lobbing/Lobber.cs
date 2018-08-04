@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Util;
 using Random = UnityEngine.Random;
 
 namespace Lobbing
@@ -41,6 +42,9 @@ namespace Lobbing
         public LobStyle Flight = new LobStyle();
         public LobDivision Division = new LobDivision();
 
+        [Header("Other")] 
+        public bool ForceToUi = true;
+
         [Header("Events")] 
         public LobEvent OnLobBegan;
         public LobEvent OnLobEnded;
@@ -51,6 +55,8 @@ namespace Lobbing
         {
             var obj = Instantiate(Prefab, Container ?? To.parent);
             obj.transform.position = From.position;
+            if (ForceToUi)
+                obj.transform.CastIntoUi();
             obj.transform.SetAsLastSibling();
             
             var style = Flight;
