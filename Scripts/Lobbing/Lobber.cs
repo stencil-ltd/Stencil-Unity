@@ -38,8 +38,8 @@ namespace Lobbing
         public GameObject ToParticle;
 
         [Header("Style")]
-        public LobStyle Flight;
-        public LobDivision Division;
+        public LobStyle Flight = new LobStyle();
+        public LobDivision Division = new LobDivision();
 
         [Header("Events")] 
         public LobEvent OnLobBegan;
