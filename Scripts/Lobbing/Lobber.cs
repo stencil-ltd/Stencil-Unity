@@ -31,6 +31,7 @@ namespace Lobbing
         public GameObject Prefab;
         public Transform From;
         public Transform To;
+        public Transform Container;
 
         [Header("Particles")] 
         public GameObject FromParticle;
@@ -48,8 +49,9 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount, bool applyRandomization = false)
         {
-            var obj = Instantiate(Prefab, To.parent);
+            var obj = Instantiate(Prefab, Container ?? To.parent);
             obj.transform.position = From.position;
+            obj.transform.SetAsLastSibling();
             
             var style = Flight;
             if (applyRandomization)

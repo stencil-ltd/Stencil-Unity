@@ -1,6 +1,7 @@
 ﻿using System;
 using Binding;
 using Currencies;
+using Lobbing;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ namespace Rewards
     {
         public Currency Currency;
         public long Amount;
+        
+        public Lobber OptionalLobber;
 
         public RewardEvent OnReward;
 
@@ -33,11 +36,18 @@ namespace Rewards
         private void OnEnable()
         {
             GameAds.Rewarded.OnResult += _OnComplete;
+            OptionalLobber?.OnLobEnded.AddListener(OnLobEnded);
         }
 
         private void OnDisable()
         {
             GameAds.Rewarded.OnResult -= _OnComplete;
+            OptionalLobber?.OnLobEnded.RemoveListener(OnLobEnded);
+        }
+
+        private void OnLobEnded(Lob arg0)
+        {
+            Currency.Commit(arg0.Amount).AndSave();
         }
 
         private void _OnButton()
@@ -51,7 +61,14 @@ namespace Rewards
             if (!_isShowing) return;
             _isShowing = false;
             if (!b) return;
-            Currency.Add(Amount).AndSave();
+            if (OptionalLobber == null)
+                Currency.Add(Amount).AndSave();
+            else
+            {
+                Currency.Stage(Amount).AndSave();
+                StartCoroutine(OptionalLobber.LobMany(Amount));
+            }
+                
             OnReward?.Invoke(Currency, Amount);
         }
 
