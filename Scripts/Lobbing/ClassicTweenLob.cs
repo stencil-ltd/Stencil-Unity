@@ -9,8 +9,8 @@ namespace Lobbing
         public IEnumerator Lob(Lob lob, Transform origin, Transform target)
         {
             var obj = lob.Projectile;
-            obj.transform.position = origin.position;
-            var lt = LeanTween.move(obj, target, lob.Style.Duration);
+            var targetPos = obj.transform.parent.InverseTransformPoint(target.position);
+            var lt = LeanTween.moveLocal(obj, targetPos, lob.Style.Duration);
             if (lob.Style.Elastic)
             {
                 lt.setEaseInBack();

@@ -27,10 +27,9 @@ namespace Util
             Enqueue(action);
         }
 
-        public static void StartCoroutine(IEnumerator coroutine)
+        public static Coroutine StartCoroutine(IEnumerator coroutine)
         {
-            UnityMainThreadDispatcher.Instance().StartCoroutine(coroutine);
-            
+            return UnityMainThreadDispatcher.Instance().StartCoroutine(coroutine);
         }
 
         public static void OnMain(Action Action)

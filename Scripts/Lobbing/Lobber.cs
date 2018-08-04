@@ -28,6 +28,9 @@ namespace Lobbing
 
     public class Lobber : MonoBehaviour
     {
+        [Header("General")] 
+        public bool ForceToUi = true;
+        
         [Header("Objects")] 
         public GameObject Prefab;
         public Transform From;
@@ -41,9 +44,6 @@ namespace Lobbing
         [Header("Style")]
         public LobStyle Flight = new LobStyle();
         public LobDivision Division = new LobDivision();
-
-        [Header("Other")] 
-        public bool ForceToUi = true;
 
         [Header("Events")] 
         public LobEvent OnLobBegan;
@@ -67,7 +67,7 @@ namespace Lobbing
             
             var lob = new Lob(obj, amount, style);
             Begin(lob);
-            yield return StartCoroutine(Function.Lob(lob, From, To));
+            yield return Objects.StartCoroutine(Function.Lob(lob, From, To));
             End(lob);
         }
 
@@ -82,7 +82,7 @@ namespace Lobbing
                 if (single < 0) continue;
                 if (single > remaining) single = remaining;
                 remaining -= single;
-                routines.Add(StartCoroutine(LobSingle(single, true)));
+                routines.Add(Objects.StartCoroutine(LobSingle(single, true)));
                 if (remaining > 0)
                 {
                     var interval = Division.Interval +

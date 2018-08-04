@@ -10,10 +10,11 @@ namespace Util
             var mask = LayerMask.GetMask("UI");
             var pos = transform.position;
             var cam = Camera.main.transform.position;
-            var ray = new Ray(cam, cam - pos);
+            var ray = new Ray(pos, cam - pos);
             RaycastHit hit;
-            Physics.Raycast(ray, out hit, float.MaxValue, mask);
-            transform.position = hit.point;
+            var success = Physics.Raycast(ray, out hit, float.MaxValue, mask);
+            if (success)
+                transform.position = hit.point;
         }
     }
 }
