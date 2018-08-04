@@ -32,6 +32,10 @@ namespace Lobbing
         public Transform From;
         public Transform To;
 
+        [Header("Particles")] 
+        public GameObject FromParticle;
+        public GameObject ToParticle;
+
         [Header("Style")]
         public LobStyle Flight;
         public LobDivision Division;
@@ -54,10 +58,9 @@ namespace Lobbing
             }
             
             var lob = new Lob(obj, amount, style);
-            OnLobBegan?.Invoke(lob);
+            Begin(lob);
             yield return StartCoroutine(Function.Lob(lob, From, To));
-            OnLobEnded?.Invoke(lob);
-            Destroy(obj);
+            End(lob);
         }
 
         public IEnumerator LobMany(long amount)
@@ -82,6 +85,21 @@ namespace Lobbing
 
             foreach (var r in routines)
                 yield return r;
+        }
+
+        private void Begin(Lob lob)
+        {
+            if (FromParticle != null)
+                Instantiate(FromParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+            OnLobBegan?.Invoke(lob);
+        }
+
+        private void End(Lob lob)
+        {
+            if (ToParticle != null)
+                Instantiate(ToParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+            OnLobEnded?.Invoke(lob);
+            Destroy(lob.Projectile);
         }
     }
 }
