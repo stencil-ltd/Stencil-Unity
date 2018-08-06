@@ -51,7 +51,7 @@ public static class LogCollector
     }
     #endregion
     
-    public static void Init(int capacity = 200)
+    public static void Init(int capacity = 1024)
     {
         if (IsInitialized) return;
 
