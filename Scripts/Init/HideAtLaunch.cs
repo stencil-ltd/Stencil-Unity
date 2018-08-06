@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.Init
+namespace Init
 {
     public class HideAtLaunch : MonoBehaviour
     {
