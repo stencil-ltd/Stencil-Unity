@@ -39,6 +39,7 @@ namespace Lobbing
 
         [Header("Particles")] 
         public GameObject FromParticle;
+        public GameObject FromParticleSingle;
         public GameObject ToParticle;
 
         [Header("Style")]
@@ -53,12 +54,7 @@ namespace Lobbing
 
         public IEnumerator LobSingle(long amount, bool applyRandomization = false)
         {
-            var obj = Instantiate(Prefab, Container ?? To.parent);
-            obj.transform.position = From.position;
-            if (ForceToUi)
-                obj.transform.CastIntoUi();
-            obj.transform.SetAsLastSibling();
-            
+            var obj = SpawnPrefab(Prefab, Container ?? To.parent);
             var style = Flight;
             if (applyRandomization)
             {
@@ -75,6 +71,10 @@ namespace Lobbing
         {
             var routines = new List<Coroutine>();
             var remaining = amount;
+
+            if (FromParticleSingle)
+                SpawnPrefab(FromParticleSingle, Container ?? To.parent);
+                
             while (remaining > 0L)
             {
                 var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
@@ -95,17 +95,27 @@ namespace Lobbing
                 yield return r;
         }
 
+        private GameObject SpawnPrefab(GameObject prefab, Transform at)
+        {
+            var obj = Instantiate(prefab, at.position, Quaternion.identity, at.parent);
+            obj.transform.position = From.position;
+            if (ForceToUi)
+                obj.transform.CastIntoUi();
+            obj.transform.SetAsLastSibling();
+            return obj;
+        }
+
         private void Begin(Lob lob)
         {
-            if (FromParticle != null)
-                Instantiate(FromParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+            if (FromParticle)
+                SpawnPrefab(FromParticle, lob.Projectile.transform);
             OnLobBegan?.Invoke(lob);
         }
 
         private void End(Lob lob)
         {
             if (ToParticle != null)
-                Instantiate(ToParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+                SpawnPrefab(ToParticle, lob.Projectile.transform);
             OnLobEnded?.Invoke(lob);
             Destroy(lob.Projectile);
         }
