@@ -39,6 +39,7 @@ namespace Lobbing
 
         [Header("Particles")] 
         public GameObject FromParticle;
+        public GameObject FromParticleSingle;
         public GameObject ToParticle;
 
         [Header("Style")]
@@ -75,6 +76,14 @@ namespace Lobbing
         {
             var routines = new List<Coroutine>();
             var remaining = amount;
+
+            if (FromParticleSingle)
+            {
+                var part = Instantiate(FromParticleSingle, From.position, Quaternion.identity, Container ?? To.parent);
+                if (ForceToUi)
+                    part.transform.CastIntoUi();
+            }
+            
             while (remaining > 0L)
             {
                 var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
@@ -98,14 +107,23 @@ namespace Lobbing
         private void Begin(Lob lob)
         {
             if (FromParticle != null)
-                Instantiate(FromParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+            {
+                var part = Instantiate(FromParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+                if (ForceToUi)
+                    part.transform.CastIntoUi();
+            }
             OnLobBegan?.Invoke(lob);
         }
 
         private void End(Lob lob)
         {
             if (ToParticle != null)
-                Instantiate(ToParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+            {
+                var part = Instantiate(ToParticle, lob.Projectile.transform.position, Quaternion.identity, lob.Projectile.transform.parent);
+                if (ForceToUi)
+                    part.transform.CastIntoUi();
+            }
+            
             OnLobEnded?.Invoke(lob);
             Destroy(lob.Projectile);
         }
