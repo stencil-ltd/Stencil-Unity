@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.Coroutines
+namespace Coroutines
 {
     public class WaitForTween : CustomYieldInstruction
     {

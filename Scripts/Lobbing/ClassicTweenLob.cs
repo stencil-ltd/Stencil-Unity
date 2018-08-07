@@ -1,5 +1,5 @@
 using System.Collections;
-using Plugins.Coroutines;
+using Coroutines;
 using UnityEngine;
 
 namespace Lobbing

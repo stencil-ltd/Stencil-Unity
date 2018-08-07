@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Plugins.Coroutines
+namespace Coroutines
 {
     public class WaitForAnim : CustomYieldInstruction
     {

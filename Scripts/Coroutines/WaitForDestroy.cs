@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Plugins.Coroutines
+namespace Coroutines
 {
     public class WaitForDestroy : CustomYieldInstruction
     {
