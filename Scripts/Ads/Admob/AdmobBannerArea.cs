@@ -1,5 +1,6 @@
+#if STENCIL_ADMOB
+
 using System;
-using System.Security.Cryptography.X509Certificates;
 using GoogleMobileAds.Api;
 using Plugins.UI;
 using UI;
@@ -101,3 +102,4 @@ namespace Ads.Admob
         }
     }
 }
+#endif

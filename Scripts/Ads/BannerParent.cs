@@ -1,5 +1,4 @@
 using System;
-using NatCorderU.Core;
 using UnityEngine; 
 using UnityEngine.UI;
 using Frame = UI.Frame;
