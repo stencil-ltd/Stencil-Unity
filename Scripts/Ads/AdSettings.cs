@@ -26,12 +26,17 @@ namespace Ads
         public AdId RewardedId;
         public RewardedConfiguration RewardConfiguration { get; private set; }
 
-        private void OnEnable()
+        public AdId HouseId;
+        public InterstitialConfiguration HouseConfiguration { get; private set; }
+
+        protected override void OnEnable()
         {
+            base.OnEnable();
             AppConfiguration = new AppIdConfiguration(AppId.Android, AppId.Ios);
             BannerConfiguration = new BannerConfiguration(BannerId.Android, BannerId.Ios);
             InterstitialConfiguration = new InterstitialConfiguration(InterstitialId.Android, InterstitialId.Ios);
             RewardConfiguration = new RewardedConfiguration(RewardedId.Android, RewardedId.Ios);
+            HouseConfiguration = new InterstitialConfiguration(HouseId.Android, HouseId.Ios);
         }
     }
 }
