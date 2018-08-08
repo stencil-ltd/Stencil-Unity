@@ -2,6 +2,7 @@
 using Binding;
 using Currencies;
 using Lobbing;
+using Scripts.Ads;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -35,13 +36,13 @@ namespace Rewards
 
         private void OnEnable()
         {
-            GameAds.Rewarded.OnResult += _OnComplete;
+            StencilAds.Rewarded.OnResult += _OnComplete;
             OptionalLobber?.OnLobEnded.AddListener(OnLobEnded);
         }
 
         private void OnDisable()
         {
-            GameAds.Rewarded.OnResult -= _OnComplete;
+            StencilAds.Rewarded.OnResult -= _OnComplete;
             OptionalLobber?.OnLobEnded.RemoveListener(OnLobEnded);
         }
 
@@ -53,7 +54,7 @@ namespace Rewards
         private void _OnButton()
         {
             _isShowing = true;
-            GameAds.Rewarded.Show();
+            StencilAds.Rewarded.Show();
         }
 
         private void _OnComplete(object sender, bool b)
@@ -74,7 +75,7 @@ namespace Rewards
 
         private void Update()
         {
-            var hasAd = GameAds.Rewarded.IsReady;
+            var hasAd = StencilAds.Rewarded.IsReady;
             if (!hasAd)
             {
                 _button.enabled = false;
