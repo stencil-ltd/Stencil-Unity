@@ -94,7 +94,7 @@ namespace Util
 		}
 
 		void OnDestroy() {
-			_instance = null;
+			_instance = _instance == this ? null : _instance;
 		}
 	}
 }
