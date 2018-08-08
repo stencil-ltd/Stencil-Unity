@@ -30,7 +30,8 @@ namespace Store
             {
                 if (!Buyable.Acquired)
                 {
-                    Instantiate(BuyParticlePrefab, Icon.transform);
+                    if (BuyParticlePrefab)
+                        Instantiate(BuyParticlePrefab, Icon.transform);
                     Buyable.AttemptToBuy();
                 }
                 else if (!Buyable.Equipped)
