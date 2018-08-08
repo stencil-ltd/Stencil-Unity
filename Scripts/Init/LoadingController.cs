@@ -3,6 +3,7 @@ using System.Collections;
 using Ads;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Util;
 
 namespace Init
 {
@@ -17,6 +18,7 @@ namespace Init
             StencilAds.InitHouse();
             StencilAds.House.OnError += OnError;
             StencilAds.House.OnComplete += OnComplete;
+            new GameObject("Main Thread").AddComponent<UnityMainThreadDispatcher>();
         }
 
         private IEnumerator Start()
