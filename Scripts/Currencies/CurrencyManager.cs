@@ -17,16 +17,18 @@ namespace Currencies
         {
             return _types[name];
         }
-        
-        private void OnEnable()
+
+        protected override void OnEnable()
         {
+            base.OnEnable();
             foreach (var type in Types)
                 _types[type.Name] = type;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             Save();
+            base.OnDisable();
         }
 
         public CurrencyManager Save()
