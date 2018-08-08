@@ -1,5 +1,6 @@
 ﻿using System.Net.Configuration;
 using Binding;
+using Particles;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ namespace Store
         public Image Checkmark;
         public GameObject Equip;
 
+        public StandardParticle BuyParticlePrefab;
+
         [Bind] 
         private Button _button;
 
@@ -26,9 +29,14 @@ namespace Store
             _button.onClick.AddListener(() =>
             {
                 if (!Buyable.Acquired)
+                {
+                    Instantiate(BuyParticlePrefab, Icon.transform);
                     Buyable.AttemptToBuy();
+                }
                 else if (!Buyable.Equipped)
+                {
                     Buyable.Equipped = true;
+                }
             });
         }
 
