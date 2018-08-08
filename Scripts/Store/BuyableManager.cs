@@ -25,16 +25,18 @@ namespace Store
 
         [Header("Debug")]
         [CanBeNull] public Buyable SingleEquipped;
-        
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void OnLoad()
+
+        private static bool _init;
+        public static void Init()
         {
+            if (_init) return;
+            _init = true;
             Debug.Log("Buyables Loading");
             foreach (var r in Resources.FindObjectsOfTypeAll<BuyableManager>())
-                r.Init();
+                r._Init();
         }
 
-        private void Init()
+        private void _Init()
         {
             Debug.Log($"Init {this}");
             if (!Application.isPlaying) return;

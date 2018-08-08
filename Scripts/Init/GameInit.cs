@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Dev;
 using Plugins.UI;
+using Store;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ namespace Init
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
+            BuyableManager.Init();
             SceneManager.sceneLoaded += OnNewScene;
             OnInit();
         }
