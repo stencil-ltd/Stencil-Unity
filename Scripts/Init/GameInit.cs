@@ -3,6 +3,7 @@ using Dev;
 using Plugins.UI;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Util;
 
 namespace Init
@@ -21,6 +22,7 @@ namespace Init
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
+            SceneManager.sceneLoaded += OnNewScene;
             OnInit();
         }
         
@@ -29,7 +31,10 @@ namespace Init
 
         protected virtual void OnSettled()
         {}
-        
+
+        protected virtual void OnNewScene(Scene arg0, LoadSceneMode loadSceneMode)
+        {}
+
         protected virtual IEnumerator Start()
         {
             Started = true;

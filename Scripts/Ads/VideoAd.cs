@@ -4,7 +4,7 @@ using Analytics;
 using UnityEngine;
 using Util;
 
-namespace Plugins.Ads
+namespace Ads
 {
     public abstract class VideoAd
     {

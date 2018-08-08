@@ -1,6 +1,6 @@
 ﻿using Util;
 
-namespace Plugins.Ads
+namespace Ads
 {
     public class AdConfiguration
     {

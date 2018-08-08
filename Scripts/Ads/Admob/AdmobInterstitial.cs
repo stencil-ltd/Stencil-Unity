@@ -1,10 +1,9 @@
 ﻿#if STENCIL_ADMOB
 
 using GoogleMobileAds.Api;
-using UnityEngine;
 using Util;
 
-namespace Plugins.Ads.Admob
+namespace Ads.Admob
 {
     public class AdmobInterstitial : VideoAd
     {

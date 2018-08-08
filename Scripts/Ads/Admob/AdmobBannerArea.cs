@@ -1,7 +1,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using GoogleMobileAds.Api;
-using Plugins.Ads;
 using Plugins.UI;
 using UI;
 using UnityEngine;
