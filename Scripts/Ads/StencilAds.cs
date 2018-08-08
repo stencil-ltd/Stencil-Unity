@@ -6,7 +6,7 @@ using Ads.Admob;
 using GoogleMobileAds.Api;
 #endif
 
-namespace Scripts.Ads
+namespace Ads
 {
     public static class StencilAds
     {

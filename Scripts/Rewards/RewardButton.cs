@@ -2,7 +2,7 @@
 using Binding;
 using Currencies;
 using Lobbing;
-using Scripts.Ads;
+using Ads;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
