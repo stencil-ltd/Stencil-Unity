@@ -29,6 +29,7 @@ namespace Store
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnLoad()
         {
+            Debug.Log("Buyables Loading");
             foreach (var r in Resources.FindObjectsOfTypeAll<BuyableManager>())
                 r.Init();
         }
