@@ -1,4 +1,5 @@
 using System.Linq;
+using CustomOrder;
 using UI;
 using UnityEditor;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace State.Active
 {
+    [ExecutionOrder(-20)]
     public class ActiveEventSystem : MonoBehaviour
     {
         private ActiveManager[] _managers;

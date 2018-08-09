@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace SplashScreen
+namespace Standard
 {
     [InitializeOnLoad]
     public class SplashScreenFuckOff {

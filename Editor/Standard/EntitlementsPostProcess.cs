@@ -1,56 +1,59 @@
-﻿using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
 using UnityEditor.Callbacks;
-#if UNITY_IOS
 using UnityEditor.iOS.Xcode;
+using UnityEngine;
+
+#if UNITY_IOS
 #endif
-using System.Collections;
-using System.IO;
 
 
-public class EntitlementsPostProcess : ScriptableObject
+namespace Standard
 {
-    public DefaultAsset m_entitlementsFile;
-
-    [PostProcessBuild]
-    public static void OnPostProcess(BuildTarget buildTarget, string buildPath)
+    public class EntitlementsPostProcess : ScriptableObject
     {
-		#if UNITY_IOS
-        if (buildTarget != BuildTarget.iOS)
-        {
-            return;
-        }
+        public DefaultAsset m_entitlementsFile;
 
-        var dummy = ScriptableObject.CreateInstance<EntitlementsPostProcess>();
-        var file = dummy.m_entitlementsFile;
-        ScriptableObject.DestroyImmediate(dummy);
-        if (file == null)
+        [PostProcessBuild]
+        public static void OnPostProcess(BuildTarget buildTarget, string buildPath)
         {
-            return;
-        }
+#if UNITY_IOS
+            if (buildTarget != BuildTarget.iOS)
+            {
+                return;
+            }
 
-        var proj_path = PBXProject.GetPBXProjectPath(buildPath);
-        var proj = new PBXProject();
-        proj.ReadFromFile(proj_path);
+            var dummy = ScriptableObject.CreateInstance<EntitlementsPostProcess>();
+            var file = dummy.m_entitlementsFile;
+            ScriptableObject.DestroyImmediate(dummy);
+            if (file == null)
+            {
+                return;
+            }
 
-        // target_name = "Unity-iPhone"
-        var target_name = PBXProject.GetUnityTargetName();
-        var target_guid = proj.TargetGuidByName(target_name);
-        var src = AssetDatabase.GetAssetPath(file);
-        var file_name = Path.GetFileName(src);
-        var dst = buildPath + "/" + target_name + "/" + file_name;
-        try
-        {
-            FileUtil.CopyFileOrDirectory(src, dst);
-            proj.AddFile(target_name + "/" + file_name, file_name);
-            proj.AddBuildProperty(target_guid, "CODE_SIGN_ENTITLEMENTS", target_name + "/" + file_name);
-            proj.WriteToFile(proj_path);
-        }
-        catch (IOException e)
-        {
-            Debug.LogWarning($"Could not copy entitlements. Probably already exists. ({e})");
-        }
+            var proj_path = PBXProject.GetPBXProjectPath(buildPath);
+            var proj = new PBXProject();
+            proj.ReadFromFile(proj_path);
 
-		#endif
+            // target_name = "Unity-iPhone"
+            var target_name = PBXProject.GetUnityTargetName();
+            var target_guid = proj.TargetGuidByName(target_name);
+            var src = AssetDatabase.GetAssetPath(file);
+            var file_name = Path.GetFileName(src);
+            var dst = buildPath + "/" + target_name + "/" + file_name;
+            try
+            {
+                FileUtil.CopyFileOrDirectory(src, dst);
+                proj.AddFile(target_name + "/" + file_name, file_name);
+                proj.AddBuildProperty(target_guid, "CODE_SIGN_ENTITLEMENTS", target_name + "/" + file_name);
+                proj.WriteToFile(proj_path);
+            }
+            catch (IOException e)
+            {
+                Debug.LogWarning($"Could not copy entitlements. Probably already exists. ({e})");
+            }
+
+#endif
+        }
     }
 }

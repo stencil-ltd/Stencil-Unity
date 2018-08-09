@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using CustomOrder;
 using Dev;
 using Plugins.UI;
 using Store;
@@ -9,6 +10,7 @@ using Util;
 
 namespace Init
 {
+    [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
     {
         public virtual bool ForceDevMode { get; } = false;
