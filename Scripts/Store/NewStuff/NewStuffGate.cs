@@ -12,18 +12,20 @@ namespace Store.NewStuff
         public Currency Currency;
 
         public int BuyableCount 
-            => Manager.Buyables.Sum(buyable => buyable.CanBuy() ? 1 : 0);
+            => Manager?.Buyables.Sum(buyable => buyable.CanBuy() ? 1 : 0) ?? 0;
 
         public int? LastBuyableCount
         {
             get
             {
+                if (Manager == null) return null;
                 var ret = PlayerPrefs.GetInt($"last_buyable_{Manager.Id}", -1);
                 if (ret == -1) return null;
                 return ret;
             }
             set
             {
+                if (Manager == null) return;
                 PlayerPrefs.SetInt($"last_buyable_{Manager.Id}", value ?? -1);
                 PlayerPrefs.Save();
             }
@@ -32,14 +34,16 @@ namespace Store.NewStuff
         public override void Register(ActiveManager manager)
         {
             base.Register(manager);
-            Currency.OnSpendableChanged += OnChange;   
+            if (Currency != null)
+                Currency.OnSpendableChanged += OnChange;   
             Debug.Log($"Register New Stuff {this}");
         }
 
         public override void Unregister()
         {
             base.Unregister();
-            Currency.OnSpendableChanged -= OnChange;
+            if (Currency != null)
+                Currency.OnSpendableChanged -= OnChange;
             Debug.Log($"Unregister New Stuff {this}");
         }
 

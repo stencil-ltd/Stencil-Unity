@@ -16,13 +16,15 @@ namespace Store
         private void Awake()
         {
             this.Bind();
-            Manager.OnEquipChanged += OnEquip;
+            if (Manager != null)
+                Manager.OnEquipChanged += OnEquip;
             UpdateSprite();
         }
 
         private void OnDestroy()
         {
-            Manager.OnEquipChanged -= OnEquip;
+            if (Manager != null)
+                Manager.OnEquipChanged -= OnEquip;
         }
 
         private void OnEquip(object sender, EventArgs e)
@@ -32,7 +34,7 @@ namespace Store
 
         private void UpdateSprite()
         {
-            _image.sprite = Manager.SingleEquipped.Icon;
+            _image.sprite = Manager?.SingleEquipped.Icon;
         }
     }
 }

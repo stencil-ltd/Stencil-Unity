@@ -8,7 +8,7 @@ namespace Currencies
     [CreateAssetMenu(menuName = "Managers/Currency")]
     public class CurrencyManager : Singleton<CurrencyManager>
     {
-        public Currency[] Types;
+        public Currency[] Types = { };
         public bool SaveOnWrite;
         
         private readonly Dictionary<string, Currency> _types = new Dictionary<string, Currency>();
