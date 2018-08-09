@@ -15,8 +15,6 @@ namespace State.Active
         private ActiveManager[] _managers;
         private RegisterableBehaviour[] _registers;
         
-        public ScriptableObject[] PermanentObjects;
-
         private void Awake()
         {
             Debug.Log("ActiveEventSystem Awake");

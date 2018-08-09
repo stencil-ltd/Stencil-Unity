@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Lifecycle;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,7 @@ namespace Util
     /// Based on https://www.youtube.com/watch?v=VBA1QCoEAX4
     /// </summary>
     /// <typeparam name="T">Singleton type</typeparam>
-    public abstract class Singleton<T> : ScriptableObject where T : ScriptableObject {
+    public abstract class Singleton<T> : AlwaysScriptableObject where T : ScriptableObject {
         static T _instance = null;
         public static T Instance
         {

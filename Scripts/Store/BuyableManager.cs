@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Lifecycle;
 using Plugins.Data;
 using UnityEngine;
 using Util;
@@ -9,7 +10,7 @@ namespace Store
 {
 
     [CreateAssetMenu(menuName = "Buyables/Manager")]
-    public class BuyableManager : ScriptableObject
+    public class BuyableManager : AlwaysScriptableObject
     {
         private static readonly Dictionary<string, BuyableManager> Registry 
             = new Dictionary<string, BuyableManager>();
