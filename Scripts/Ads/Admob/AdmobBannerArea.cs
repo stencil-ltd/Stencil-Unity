@@ -12,10 +12,6 @@ using Util;
 
 namespace Ads.Admob
 {    
-    [Serializable]
-    public class BannerEvent : UnityEvent
-    {}
-    
     public class AdmobBannerArea : Controller<AdmobBannerArea>
     {            
         public static BannerEvent OnChange;
@@ -101,5 +97,9 @@ namespace Ads.Admob
             Debug.Log($"Setting banner height to {pixelHeight}");
         }
     }
+    
+    [Serializable]
+    public class BannerEvent : UnityEvent
+    {}
 }
 #endif
