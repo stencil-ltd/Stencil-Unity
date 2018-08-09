@@ -1,12 +1,9 @@
-﻿using UnityEditor;
+﻿#if UNITY_IOS
+using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
-
-#if UNITY_IOS
 using System.IO;
 using UnityEditor.iOS.Xcode;
-#endif
-
 
 namespace Standard
 {
@@ -17,7 +14,6 @@ namespace Standard
         [PostProcessBuild]
         public static void OnPostProcess(BuildTarget buildTarget, string buildPath)
         {
-#if UNITY_IOS
             if (buildTarget != BuildTarget.iOS)
             {
                 return;
@@ -52,8 +48,8 @@ namespace Standard
             {
                 Debug.LogWarning($"Could not copy entitlements. Probably already exists. ({e})");
             }
-
-#endif
         }
     }
 }
+
+#endif
