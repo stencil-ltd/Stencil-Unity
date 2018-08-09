@@ -1,12 +1,17 @@
 ﻿using System.Linq;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Lifecycle
 {
     public class AlwaysScriptableObject : ScriptableObject
     {
+#if UNITY_EDITOR
         [MenuItem("Stencil/Always Loaded")]
+#endif
         public static void Refresh()
         {
             var obj = GameObject.Find("Always Loaded");
