@@ -1,11 +1,7 @@
-﻿using System;
-using PaperPlaneTools;
-using Plugins.UI;
+﻿using PaperPlaneTools;
 using Standard.States;
-using States;
 using UI;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Menu
 {
