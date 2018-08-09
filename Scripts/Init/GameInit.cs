@@ -28,6 +28,8 @@ namespace Init
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
             BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
+            OnInit();
+            
 #if STENCIL_FIREBASE
             Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
@@ -36,9 +38,9 @@ namespace Init
                 {
                     Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
                 }
+                Objects.Enqueue(() => OnFirebase(dependencyStatus == Firebase.DependencyStatus.Available));
             });
 #endif
-            OnInit();
         }
 
         private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
@@ -46,6 +48,9 @@ namespace Init
             StencilAds.CheckReload();
             OnNewScene(arg0, arg1);
         }
+
+        protected virtual void OnFirebase(bool success)
+        {}
 
         protected virtual void OnInit()
         {}
