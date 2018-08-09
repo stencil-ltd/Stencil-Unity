@@ -1,6 +1,10 @@
-﻿using UI;
+﻿using Audio;
+using Plugins.UI;
+using UI;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
-namespace Standard.Menu
+namespace Menu
 {
     public class OptionsMenu : Controller<OptionsMenu>
     {
