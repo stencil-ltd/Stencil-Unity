@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Ads;
 using CustomOrder;
 using Dev;
 using Plugins.UI;
@@ -26,10 +27,26 @@ namespace Init
             gameObject.AddComponent<GestureReport>();
             new GameObject("Main Thread Dispatch").AddComponent<UnityMainThreadDispatcher>();
             BuyableManager.Init();
-            SceneManager.sceneLoaded += OnNewScene;
+            SceneManager.sceneLoaded += _OnNewScene;
+#if STENCIL_FIREBASE
+            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            {
+                var dependencyStatus = task.Result;
+                if (dependencyStatus != Firebase.DependencyStatus.Available)
+                {
+                    Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                }
+            });
+#endif
             OnInit();
         }
-        
+
+        private void _OnNewScene(Scene arg0, LoadSceneMode arg1)
+        {
+            StencilAds.CheckReload();
+            OnNewScene(arg0, arg1);
+        }
+
         protected virtual void OnInit()
         {}
 
@@ -43,6 +60,7 @@ namespace Init
         {
             Started = true;
             yield return null;
+            StencilAds.Init();
             OnSettled();
         }
     }
