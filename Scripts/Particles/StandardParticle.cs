@@ -53,16 +53,24 @@ namespace Particles
         {
             if (!Application.isPlaying) return;
             if (ParticleSystem.isStopped)
+                PerformFinish();
+        }
+
+        private void OnDisable()
+        {
+            PerformFinish();
+        }
+
+        private void PerformFinish()
+        {
+            switch (OnFinish)
             {
-                switch (OnFinish)
-                {
-                    case DoOnFinish.Deactivate:
-                        gameObject.SetActive(false);
-                        break;
-                    case DoOnFinish.Destroy:
-                        Destroy(gameObject);
-                        break;
-                }
+                case DoOnFinish.Deactivate:
+                    gameObject.SetActive(false);
+                    break;
+                case DoOnFinish.Destroy:
+                    Destroy(gameObject);
+                    break;
             }
         }
     }
