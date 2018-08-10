@@ -16,13 +16,15 @@ namespace Currencies
 
         private void OnEnable()
         {
-            Currency.OnSpendableChanged += OnChange;
+            if (Currency != null)
+                Currency.OnSpendableChanged += OnChange;
             UpdateText();
         }
 
         private void OnDisable()
         {
-            Currency.OnSpendableChanged -= OnChange;
+            if (Currency != null)
+                Currency.OnSpendableChanged -= OnChange;
         }
 
         private void OnChange(object sender, Currency e)
@@ -33,12 +35,13 @@ namespace Currencies
 
         private void UpdateText()
         {
-            Text.SetAmount(_fmt, "N0", Currency.Spendable());
+            Text.SetAmount(_fmt, "N0", Currency?.Spendable() ?? 0);
         }
         
         public void OnLobEnd(Lob lob)
         {
-            Currency.Add(lob.Amount).AndSave();
+            if (Currency != null)
+                Currency.Add(lob.Amount).AndSave();
         }
     }
 }
