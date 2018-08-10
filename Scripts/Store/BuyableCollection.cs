@@ -13,6 +13,7 @@ namespace Store
         private void Awake()
         {
             Container.DestroyAllChildren();
+            if (Manager == null) return;
             foreach (var b in Manager.Buyables)
             {
                 var listing = Instantiate(ListingPrefab, Container);
