@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Binding;
 using Currencies;
 using Lobbing;
@@ -20,6 +21,7 @@ namespace Rewards
         public long Amount;
         
         public Lobber OptionalLobber;
+        public GameObject Glow;
 
         public RewardEvent OnReward;
 
@@ -27,6 +29,7 @@ namespace Rewards
         [Bind] private CanvasGroup _group;
 
         private bool _isShowing;
+        private bool _lobbing;
 
         private void Awake()
         {
@@ -62,29 +65,40 @@ namespace Rewards
             if (!_isShowing) return;
             _isShowing = false;
             if (!b) return;
+            _lobbing = true;
             if (OptionalLobber == null)
+            {
                 Currency.Add(Amount).AndSave();
+                _lobbing = false;
+            }
             else
             {
                 Currency.Stage(Amount).AndSave();
-                StartCoroutine(OptionalLobber.LobMany(Amount));
-            }
-                
+                StartCoroutine(Lob());
+            }       
+        }
+
+        private IEnumerator Lob()
+        {
+            yield return StartCoroutine(OptionalLobber.LobMany(Amount));
+            _lobbing = false;
             OnReward?.Invoke(Currency, Amount);
         }
 
         private void Update()
         {
             var hasAd = StencilAds.Rewarded.IsReady;
-            if (!hasAd)
+            if (!hasAd || _lobbing)
             {
                 _button.enabled = false;
-                _group.alpha = 0f;
+                _group.alpha = 0.7f;
+                Glow.SetActive(false);
             }
             else
             {
                 _button.enabled = true;
                 _group.alpha = 1f;
+                Glow.SetActive(true);
             }
         }
     }
