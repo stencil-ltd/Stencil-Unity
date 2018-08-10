@@ -19,7 +19,7 @@ namespace Store
         public string Id;
         public bool SingleEquip;
         
-        public Buyable[] Buyables;
+        public Buyable[] Buyables = {};
 
         public event EventHandler OnAcquireChanged;
         public event EventHandler OnEquipChanged;

@@ -31,6 +31,7 @@ namespace Store
 
         protected virtual void OnDestroy()
         {
+            if (Buyable == null) return;
             Buyable.OnEquipChanged -= OnEquipChanged;
             Buyable.OnAcquireChanged -= OnAcquireChanged;
         }
