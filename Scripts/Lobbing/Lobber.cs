@@ -11,9 +11,8 @@ namespace Lobbing
     [Serializable]
     public class LobDivision
     {
-        [Range(0f, 1f)] 
+        public bool ConcreteAmount = false;
         public float AmountPerLob = 0.1f;
-        [Range(0f, 1f)] 
         public float RandomizeAmount = 0.5f;
         
         public float Interval = 0.2f;
@@ -86,8 +85,17 @@ namespace Lobbing
             
             while (remaining > 0L)
             {
-                var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
-                var single = (long) (div * amount);
+                long single;
+                if (Division.ConcreteAmount)
+                {
+                    single = (long) (Division.AmountPerLob + 
+                                     Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount));
+                }
+                else
+                {
+                    var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
+                    single = (long) (div * amount);
+                }
                 if (single < 0) continue;
                 if (single > remaining) single = remaining;
                 remaining -= single;
