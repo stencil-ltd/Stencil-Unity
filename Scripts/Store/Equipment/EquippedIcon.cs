@@ -2,9 +2,8 @@ using System;
 using Binding;
 using UnityEngine;
 using UnityEngine.UI;
-using Util;
 
-namespace Store
+namespace Store.Equipment
 {
     [RequireComponent(typeof(Image))]
     public class EquippedIcon : MonoBehaviour

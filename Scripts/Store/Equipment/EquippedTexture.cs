@@ -1,9 +1,8 @@
 using System;
 using Binding;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Store
+namespace Store.Equipment
 {
     [RequireComponent(typeof(Renderer))]
     public class EquippedTexture : MonoBehaviour
