@@ -14,14 +14,12 @@ namespace Init
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
     {
-        public virtual bool ForceDevMode { get; } = false;
         public bool Started { get; private set; }
         
         protected sealed override void Awake()
         {
             base.Awake();
             if (!Valid) return;
-            Developers.ForceEnabled = ForceDevMode;
             Application.targetFrameRate = 60;
             gameObject.AddComponent<Gestures>();
             gameObject.AddComponent<GestureReport>();
