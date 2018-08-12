@@ -24,6 +24,7 @@ namespace UI
 
         public void SetAmount(long amount, bool animated = true)
         {
+            if (Text == null) this.Bind();
             if (_co != null) StopCoroutine(_co);
             _co = null;
             if (animated)
