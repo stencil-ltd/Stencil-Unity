@@ -5,14 +5,6 @@ using UnityEngine.Events;
 
 namespace Plugins.Physics
 {
-    [Serializable]
-    public class CollisionEvent : UnityEvent<Collision>
-    {}
-    
-    [Serializable]
-    public class ColliderEvent : UnityEvent<Collider>
-    {}
-    
     [RequireComponent(typeof(Collider))]
     public class ColliderHelper : MonoBehaviour
     {
@@ -40,4 +32,11 @@ namespace Plugins.Physics
             => TriggerExit?.Invoke(other);
     }
     
+    [Serializable]
+    public class CollisionEvent : UnityEvent<Collision>
+    {}
+    
+    [Serializable]
+    public class ColliderEvent : UnityEvent<Collider>
+    {}
 }
