@@ -2,7 +2,7 @@
 using UI;
 using UnityEngine;
 
-namespace Menu
+namespace Standard.Menu
 {
     public class AudioOptions : MonoBehaviour
     {

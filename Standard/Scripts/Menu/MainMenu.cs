@@ -3,7 +3,7 @@ using Standard.States;
 using UI;
 using UnityEngine;
 
-namespace Menu
+namespace Standard.Menu
 {
     public class MainMenu : Controller<MainMenu>
     {
