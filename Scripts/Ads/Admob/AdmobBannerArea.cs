@@ -30,17 +30,18 @@ namespace Ads.Admob
         {
             get
             {
-                if (Application.isEditor || _banner == null)
-                    return 225f;
                 if (!_visible)
                     return 0f;
+                if (Application.isEditor || _banner == null)
+                    return 225f;
                 return _banner.GetHeightInPixels();
             }
         }
         
         public static void ShowBanner()
         {
-            if (_visible) return;
+            if (_visible || _banner == null) return;
+            Debug.Log("Show Banner");
             _visible = true;
             _banner.Show();
             Change();
@@ -48,7 +49,8 @@ namespace Ads.Admob
 
         public static void HideBanner()
         {
-            if (!_visible) return;
+            if (!_visible || _banner == null) return;
+            Debug.Log("Hide Banner");
             _visible = false;
             _banner.Hide();
             Change();
@@ -82,7 +84,7 @@ namespace Ads.Admob
         
         private static void Change()
         {
-            Instance.SetBannerSize(BannerHeight);
+            Instance?.SetBannerSize(BannerHeight);
             OnChange?.Invoke();
         }
         

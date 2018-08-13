@@ -26,7 +26,8 @@ namespace Standard.Menu
             Score = score;
             return true;
         }
-        
+
+        public ScreenshotZone ScreenshotZone;
         public Text Text;
 
         private void OnEnable()
@@ -36,7 +37,8 @@ namespace Standard.Menu
 
         public void Click_Camera()
         {
-            // TODO
+            ScreenshotZone.SetScore(Score.Value);
+            ScreenshotZone.gameObject.SetActive(true);   
         }
     }
 }

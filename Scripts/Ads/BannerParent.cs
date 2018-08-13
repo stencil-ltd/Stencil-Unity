@@ -5,6 +5,7 @@ using Frame = UI.Frame;
 
 namespace Ads
 {
+    [Obsolete]
     public class BannerParent : MonoBehaviour
     {
         public RectTransform Scrim;
