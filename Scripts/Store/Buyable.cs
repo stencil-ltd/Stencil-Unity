@@ -88,7 +88,7 @@ namespace Store
         private bool _init;
         internal bool Init(BuyableManager manager)
         {
-            if (_init) return false;
+//            if (_init) return false;
             if (!Application.isPlaying) return false;
             _init = true;
             Manager = manager;
