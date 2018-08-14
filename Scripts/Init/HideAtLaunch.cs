@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using UI;
 
 namespace Init
 {
-    public class HideAtLaunch : MonoBehaviour
+    public class HideAtLaunch : RegisterableBehaviour
     {
-        private void Awake()
+        public override void Register()
         {
-            if (!GameInit.Instance.Started)
+            if (gameObject.activeSelf)
                 gameObject.SetActive(false);
         }
+
+        public override void Unregister()
+        {}
     }
 }
