@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if STENCIL_NATSHARE
+using System.Collections;
 using Binding;
 using NatShareU;
 using UnityEngine;
@@ -7,6 +8,7 @@ using Util;
 
 namespace UI
 {
+    
     [RequireComponent(typeof(Button))]
     public class ScreenshotButton : MonoBehaviour
     {
@@ -45,3 +47,4 @@ namespace UI
         }
     }
 }
+#endif
