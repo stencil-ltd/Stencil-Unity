@@ -37,7 +37,7 @@ namespace UI
             else
             {
                 var image = ScreenCapture.CaptureScreenshotAsTexture();
-                image.Share();
+                image.Share("");
             }
             Flash?.SetActive(false);
             Flash?.SetActive(true);
