@@ -32,7 +32,7 @@ namespace Standard.Menu
 
         private void OnEnable()
         {
-            Text.text = $"{Score}";
+            Text.text = $"{Score:N0}";
         }
 
         public void Click_Camera()

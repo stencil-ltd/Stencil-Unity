@@ -91,6 +91,7 @@ namespace Ads.Admob
         private void SetBannerSize(float pixelHeight)
         {            
             var scaler = Frame.Instance.GetComponentInParent<CanvasScaler>();
+            if (scaler == null) return;
             var ratio = scaler.referenceResolution.x / Screen.width;
             pixelHeight *= ratio;
             Scrim.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0, pixelHeight);

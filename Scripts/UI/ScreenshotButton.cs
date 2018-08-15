@@ -1,26 +1,50 @@
-﻿using Binding;
+﻿#if STENCIL_NATSHARE
+using System.Collections;
+using Binding;
 using NatShareU;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace UI
 {
+    
     [RequireComponent(typeof(Button))]
     public class ScreenshotButton : MonoBehaviour
     {
+        public GameObject[] Hide = {};
+        public GameObject Flash;
+        
         [Bind] private Button _button;
 
         private void Awake()
         {
             this.Bind();
-            _button.onClick.AddListener(ClickScreenshot);
+            _button.onClick.AddListener(() => Objects.StartCoroutine(_Screenshot()));
         }
 
-        private void ClickScreenshot()
+        private IEnumerator _Screenshot()
         {
-            if (Application.isEditor) return;
-            var image = ScreenCapture.CaptureScreenshotAsTexture();
-            image.Share();
+            foreach (var o in Hide)
+                o.SetActive(false);
+            
+            yield return new WaitForEndOfFrame();
+            if (Application.isEditor)
+            {
+                ScreenCapture.CaptureScreenshot("Screenshot.png");
+                Debug.Log("Screenshot Captured");
+            }
+            else
+            {
+                var image = ScreenCapture.CaptureScreenshotAsTexture();
+                image.Share("");
+            }
+            Flash?.SetActive(false);
+            Flash?.SetActive(true);
+            yield return null;
+            foreach (var o in Hide)
+                o.SetActive(true);
         }
     }
 }
+#endif
