@@ -31,6 +31,11 @@ namespace Util
         {
             return UnityMainThreadDispatcher.Instance().StartCoroutine(coroutine);
         }
+        
+        public static void StopCoroutine(Coroutine coroutine)
+        {
+            UnityMainThreadDispatcher.Instance().StopCoroutine(coroutine);
+        }
 
         public static void OnMain(Action Action)
         {
