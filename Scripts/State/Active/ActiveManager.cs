@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 namespace State.Active
@@ -8,7 +9,7 @@ namespace State.Active
         And, Or
     }
 
-    public class ActiveManager : MonoBehaviour
+    public class ActiveManager : RegisterableBehaviour
     {
         public Operation Op = Operation.Or;
 
@@ -22,7 +23,7 @@ namespace State.Active
             Register();
         }
 
-        public void Register()
+        public override void Register()
         {
             if (IsRegistered) return;
             if (!Application.isPlaying && !ActiveInEditor) return;            
@@ -33,7 +34,7 @@ namespace State.Active
             Check();
         }
 
-        public void Unregister()
+        public override void Unregister()
         {
             foreach(var g in Gates)
                 g.Unregister();            

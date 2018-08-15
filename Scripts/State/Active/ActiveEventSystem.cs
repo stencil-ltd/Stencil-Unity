@@ -12,25 +12,19 @@ namespace State.Active
     [ExecutionOrder(-20)]
     public class ActiveEventSystem : MonoBehaviour
     {
-        private ActiveManager[] _managers;
         private RegisterableBehaviour[] _registers;
         
         private void Awake()
         {
             Debug.Log("ActiveEventSystem Awake");
-            _managers = Resources.FindObjectsOfTypeAll<ActiveManager>();
             _registers = Resources.FindObjectsOfTypeAll<RegisterableBehaviour>();
 #if UNITY_EDITOR
-            _managers = _managers.Where((arg) => !EditorUtility.IsPersistent(arg))
-                .ToArray();
             _registers = _registers.Where((arg) => !EditorUtility.IsPersistent(arg))
                 .ToArray();
 #endif
             if (Application.isPlaying)
             {
                 foreach (var res in _registers)
-                    res.Register();
-                foreach (var res in _managers)
                     res.Register();
                 foreach (var res in _registers)
                     res.DidRegister();
@@ -43,8 +37,6 @@ namespace State.Active
             {
                 foreach (var res in _registers)
                     res.WillUnregister();
-                foreach (var res in _managers)
-                    res.Unregister();
                 foreach (var res in _registers)
                     res.Unregister();
             }            
@@ -52,8 +44,8 @@ namespace State.Active
 
         public void Check() 
         {
-            foreach (var res in _managers)
-                res.Check();   
+            foreach (var res in _registers)
+                (res as ActiveManager)?.Check();   
         }
     }
 }
