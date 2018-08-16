@@ -9,6 +9,7 @@
 		_FlashColor ("Flash Color", Color) = (1, 1, 1)
 		_Flash ("Flash", Range(0, 1)) = 0
 		_Alpha ("Alpha", Range(0, 1)) = 1
+		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0 
 	}
 	SubShader
 	{
@@ -46,6 +47,7 @@
 			fixed4 _AddColor;
 			fixed _Flash;
 			int _ApplyTint;
+			int _UseDistance;
 			float _Alpha;
 			
 			// Globals
@@ -85,7 +87,11 @@
 			
 			    fixed4 color = _BikeFogColor;
 			    color.a = 0;
-                float d = _BikePosition.y - i.worldPos.y;    
+			    float d = 0;
+			    if (_UseDistance == 1)
+			        d = distance(_BikePosition, i.worldPos);
+			    else
+			        d = _BikePosition.y - i.worldPos.y;    
                 float norm = (d - _MinBikeFog) / (_MaxBikeFog - _MinBikeFog);
                 float smooth = smoothstep(0, 1, clamp(norm, 0, 1));
                 return lerp(tex, color, smooth);
