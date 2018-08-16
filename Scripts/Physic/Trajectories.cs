@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.Physics
+namespace Physic
 {
     public static class Trajectories
     {

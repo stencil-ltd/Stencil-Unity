@@ -3,7 +3,7 @@ using Binding;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Plugins.Physics
+namespace Physic
 {
     [RequireComponent(typeof(Collider))]
     public class ColliderHelper : MonoBehaviour
