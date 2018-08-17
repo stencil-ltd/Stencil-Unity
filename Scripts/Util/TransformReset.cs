@@ -14,12 +14,7 @@ namespace Util
         public Quaternion LocalRotation { get; private set; }
         public Vector3 Scale { get; private set; }
 
-        private Transform _transform;
-
-        private void Awake()
-        {
-            this.Bind(ref _transform);
-        }
+        public Transform Transform;
 
         private void Start()
         {
@@ -28,24 +23,24 @@ namespace Util
 
         public void Mark()
         {
-            LocalPosition = _transform.localPosition;
-            WorldPosition = _transform.position;
-            LocalRotation = _transform.localRotation;
-            WorldRotation = _transform.rotation;
-            Scale = _transform.localScale;
+            LocalPosition = Transform.localPosition;
+            WorldPosition = Transform.position;
+            LocalRotation = Transform.localRotation;
+            WorldRotation = Transform.rotation;
+            Scale = Transform.localScale;
         }
 
         public void ResetToMark()
         {
             if (UseWorldRotation)
-                _transform.rotation = WorldRotation;
-            else _transform.localRotation = LocalRotation;
+                Transform.rotation = WorldRotation;
+            else Transform.localRotation = LocalRotation;
 
             if (UseWorldPosition)
-                _transform.position = WorldPosition;
-            else _transform.localPosition = LocalPosition;
+                Transform.position = WorldPosition;
+            else Transform.localPosition = LocalPosition;
 
-            _transform.localScale = Scale;
+            Transform.localScale = Scale;
         }
 
         public void Translate(Vector3 translate)
@@ -53,8 +48,8 @@ namespace Util
             var pos = UseWorldPosition ? WorldPosition : LocalPosition;
             pos += translate;
             if (UseWorldPosition)
-                _transform.position = pos;
-            else _transform.localPosition = pos;
+                Transform.position = pos;
+            else Transform.localPosition = pos;
         }
     }
 }
