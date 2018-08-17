@@ -1,7 +1,7 @@
 ﻿using Binding;
 using UnityEngine;
 
-namespace Plugins.Physics
+namespace Physic
 {
     [RequireComponent(typeof(BoxCollider))]
     [ExecuteInEditMode]

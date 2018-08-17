@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UI
+﻿namespace UI
 {
     public abstract class Controller<T> : RegisterableBehaviour where T : Controller<T>
     {
@@ -17,9 +15,6 @@ namespace UI
         }
 
         public override void Unregister()
-        {}
-
-        protected virtual void OnDestroy()
         {
             Instance = Instance == this ? null : Instance;
         }
