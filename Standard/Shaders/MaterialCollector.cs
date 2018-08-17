@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace Runner.Colors
+namespace Standard.Shaders
 {
     public class MaterialCollector : MonoBehaviour
     {

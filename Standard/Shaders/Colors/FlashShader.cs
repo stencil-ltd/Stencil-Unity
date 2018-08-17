@@ -3,7 +3,7 @@ using System.Collections;
 using Binding;
 using UnityEngine;
 
-namespace Runner.Colors
+namespace Standard.Shaders.Colors
 {
     [RequireComponent(typeof(MaterialCollector))]
     public class FlashShader : MonoBehaviour

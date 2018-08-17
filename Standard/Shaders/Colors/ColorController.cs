@@ -5,7 +5,7 @@ using UI;
 using UnityEngine;
 using Util;
 
-namespace Runner.Colors
+namespace Standard.Shaders.Colors
 {
     public class ColorController : Controller<ColorController>
     {
