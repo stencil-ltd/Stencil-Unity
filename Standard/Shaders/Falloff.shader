@@ -6,8 +6,6 @@
 		[MaterialToggle] _ApplyTint("Apply Tint", Int) = 1
 		_MultColor ("Tint Mult", Color) = (1,1,1,1)	
 		_AddColor("Tint Add", Color) = (0,0,0,0)
-		_FlashColor ("Flash Color", Color) = (1, 1, 1)
-		_Flash ("Flash", Range(0, 1)) = 0
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0 
 	}
@@ -42,10 +40,8 @@
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-			fixed3 _FlashColor;
 			fixed4 _MultColor;
 			fixed4 _AddColor;
-			fixed _Flash;
 			int _ApplyTint;
 			int _UseDistance;
 			float _Alpha;
@@ -76,14 +72,7 @@
 			        tex *= _MultColor;
 			        tex += _AddColor;
 			    }
-				tex.rgb = lerp(tex.rgb, _FlashColor.rgb, _Flash);
 				tex.a = _Alpha;
-			
-//                half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, i.worldRefl);
-//                half3 skyColor = DecodeHDR (skyData, unity_SpecCube0_HDR);
-//                fixed4 color = (1,1,1,1);
-//                color.rgb = skyColor;
-//                color.a = 1;
 			
 			    fixed4 color = _BikeFogColor;
 			    color.a = 0;
