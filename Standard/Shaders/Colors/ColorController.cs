@@ -53,11 +53,20 @@ namespace Standard.Shaders.Colors
         {
             if (_level == null) return;
             var render = _level.Render;
-            CurrentColor = new ColorState
+            _SetCurrentColors(new ColorState
             {
                 Add = render.AddColor,
                 Mult = render.MultColor
-            };
+            });
+        }
+
+        private void _SetCurrentColors(ColorState state)
+        {
+            CurrentColor = state;
+            var color = Color.white;
+            color *= state.Mult;
+            color += state.Add;
+            RenderSettings.fogColor = color;
             OnColor?.Invoke(CurrentColor);
         }
         
@@ -79,13 +88,13 @@ namespace Standard.Shaders.Colors
             {
                 elapsed += Time.deltaTime;
                 var norm = curve.Evaluate(elapsed / duration);
-                var mult = UnityEngine.Color.Lerp(oldMult, newMult, norm);
-                var add = UnityEngine.Color.Lerp(oldAdd, newAdd, norm);
-                CurrentColor = new ColorState
+                var mult = Color.Lerp(oldMult, newMult, norm);
+                var add = Color.Lerp(oldAdd, newAdd, norm);
+                _SetCurrentColors(new ColorState
                 {
                     Add = add,
                     Mult = mult
-                };
+                });
                 OnColor?.Invoke(CurrentColor);
                 yield return null;    
             }
