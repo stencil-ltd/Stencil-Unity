@@ -8,7 +8,6 @@ using Util;
 
 namespace UI
 {
-    
     [RequireComponent(typeof(Button))]
     public class ScreenshotButton : MonoBehaviour
     {
