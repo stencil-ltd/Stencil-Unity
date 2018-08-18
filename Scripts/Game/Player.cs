@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Plugins.Game
+namespace Game
 {
     public static class Player
     {

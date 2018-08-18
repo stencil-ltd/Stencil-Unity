@@ -1,4 +1,5 @@
 ﻿using System;
+using Binding;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,6 +24,7 @@ namespace UI
 
         public float TopSafePadding { get; private set; }
 
+        [Bind]
         private BoxCollider2D _collider;
         private int lockCount;
         private EventSystem eventSystem;
@@ -30,7 +32,7 @@ namespace UI
         private void Awake()
         {
             Instance = this;
-            this.Bind(ref _collider);
+            this.Bind();
             eventSystem = EventSystem.current;
             ApplyNotch();
         }

@@ -19,7 +19,7 @@ namespace Dev
         {
             _deltaTime += (Time.unscaledDeltaTime - _deltaTime) * 0.1f;
             var fps = (int) (1.0f / _deltaTime);
-            _text.text = $"{fps}fps";
+            _text.text = $"Fps: {fps}";
         }
     }
 }
