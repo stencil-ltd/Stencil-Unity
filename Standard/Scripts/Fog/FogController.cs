@@ -25,12 +25,9 @@ namespace Standard.Fog
 
         private void SetCurrentColors()
         {
-            var settings = LevelSettings.Instance;
             var level = Levels.Level ?? Levels.Levels[0];
             var fog = level.Render.FogColor;
             Shader.SetGlobalColor("_BikeFogColor", fog);
-            Shader.SetGlobalFloat("_MinBikeFog", settings.Fog.MinDist);
-            Shader.SetGlobalFloat("_MaxBikeFog", settings.Fog.MaxDist);
         }
 
         private void OnLevel(object sender, LevelChange e)
@@ -59,12 +56,6 @@ namespace Standard.Fog
                 yield return null;    
             }
             SetCurrentColors();
-        }
-
-        private void Update()
-        {
-            if (!Application.isPlaying || PlayStates.Instance.State == PlayStates.State.Playing)
-                Shader.SetGlobalVector("_BikePosition", Camera.main.transform.position);
         }
     }
 }
