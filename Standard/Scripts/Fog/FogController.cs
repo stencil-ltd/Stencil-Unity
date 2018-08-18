@@ -27,7 +27,7 @@ namespace Standard.Fog
         {
             var level = Levels.Level ?? Levels.Levels[0];
             var fog = level.Render.FogColor;
-            Shader.SetGlobalColor("_BikeFogColor", fog);
+            Shader.SetGlobalColor("_FogColor", fog);
         }
 
         private void OnLevel(object sender, LevelChange e)
@@ -52,7 +52,7 @@ namespace Standard.Fog
                 elapsed += Time.deltaTime;
                 var norm = curve.Evaluate(elapsed / duration);
                 var mult = Color.Lerp(oldMult, newMult, norm);        
-                Shader.SetGlobalColor("_BikeFogColor", mult);
+                Shader.SetGlobalColor("_FogColor", mult);
                 yield return null;    
             }
             SetCurrentColors();

@@ -7,7 +7,9 @@
 		_MultColor ("Tint Mult", Color) = (1,1,1,1)	
 		_AddColor("Tint Add", Color) = (0,0,0,0)
 		_Alpha ("Alpha", Range(0, 1)) = 1
-		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0 
+		
+		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
+		[MaterialToggle] _UseHeight ("Use Height", Int) = 0  
 	}
 	SubShader
 	{
@@ -44,13 +46,18 @@
 			fixed4 _AddColor;
 			int _ApplyTint;
 			int _UseDistance;
+			int _UseHeight;
 			float _Alpha;
 			
 			// Globals
-            float3 _BikePosition;
-            half4 _BikeFogColor;
-            float _MinBikeFog;
-            float _MaxBikeFog;
+            float3 _FogPoint;
+            half4 _FogColor;
+            
+            float _FogHeightMin;
+            float _FogHeightMax;
+            
+            float _FogDistMin;
+            float _FogDistMax;
 			
 			v2f vert (appdata_base v)
 			{
@@ -74,14 +81,18 @@
 			    }
 				tex.a = _Alpha;
 			
-			    fixed4 color = _BikeFogColor;
+			    fixed4 color = _FogColor;
 			    color.a = 0;
-			    float d = 0;
-			    if (_UseDistance == 1)
-			        d = distance(_BikePosition, i.worldPos);
-			    else
-			        d = _BikePosition.y - i.worldPos.y;    
-                float norm = (d - _MinBikeFog) / (_MaxBikeFog - _MinBikeFog);
+			    float d = 1;
+			    float norm = 0;
+			    if (_UseDistance) {
+			        d = distance(_FogPoint, i.worldPos);
+                    norm = (d - _FogDistMin) / (_FogDistMax - _FogDistMin);
+                }
+			    if (_UseHeight) {
+			        d = _FogPoint.y - i.worldPos.y;
+			        norm = max(norm, (d - _FogHeightMin) / (_FogHeightMax - _FogHeightMin));
+                }
                 float smooth = smoothstep(0, 1, clamp(norm, 0, 1));
                 return lerp(tex, color, smooth);
 			}
