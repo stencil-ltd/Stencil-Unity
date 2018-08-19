@@ -47,6 +47,7 @@ namespace State.Active
             var active = Op == Operation.And;
             foreach(var g in Gates) 
             {
+                if (!g.enabled) continue;
                 var check = g.Check();
                 if (check == null) continue;
                 switch(Op)
