@@ -5,23 +5,21 @@ namespace Coroutines
     public class WaitForAnim : CustomYieldInstruction
     {
         public readonly Animator Animator;
-        public readonly string State;
 
         public override bool keepWaiting
         {
             get
             {
                 var info = Animator.GetCurrentAnimatorStateInfo(0);
-                var isAtState = info.IsName(State);
                 var trans = Animator.IsInTransition(0);
-                return !isAtState || trans;
+                var beginOrEnd = info.normalizedTime == 1f || info.normalizedTime == 0f;
+                return beginOrEnd || trans;
             }
         }
 
-        public WaitForAnim(Animator animator, string state)
+        public WaitForAnim(Animator animator)
         {
             Animator = animator;
-            State = state;
         }
     }
 }
