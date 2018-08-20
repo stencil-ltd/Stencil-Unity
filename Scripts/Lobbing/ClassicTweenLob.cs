@@ -16,7 +16,7 @@ namespace Lobbing
                 lt.setEaseInBack();
                 lt.setScale(0.5f);
             }
-            yield return new WaitForTween(lt);
+            yield return new WaitForSeconds(lob.Style.Duration);
         }
     }
 }

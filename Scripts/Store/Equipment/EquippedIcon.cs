@@ -33,7 +33,7 @@ namespace Store.Equipment
 
         private void UpdateSprite()
         {
-            _image.sprite = Manager?.SingleEquipped.Icon;
+            _image.sprite = Manager?.SingleEquipped.Icon ?? _image.sprite;
         }
     }
 }

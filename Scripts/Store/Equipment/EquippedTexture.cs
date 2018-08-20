@@ -31,7 +31,7 @@ namespace Store.Equipment
 
         private void UpdateTexture()
         {
-            _material.mainTexture = Manager.SingleEquipped.Texture;
+            _material.mainTexture = Manager.SingleEquipped.Texture ?? _material.mainTexture;
         }        
     }
 }
