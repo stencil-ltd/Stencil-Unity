@@ -92,13 +92,15 @@ namespace Rewards
             {
                 _button.enabled = false;
                 _group.alpha = 0.7f;
-                Glow.SetActive(false);
+                if (Glow != null)
+                    Glow.SetActive(false);
             }
             else
             {
                 _button.enabled = true;
                 _group.alpha = 1f;
-                Glow.SetActive(true);
+                if (Glow != null)
+                    Glow.SetActive(true);
             }
         }
     }
