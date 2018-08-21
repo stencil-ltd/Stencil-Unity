@@ -1,4 +1,7 @@
 ﻿using PaperPlaneTools;
+using Runner.Challenges;
+using Runner.Progression;
+using Runner.Scoring;
 using Standard.States;
 using UI;
 using UnityEngine;
@@ -7,7 +10,16 @@ namespace Standard.Menu
 {
     public class MainMenu : Controller<MainMenu>
     {
+        public ScoreTrackMeter Track;
         public OptionsMenu Options;
+
+        private void OnEnable()
+        {
+            var score = ScoreController.Instance.LifetimeScore;
+            ChallengeMeta meta;
+            var challenge = ChallengeController.Instance.GetChallenge((int) score, out meta);
+            Track.ResetAmounts(meta.ScoreThisChallenge, challenge.Score);
+        }
 
         public void Click_Play()
         {
