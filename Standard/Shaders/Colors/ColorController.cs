@@ -22,8 +22,9 @@ namespace Standard.Shaders.Colors
 
         public override void WillUnregister()
         {
-            base.WillUnregister();                
-            LevelController.Instance.OnLevelChanged -= OnLevel;
+            base.WillUnregister();
+            if (LevelController.Instance != null)
+                LevelController.Instance.OnLevelChanged -= OnLevel;
         }
 
         private void OnLevel(object sender, LevelChange e)

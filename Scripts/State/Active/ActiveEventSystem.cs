@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Analytics;
 using CustomOrder;
 using UI;
 using UnityEditor;
@@ -12,25 +14,47 @@ namespace State.Active
     [ExecutionOrder(-20)]
     public class ActiveEventSystem : MonoBehaviour
     {
+        public bool IsRoot;
+        
         private RegisterableBehaviour[] _registers;
         
         private void Awake()
         {
             Debug.Log("ActiveEventSystem Awake");
-            _registers = Resources.FindObjectsOfTypeAll<RegisterableBehaviour>();
+            if (IsRoot)
+                _registers = Resources.FindObjectsOfTypeAll<RegisterableBehaviour>();
+            else
+                _registers = GetComponentsInChildren<RegisterableBehaviour>(true);
 #if UNITY_EDITOR
-            _registers = _registers.Where((arg) => !EditorUtility.IsPersistent(arg))
+            _registers = _registers.Where(arg => !EditorUtility.IsPersistent(arg))
                 .ToArray();
 #endif
             if (Application.isPlaying)
             {
                 foreach (var res in _registers)
                 {
-                    res.Register();
+                    try
+                    {
+                        res.Register();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                     res.Registered = true;
                 }
+
                 foreach (var res in _registers)
-                    res.DidRegister();
+                {
+                    try
+                    {
+                        res.DidRegister();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
             }
         }
 
@@ -39,10 +63,26 @@ namespace State.Active
             if (Application.isPlaying)
             {
                 foreach (var res in _registers)
-                    res.WillUnregister();
+                {
+                    try
+                    {
+                        res.WillUnregister();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
                 foreach (var res in _registers)
                 {
-                    res.Unregister();
+                    try
+                    {
+                        res.Unregister();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                     res.Unregistered = true;
                 }
             }            
