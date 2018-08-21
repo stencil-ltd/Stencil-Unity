@@ -9,11 +9,6 @@
             Instance = (T)this;
         }
 
-        protected virtual void Awake()
-        {
-            Register();
-        }
-
         public override void Unregister()
         {
             Instance = Instance == this ? null : Instance;

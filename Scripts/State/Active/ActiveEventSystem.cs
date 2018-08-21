@@ -25,7 +25,10 @@ namespace State.Active
             if (Application.isPlaying)
             {
                 foreach (var res in _registers)
+                {
                     res.Register();
+                    res.Registered = true;
+                }
                 foreach (var res in _registers)
                     res.DidRegister();
             }
@@ -38,7 +41,10 @@ namespace State.Active
                 foreach (var res in _registers)
                     res.WillUnregister();
                 foreach (var res in _registers)
+                {
                     res.Unregister();
+                    res.Unregistered = true;
+                }
             }            
         }
 

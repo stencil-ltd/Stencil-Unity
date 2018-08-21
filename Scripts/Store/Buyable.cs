@@ -28,6 +28,10 @@ namespace Store
         [Header("Equip")]
         public bool Equippable = true;
         public bool InitialEquip;
+
+        [Header("Debug")]
+        public bool DebugAcquired;
+        public bool DebugEquipped;
         
         public BuyableManager Manager { get; internal set; }
 
@@ -49,6 +53,7 @@ namespace Store
                     PlayerPrefsX.SetDateTime(Key, DateTime.Now);
                 else PlayerPrefs.DeleteKey(Key);
                 PlayerPrefs.Save();
+                UpdateDebug();
                 if (!_unsafe) OnAcquireChanged?.Invoke(this);
             }
         }
@@ -62,6 +67,7 @@ namespace Store
                 if (!Equippable) throw new Exception("This cannot be equipped");
                 PlayerPrefsX.SetBool($"{Key}_equip", value);
                 PlayerPrefs.Save();
+                UpdateDebug();
                 if (!_unsafe)
                 {
                     Manager._OnEquip(this);
@@ -94,6 +100,7 @@ namespace Store
             Manager = manager;
             ConfigureDefaults();
             Debug.Log($"Init {this}");
+            UpdateDebug();
             return true;
         }
 
@@ -108,6 +115,14 @@ namespace Store
             _unsafe = false;
             PlayerPrefsX.SetBool($"{Key}_configured", true);
             PlayerPrefs.Save();
+        }
+
+        private void UpdateDebug()
+        {
+            #if UNITY_EDITOR
+            DebugAcquired = Acquired;
+            DebugEquipped = Equipped;
+            #endif
         }
     }
 }

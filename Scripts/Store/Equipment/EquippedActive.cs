@@ -11,16 +11,12 @@ namespace Store.Equipment
         public Buyable Buyable;
         public BuyableManager Manager { get; private set; }
 
-        public override void Register()
+        public override void DidRegister()
         {
             this.Bind();
             Manager = Buyable.Manager;
             if (Manager != null)
                 Manager.OnEquipChanged += OnEquip;
-        }
-
-        private void OnEnable()
-        {
             UpdateActive();
         }
 

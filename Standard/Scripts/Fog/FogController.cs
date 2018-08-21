@@ -15,7 +15,7 @@ namespace Standard.Fog
         public override void DidRegister()
         {
             base.DidRegister();
-            LevelController.Instance.OnLevelChanged += OnLevel;
+            Levels.OnLevelChanged += OnLevel;
         }
 
         private void OnEnable()

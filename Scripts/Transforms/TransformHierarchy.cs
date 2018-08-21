@@ -6,6 +6,7 @@ namespace Transforms
     public class TransformHierarchy : MonoBehaviour
     {
         public bool TranslateSelf;
+        public GameObject OptionalPrefab;
         
         public Transform Translator { get; private set; }
         public Transform Scaler { get; private set; }
@@ -22,7 +23,18 @@ namespace Transforms
             Translator = TranslateSelf ? transform : transform.GetChild(0);
             Scaler = Translator.GetChild(0);
             Rotator = Scaler.GetChild(0);
-            Subject = Rotator.GetChild(0);
+
+            if (Rotator.childCount > 0)
+                Subject = Rotator.GetChild(0);
+            if (OptionalPrefab)
+            {
+                if (Subject != null)
+                    DestroyImmediate(Subject);
+                Subject = Instantiate(OptionalPrefab, Rotator).transform;
+                Subject.transform.localPosition = Vector3.zero;
+                Subject.transform.localRotation = Quaternion.identity;
+                Subject.transform.localScale = Vector3.one;
+            }
         }
 
         public void Copy(TransformHierarchy other)

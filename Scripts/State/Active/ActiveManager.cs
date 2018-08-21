@@ -15,19 +15,11 @@ namespace State.Active
 
         public readonly List<ActiveGate> Gates = new List<ActiveGate>();
         public bool ActiveInEditor;
-        
-        protected bool IsRegistered { get; private set; }
-
-        private void Awake() 
-        {
-            Register();
-        }
 
         public override void Register()
         {
-            if (IsRegistered) return;
-            if (!Application.isPlaying && !ActiveInEditor) return;            
-            IsRegistered = true;
+            if (Registered) return;
+            if (!Application.isPlaying && !ActiveInEditor) return;
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
                 g.Register(this);
