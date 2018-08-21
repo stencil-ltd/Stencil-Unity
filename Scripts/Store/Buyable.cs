@@ -26,7 +26,7 @@ namespace Store
         public bool InitialGrant;
         
         [Header("Equip")]
-        public bool Equippable;
+        public bool Equippable = true;
         public bool InitialEquip;
         
         public BuyableManager Manager { get; internal set; }
