@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plugins.UI;
+using UI;
 using UnityEngine;
 using Util;
 
 namespace Currencies
 {
-    [CreateAssetMenu(menuName = "Managers/Currency")]
-    public class CurrencyManager : Singleton<CurrencyManager>
+    public class CurrencyController : Permanent<CurrencyController>
     {
         public Currency[] Types = { };
         public bool SaveOnWrite;
@@ -18,20 +19,20 @@ namespace Currencies
             return _types[name];
         }
 
-        protected override void OnEnable()
+        private void Start()
         {
-            base.OnEnable();
+            if (!Valid) return;
             foreach (var type in Types)
                 _types[type.Name] = type;
         }
 
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             Save();
-            base.OnDisable();
         }
 
-        public CurrencyManager Save()
+        public CurrencyController Save()
         {
             foreach (var type in Types)
                 type.Save();
@@ -39,7 +40,7 @@ namespace Currencies
             return this;
         }
 
-        public CurrencyManager Clear()
+        public CurrencyController Clear()
         {
             foreach (var type in Types)
                 type.Clear();

@@ -255,7 +255,7 @@ namespace Currencies
         private void AnythingChanged()
         {
             _dirty = true;
-            if (CurrencyManager.Instance.SaveOnWrite) Save();
+            if (CurrencyController.Instance.SaveOnWrite) Save();
         }
 
         private void UpdateTracking()
