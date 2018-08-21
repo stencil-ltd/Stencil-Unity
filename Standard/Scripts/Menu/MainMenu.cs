@@ -18,7 +18,7 @@ namespace Standard.Menu
             var score = ScoreController.Instance.LifetimeScore;
             ChallengeMeta meta;
             var challenge = ChallengeController.Instance.GetChallenge((int) score, out meta);
-            Track.ResetAmounts(meta.ScoreThisChallenge, challenge.Score);
+            Track.ResetAmounts(meta.ScoreThisChallenge, challenge.Score, meta.Index);
         }
 
         public void Click_Play()
