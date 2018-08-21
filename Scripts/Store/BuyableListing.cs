@@ -36,9 +36,9 @@ namespace Store
                     if (Buyable.AttemptToBuy() && BuyParticlePrefab)
                         Instantiate(BuyParticlePrefab, CoinSection.transform);
                 }
-                else if (!Buyable.Equipped)
+                else if (!Buyable.Equipped || !Buyable.Manager.SingleEquip)
                 {
-                    Buyable.Equipped = true;
+                    Buyable.Equipped = !Buyable.Equipped;
                 }
             });
 
