@@ -97,6 +97,7 @@ namespace Lobbing
                     single = (long) (div * amount);
                 }
                 if (single < 0) continue;
+                if (single < 1) single = 1; 
                 if (single > remaining) single = remaining;
                 remaining -= single;
                 routines.Add(Objects.StartCoroutine(LobSingle(single, true)));
