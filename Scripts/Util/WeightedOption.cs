@@ -7,16 +7,10 @@ using Random = UnityEngine.Random;
 namespace Util
 {
     [Serializable]
-    public abstract class WeightHaver
+    public class WeightHaver
     {
         [Range(0,1)]
         public float Weight = 1f;
-    }
-    
-    [Serializable]
-    public class WeightedOption<T> : WeightHaver
-    {
-        public T Option;
     }
 
     public static class WeightExtensions
