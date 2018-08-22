@@ -18,8 +18,13 @@ public class BuildScript {
     [MenuItem("Stencil/Build/Both")]
     public static void PerformBothBuild()
     {
+        #if UNITY_ANDROID
+        Build(BuildTarget.Android);
+        Build(BuildTarget.iOS);
+        #elif UNITY_IOS
         Build(BuildTarget.iOS);
         Build(BuildTarget.Android);
+        #endif
     }
 
     public static void Build(BuildTarget target)
