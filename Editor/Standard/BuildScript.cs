@@ -14,6 +14,13 @@ public class BuildScript {
     {
         Build(BuildTarget.iOS);
     }
+    
+    [MenuItem("Stencil/Build/Both")]
+    public static void PerformBothBuild()
+    {
+        Build(BuildTarget.iOS);
+        Build(BuildTarget.Android);
+    }
 
     public static void Build(BuildTarget target)
     {
