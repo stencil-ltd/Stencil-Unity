@@ -3,11 +3,13 @@ using UnityEditor;
 
 public class BuildScript {
 
+    [MenuItem("Stencil/Build/Android")]
     public static void PerformAndroidBuild()
     { 
         Build(BuildTarget.Android);
     }
 
+    [MenuItem("Stencil/Build/iOS")]
     public static void PerformiOSBuild()
     {
         Build(BuildTarget.iOS);
