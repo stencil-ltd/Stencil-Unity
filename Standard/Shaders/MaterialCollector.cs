@@ -9,7 +9,7 @@ namespace Standard.Shaders
 
         private void Awake()
         {
-            var renders = GetComponentsInChildren<MeshRenderer>();
+            var renders = GetComponentsInChildren<MeshRenderer>(true);
             Materials = renders.SelectMany(m => m.materials).ToArray();
         }
     }

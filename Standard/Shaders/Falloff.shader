@@ -9,7 +9,10 @@
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		
 		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
-		[MaterialToggle] _UseHeight ("Use Height", Int) = 0  
+		[MaterialToggle] _UseHeight ("Use Height", Int) = 0
+		
+		_FlashColor ("Flash Color", Color) = (1, 1, 1)
+		_Flash ("Flash", Range(0, 1)) = 0   
 	}
 	SubShader
 	{
@@ -49,6 +52,9 @@
 			int _UseHeight;
 			float _Alpha;
 			
+			fixed3 _FlashColor;
+			fixed _Flash;
+			
 			// Globals
             float3 _FogPoint;
             half4 _FogColor;
@@ -79,6 +85,7 @@
 			        tex *= _MultColor;
 			        tex += _AddColor;
 			    }
+			    tex.rgb = lerp(tex.rgb, _FlashColor, _Flash);
 				tex.a = _Alpha;
 			
 			    fixed4 color = _FogColor;
