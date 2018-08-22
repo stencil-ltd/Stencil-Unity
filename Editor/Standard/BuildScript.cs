@@ -6,7 +6,7 @@ namespace Standard
     public class BuildScript {
 
         public static void PerformAndroidBuild()
-        {
+        { 
             Build(BuildTarget.Android);
         }
     
