@@ -18,7 +18,7 @@ namespace Util
         public static T WeightedRandom<T>(this ICollection<T> coll) where T : WeightHaver
         {
             var total = coll.Sum(w => w.Weight);
-            var rand = Random.Range(0, total);
+            var rand = Random.Range(0f, total);
             var test = 0f;
             foreach (var p in coll)
             {
