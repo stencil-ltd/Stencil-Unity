@@ -29,7 +29,7 @@ namespace Transforms
             if (OptionalPrefab)
             {
                 if (Subject != null)
-                    DestroyImmediate(Subject);
+                    DestroyImmediate(Subject.gameObject);
                 Subject = Instantiate(OptionalPrefab, Rotator).transform;
                 Subject.transform.localPosition = Vector3.zero;
                 Subject.transform.localRotation = Quaternion.identity;
