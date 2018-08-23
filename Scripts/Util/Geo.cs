@@ -15,6 +15,7 @@ namespace Util
             var success = Physics.Raycast(ray, out hit, float.MaxValue, mask);
             if (success)
                 transform.position = hit.point;
+            else Debug.LogWarning($"Failed to cast lob into UI layer.");
         }
     }
 }

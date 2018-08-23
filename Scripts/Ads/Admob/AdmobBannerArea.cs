@@ -22,9 +22,9 @@ namespace Ads.Admob
         
         private static bool _visible;
         public static bool IsBannerVisible() => _visible;
-                
-        public RectTransform Content;
-        public RectTransform Scrim;
+
+        public RectTransform Content => Frame.Instance.Contents;
+        public RectTransform Scrim => Frame.Instance.Scrim;
         
         public static float BannerHeight
         {

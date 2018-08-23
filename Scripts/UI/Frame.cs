@@ -21,6 +21,7 @@ namespace UI
 
         [CanBeNull] public RectMask2D Mask;
         public RectTransform Contents;
+        [CanBeNull] public RectTransform Scrim;
 
         public float TopSafePadding { get; private set; }
 
