@@ -40,7 +40,7 @@ public class BuildScript {
                 suffix = "";
                 break;
         }
-        var path = $"Build/{target}{suffix}";
+        var path = $"Builds/{target}{suffix}";
         var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
         BuildPipeline.BuildPlayer(levels, path, target, dev);
     }
