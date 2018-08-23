@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,6 +16,7 @@ namespace Util
 
     public static class WeightExtensions
     {
+        [CanBeNull]
         public static T WeightedRandom<T>(this ICollection<T> coll) where T : WeightHaver
         {
             var total = coll.Sum(w => w.Weight);
@@ -27,7 +29,8 @@ namespace Util
                     return p;
                 test += w;
             }
-            throw new Exception("Could not choose by weight. Are there any in the list?");
+
+            return null;
         }
     }
 }
