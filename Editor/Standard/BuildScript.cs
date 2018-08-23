@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using UnityEditor;
-using UnityEditor.Build.Content;
 
 public class BuildScript {
 
@@ -41,7 +40,7 @@ public class BuildScript {
                 suffix = "";
                 break;
         }
-        var path = $"Builds/{target}{suffix}";
+        var path = $"Build/{target}{suffix}";
         var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
         BuildPipeline.BuildPlayer(levels, path, target, dev);
     }
