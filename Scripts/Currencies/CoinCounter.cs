@@ -10,6 +10,7 @@ namespace Currencies
         public Currency Currency;
         public Text Text;
         public float Speed = 5f;
+        public bool OnlyCommitAmount;
 
         private string _fmt = "x{0}";
         private Coroutine _co;
@@ -40,7 +41,10 @@ namespace Currencies
         
         public void OnLobEnd(Lob lob)
         {
-            if (Currency != null)
+            if (Currency == null) return;
+            if (OnlyCommitAmount)
+                Currency.Commit(lob.Amount).AndSave();
+            else
                 Currency.Add(lob.Amount).AndSave();
         }
     }
