@@ -35,6 +35,8 @@ namespace Store.Equipment
 
         private void OnEquip(object sender, EventArgs e)
         {
+            if (this == null)
+                Debug.LogError($"Destroyed: {gameObject}");
             UpdateActive();
         }
 
