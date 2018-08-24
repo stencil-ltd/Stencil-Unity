@@ -22,6 +22,11 @@ namespace Physic
             var a = height / (mid * (mid - length));
             return a * x * (x - length);
         }
+        
+        public static float ParabolicYByNorm(float norm, float length, float angle)
+        {
+            return ParabolicY(norm * length, length, angle);
+        }
 
         public static float ParabolicY(float x, float length, float angle)
         {
