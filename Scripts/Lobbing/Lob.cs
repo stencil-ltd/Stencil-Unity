@@ -36,4 +36,14 @@ namespace Lobbing
             Style = style ?? LobStyle.Standard;
         }
     }
+
+    [Serializable]
+    public class LobOverrides
+    {
+        public bool OverrideStyle;
+        public LobStyle Style;
+
+        public bool OverrideDivision;
+        public LobDivision Division;
+    }
 }

@@ -51,7 +51,7 @@ namespace Lobbing
 
         public ILobFunction Function = new ClassicTweenLob();
 
-        public IEnumerator LobSingle(long amount, bool applyRandomization = false)
+        public IEnumerator LobSingle(long amount, bool applyRandomization = false, LobOverrides overrides = null)
         {
             var obj = Instantiate(Prefab, Container ?? To.parent);
             obj.transform.position = From.position;
@@ -60,9 +60,16 @@ namespace Lobbing
             obj.transform.SetAsLastSibling();
             
             var style = Flight;
+            if (overrides?.OverrideStyle ?? false)
+                style = overrides.Style;
+
+            var division = Division;
+            if (overrides?.OverrideDivision ?? false)
+                division = overrides.Division;
+            
             if (applyRandomization)
             {
-                style.Duration += Random.Range(-Division.RandomizeDuration, Division.RandomizeDuration);
+                style.Duration += Random.Range(-division.RandomizeDuration, division.RandomizeDuration);
             }
             
             var lob = new Lob(obj, amount, style);
@@ -71,10 +78,13 @@ namespace Lobbing
             End(lob);
         }
 
-        public IEnumerator LobMany(long amount)
+        public IEnumerator LobMany(long amount, LobOverrides overrides = null)
         {
             var routines = new List<Coroutine>();
             var remaining = amount;
+            var division = Division;
+            if (overrides?.OverrideDivision ?? false)
+                division = overrides.Division;
 
             if (FromParticleSingle)
             {
@@ -86,25 +96,25 @@ namespace Lobbing
             while (remaining > 0L)
             {
                 long single;
-                if (Division.ConcreteAmount)
+                if (division.ConcreteAmount)
                 {
-                    single = (long) (Division.AmountPerLob + 
-                                     Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount));
+                    single = (long) (division.AmountPerLob + 
+                                     Random.Range(-division.RandomizeAmount, division.RandomizeAmount));
                 }
                 else
                 {
-                    var div = Division.AmountPerLob + Random.Range(-Division.RandomizeAmount, Division.RandomizeAmount);
+                    var div = division.AmountPerLob + Random.Range(-division.RandomizeAmount, division.RandomizeAmount);
                     single = (long) (div * amount);
                 }
                 if (single < 0) continue;
                 if (single < 1) single = 1; 
                 if (single > remaining) single = remaining;
                 remaining -= single;
-                routines.Add(Objects.StartCoroutine(LobSingle(single, true)));
+                routines.Add(Objects.StartCoroutine(LobSingle(single, true, overrides)));
                 if (remaining > 0)
                 {
-                    var interval = Division.Interval +
-                                   Random.Range(-Division.RandomizeInterval, Division.RandomizeInterval);
+                    var interval = division.Interval +
+                                   Random.Range(-division.RandomizeInterval, division.RandomizeInterval);
                     yield return new WaitForSeconds(interval);
                 }
             }
