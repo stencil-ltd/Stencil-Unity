@@ -1,4 +1,5 @@
 ﻿using Binding;
+using Standard.Audio;
 using UnityEngine;
 
 namespace Audio
@@ -11,9 +12,11 @@ namespace Audio
         public bool IsTrigger;
         public string ColliderTag;
 
-        public bool Used;
+        public bool Used { get; set; }
 
+        [Header("Sound Choices")]
         public AudioSource Sound;
+        public AudioClip Clip;
         
         [Bind] public Collider Collider { get; private set; }
 
@@ -40,10 +43,18 @@ namespace Audio
         private void Play()
         {
             if (Used && !Repeatable) return;
-            Debug.Log($"Playing {Sound.clip}");
             Used = true;
-            Sound.enabled = true;
-            Sound.Play();
+            if (Sound != null)
+            {
+                Debug.Log($"Playing {Sound.clip}");
+                Sound.Play();
+            }
+
+            if (Clip != null)
+            {
+                Debug.Log($"Playing {Clip}");
+                SfxOneShot.Instance.Play(Clip);
+            }
         }
     }
 }
