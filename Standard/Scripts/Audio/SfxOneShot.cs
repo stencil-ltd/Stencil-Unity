@@ -1,4 +1,5 @@
-﻿using Binding;
+﻿using System.Collections.Generic;
+using Binding;
 using UI;
 using UnityEngine;
 
@@ -7,14 +8,19 @@ namespace Standard.Audio
     [RequireComponent(typeof(AudioSource))]
     public class SfxOneShot : Controller<SfxOneShot>
     {
-        [Bind] public AudioSource Source { get; private set; }
+        private AudioSource[] _sources;
+        private int _index;
 
         private void Awake()
         {
-            this.Bind();
+            _sources = GetComponents<AudioSource>();
         }
 
-        public void Play(AudioClip clip) 
-            => Source.PlayOneShot(clip);
+        public void Play(AudioClip clip)
+        {
+            var source = _sources[_index];
+            source.PlayOneShot(clip);
+            _index = (_index + 1) % _sources.Length;
+        }
     }
 }
