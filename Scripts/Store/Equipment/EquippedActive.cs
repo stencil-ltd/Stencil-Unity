@@ -27,6 +27,12 @@ namespace Store.Equipment
                 Manager.OnEquipChanged -= OnEquip;
         }
 
+        private void OnDestroy()
+        {
+            if (Manager != null)
+                Manager.OnEquipChanged -= OnEquip;
+        }
+
         private void OnEquip(object sender, EventArgs e)
         {
             UpdateActive();
