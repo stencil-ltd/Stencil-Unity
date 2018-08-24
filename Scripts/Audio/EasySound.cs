@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using Binding;
 using UnityEditor;
@@ -83,8 +82,8 @@ namespace UI
                     break;
             }
         }
+        #endif 
     }
-#endif 
 
     [Serializable]
     public enum SoundType
