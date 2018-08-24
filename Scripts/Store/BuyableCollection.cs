@@ -1,4 +1,5 @@
 ﻿using System;
+using Standard.Audio;
 using UnityEngine;
 using Util;
 
@@ -6,8 +7,8 @@ namespace Store
 {
     public class BuyableCollection : MonoBehaviour
     {
-        public AudioSource OnPurchase;
-        public AudioSource OnEquip;
+        public AudioClip OnPurchase;
+        public AudioClip OnEquip;
         
         public RectTransform Container;
 
@@ -42,14 +43,12 @@ namespace Store
 
         private void OnEquipped(object sender, EventArgs e)
         {
-            if (OnEquip != null)
-                OnEquip.Play();
+            SfxOneShot.Instance.Play(OnEquip);
         }
 
         private void OnAcquire(object sender, EventArgs e)
-        {
-            if (OnPurchase != null)
-                OnPurchase.Play();   
+        {            
+            SfxOneShot.Instance.Play(OnPurchase);
         }
     }
 }

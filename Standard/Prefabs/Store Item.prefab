@@ -531,15 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5311fffee70446c592c9a420c3c3fcfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Buyable: {fileID: 11400000, guid: 7fde64a7255f14efdb1cffb5bd7d5377, type: 2}
   Icon: {fileID: 114956821334371122}
-  CoinSection: {fileID: 1087079607898074}
-  CoinText: {fileID: 114600230288096638}
-  Highlight: {fileID: 1544556018838062}
-  Checkmark: {fileID: 114342814796280494}
-  Equip: {fileID: 1503840157355326}
-  BuyParticlePrefab: {fileID: 114299256879030454, guid: 553f2dd9b234e473fac0731307d483ac,
-    type: 2}
 --- !u!114 &114812875979339566
 MonoBehaviour:
   m_ObjectHideFlags: 1
