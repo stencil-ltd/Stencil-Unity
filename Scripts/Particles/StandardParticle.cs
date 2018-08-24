@@ -63,6 +63,7 @@ namespace Particles
 
         private void PerformFinish()
         {
+            if (!Application.isPlaying) return;
             switch (OnFinish)
             {
                 case DoOnFinish.Deactivate:
