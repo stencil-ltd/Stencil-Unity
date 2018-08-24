@@ -29,7 +29,11 @@ namespace UI
         [Bind] 
         public AudioSource Source { get; private set; }
 
+        #if UNITY_EDITOR
         [InitializeOnLoadMethod]
+        #else
+        [RuntimeInitializeOnLoadMethod]
+        #endif
         public static void OnLoad()
         {
             var mixers = Resources.FindObjectsOfTypeAll<AudioMixer>();
