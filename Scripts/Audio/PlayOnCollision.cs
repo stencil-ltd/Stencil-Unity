@@ -1,44 +1,49 @@
 ﻿using Binding;
-using UI;
 using UnityEngine;
 
 namespace Audio
 {
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(EasySound))]
     [ExecuteInEditMode]
     public class PlayOnCollision : MonoBehaviour
     {
+        public bool Repeatable;
         public bool IsTrigger;
         public string ColliderTag;
+
+        public bool Used;
+
+        public AudioSource Sound;
         
         [Bind] public Collider Collider { get; private set; }
-        [Bind] public EasySound Sound { get; private set; }
 
         private void Awake()
         {
             this.Bind();
-        }
-
-        private void Start()
-        {
-            Sound.Source.playOnAwake = false;
+            Sound = Sound ?? GetComponent<AudioSource>();
         }
 
         private void OnCollisionEnter(Collision other)
         {
             if (IsTrigger) return;
             if (!string.IsNullOrEmpty(ColliderTag) && !other.gameObject.CompareTag(ColliderTag)) return;
-            Debug.Log($"Playing {Sound.Clip}");
-            Sound.Source.Play();
+            Play();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (!IsTrigger) return;
             if (!string.IsNullOrEmpty(ColliderTag) && !other.gameObject.CompareTag(ColliderTag)) return;
-            Debug.Log($"Playing {Sound.Clip}");
-            Sound.Source.Play();
+            Play();
+        }
+
+        private void Play()
+        {
+            if (Used && !Repeatable) return;
+            Debug.Log($"Playing {Sound.clip}");
+            Used = true;
+            Sound.enabled = true;
+            Sound.Play();
         }
     }
 }

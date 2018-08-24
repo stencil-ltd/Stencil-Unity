@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Binding;
-using UnityEditorInternal;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
+
+#if UNITY_EDITOR
+using UnityEditorInternal;
+#endif
 
 namespace UI
 {
@@ -17,13 +22,15 @@ namespace UI
         public static AudioMixerGroup Music;
         public static AudioMixerGroup Sfx;
 
+        public bool PlayOnAwake;
+        public bool Loop;
         public SoundType Type = SoundType.Sfx;
         public AudioClip Clip;
         
         [Bind] 
         public AudioSource Source { get; private set; }
 
-        [RuntimeInitializeOnLoadMethod]
+        [InitializeOnLoadMethod]
         public static void OnLoad()
         {
             var mixers = Resources.FindObjectsOfTypeAll<AudioMixer>();
@@ -36,23 +43,32 @@ namespace UI
         private void Awake()
         {
             this.Bind();
-            UpdateSource();
             
             #if UNITY_EDITOR
             if (!Application.isPlaying)
+            {
+                UpdateSource();
                 InternalEditorUtility.SetIsInspectorExpanded(Source, false);
+            }
             #endif
         }
-        
-        #if UNITY_EDITOR
+
+        private void OnEnable()
+        {
+            if (Application.isPlaying && PlayOnAwake)
+                Source.Play();
+        }
+
+#if UNITY_EDITOR
         private void Update()
         {
             if (Application.isPlaying)
                 UpdateSource();
-        }
+        }   
 
         private void UpdateSource()
         {
+            Source.loop = Loop;
             Source.clip = Clip;
             switch (Type)
             {
@@ -67,8 +83,8 @@ namespace UI
                     break;
             }
         }
-#endif
     }
+#endif 
 
     [Serializable]
     public enum SoundType
