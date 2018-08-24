@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Standard.Audio;
 using UnityEngine;
 using UnityEngine.Events;
 using Util;
@@ -48,6 +49,10 @@ namespace Lobbing
         [Header("Events")] 
         public LobEvent OnLobBegan;
         public LobEvent OnLobEnded;
+
+        [Header("Sfx")] 
+        public AudioClip SfxBegin;
+        public AudioClip SfxEnd;
 
         public ILobFunction Function = new ClassicTweenLob();
 
@@ -131,6 +136,7 @@ namespace Lobbing
                 if (ForceToUi)
                     part.transform.CastIntoUi();
             }
+            SfxOneShot.Instance.Play(SfxBegin);
             OnLobBegan?.Invoke(lob);
         }
 
@@ -143,6 +149,7 @@ namespace Lobbing
                     part.transform.CastIntoUi();
             }
             
+            SfxOneShot.Instance.Play(SfxEnd);
             OnLobEnded?.Invoke(lob);
             Destroy(lob.Projectile);
         }

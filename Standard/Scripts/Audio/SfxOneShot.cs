@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Binding;
+using JetBrains.Annotations;
 using UI;
 using UnityEngine;
 
@@ -16,8 +17,9 @@ namespace Standard.Audio
             _sources = GetComponents<AudioSource>();
         }
 
-        public void Play(AudioClip clip)
+        public void Play([CanBeNull] AudioClip clip)
         {
+            if (clip == null) return;
             var source = _sources[_index];
             source.PlayOneShot(clip);
             _index = (_index + 1) % _sources.Length;
