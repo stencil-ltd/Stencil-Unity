@@ -1,7 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Binding;
+using Standard.States;
+using State;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace Particles
 {
@@ -17,10 +19,32 @@ namespace Particles
         }
         
         public DoOnFinish OnFinish = DoOnFinish.Destroy;
-
+        public PlayStates.State[] ActiveStates = { };
+        
         [Bind]
         public ParticleSystem ParticleSystem { get; set; }
         private ParticleSystem[] _particles;
+
+        private void Awake()
+        {
+            this.Bind();
+            _particles = GetComponentsInChildren<ParticleSystem>();
+            if (ActiveStates.Length > 0)
+            {
+                PlayStates.Instance.OnChange += OnState;
+                OnState(null, new StateChange<PlayStates.State>(null, PlayStates.Instance.State));
+            }
+        }
+
+        private void OnDestroy()
+        {
+            PlayStates.Instance.OnChange -= OnState;
+        }
+
+        private void OnState(object sender, StateChange<PlayStates.State> e)
+        {
+            gameObject.SetActive(ActiveStates.Contains(e.New));   
+        }
 
         public void SetColor(Color color)
         {
@@ -29,12 +53,6 @@ namespace Particles
                 var main = particle.main;
                 main.startColor = color;
             }
-        }
-
-        private void Awake()
-        {
-            this.Bind();
-            _particles = GetComponentsInChildren<ParticleSystem>();
         }
 
         private void Start()

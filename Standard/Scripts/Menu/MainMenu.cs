@@ -19,7 +19,7 @@ namespace Standard.Menu
             ChallengeMeta meta;
             var challenge = ChallengeController.Instance.GetChallenge((int) score, out meta);
             Track.ResetAmounts(meta.ScoreThisChallenge, challenge.Score, meta.Index);
-            ScreenshotZone.Instance.SetScore(HighScore.Score ?? 0);
+            ScreenshotZone.Instance?.SetScore(HighScore.Score ?? 0);
         }
 
         public void Click_Play()
