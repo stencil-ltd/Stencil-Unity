@@ -5,8 +5,6 @@ using UnityEngine;
 using System.IO;
 using UnityEditor.iOS.Xcode;
 
-namespace Standard
-{
     public class EntitlementsPostProcess : ScriptableObject
     {
         public DefaultAsset m_entitlementsFile;
@@ -50,6 +48,5 @@ namespace Standard
             }
         }
     }
-}
 
 #endif
