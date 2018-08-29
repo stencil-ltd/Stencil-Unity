@@ -89,6 +89,11 @@
 				tex.a = _Alpha;
 			
 			    fixed4 color = _FogColor;
+			    if (_ApplyTint)
+			    {
+			        color *= _MultColor;
+			        color += _AddColor;
+			    }
 			    color.a = 0;
 			    float d = 1;
 			    float norm = 0;

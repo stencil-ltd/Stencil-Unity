@@ -64,10 +64,6 @@ namespace Standard.Shaders.Colors
         private void _SetCurrentColors(ColorState state)
         {
             CurrentColor = state;
-            var color = Color.white;
-            color *= state.Mult;
-            color += state.Add;
-            RenderSettings.fogColor = color;
             OnColor?.Invoke(CurrentColor);
         }
         
