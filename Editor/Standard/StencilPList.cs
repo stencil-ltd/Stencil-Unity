@@ -1,12 +1,14 @@
-﻿
-#if UNITY_IOS
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 using System.IO;
 
+[InitializeOnLoad]
 public class StencilPlist
 {
+    static StencilPlist()
+    {}
+
     [PostProcessBuild]
     public static void ChangeXcodePlist(BuildTarget buildTarget, string pathToBuiltProject) {
 
@@ -30,4 +32,3 @@ public class StencilPlist
         }
     }
 }
-#endif
