@@ -1,4 +1,4 @@
-﻿#if UNITY_IOS
+﻿
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -48,5 +48,3 @@ using UnityEditor.iOS.Xcode;
             }
         }
     }
-
-#endif
