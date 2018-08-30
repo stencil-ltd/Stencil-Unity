@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 
 public class BuildScript {
 
@@ -41,13 +42,16 @@ public class BuildScript {
                 suffix = "";
                 break;
         }
+
         var path = $"Builds/{target}{suffix}";
-        if (File.Exists(path))
+        var dir = $"{Application.dataPath}/../";
+        var abspath = dir + path;
+        if (File.Exists(abspath))
         {
-            var bk = $"{path}.bk";
+            var bk = $"{abspath}.bk";
             if (File.Exists(bk))
                 File.Delete(bk);
-            File.Move(path, path + ".bk");
+            File.Move(abspath, bk);
         }
         var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
         BuildPipeline.BuildPlayer(levels, path, target, dev);
