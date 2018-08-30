@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Runner.Scoring;
+using UnityEngine;
 
 namespace Standard.Menu
 {
