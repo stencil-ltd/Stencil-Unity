@@ -37,10 +37,10 @@ namespace UI
         public static void OnLoad()
         {
             var mixers = Resources.FindObjectsOfTypeAll<AudioMixer>();
-            Mixer = mixers.First(mixer => mixer.name == "Mixer");
-            Sfx = Mixer.FindMatchingGroups("Sfx")[0];
-            Music = Mixer.FindMatchingGroups("Music")[0];
-            Master = Mixer.FindMatchingGroups("Master")[0];
+            Mixer = mixers.FirstOrDefault(mixer => mixer.name == "Mixer");
+            Sfx = Mixer?.FindMatchingGroups("Sfx")[0];
+            Music = Mixer?.FindMatchingGroups("Music")[0];
+            Master = Mixer?.FindMatchingGroups("Master")[0];
         }
 
         private void Awake()
