@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Ads;
 using CustomOrder;
-using Dev;
 using Plugins.UI;
 using Store;
 using UI;
@@ -38,6 +37,10 @@ namespace Init
                 }
                 Objects.Enqueue(() => OnFirebase(dependencyStatus == Firebase.DependencyStatus.Available));
             });
+#endif
+            
+#if !EXCLUDE_FACEBOOK
+            Facebook.Unity.FB.Init();
 #endif
         }
 
