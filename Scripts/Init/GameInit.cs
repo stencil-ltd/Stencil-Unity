@@ -40,6 +40,7 @@ namespace Init
 #endif
             
 #if !EXCLUDE_FACEBOOK
+            Facebook.Unity.FB.Mobile.FetchDeferredAppLinkData();
             Facebook.Unity.FB.Init();
 #endif
         }
