@@ -28,7 +28,7 @@ namespace Init
             SceneManager.sceneLoaded += _OnNewScene;
             OnInit();
             
-#if STENCIL_FIREBASE
+#if !EXCLUDE_FIREBASE
             Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
                 var dependencyStatus = task.Result;

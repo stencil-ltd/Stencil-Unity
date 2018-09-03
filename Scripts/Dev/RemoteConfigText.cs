@@ -1,4 +1,4 @@
-﻿#if STENCIL_FIREBASE
+﻿#if !EXCLUDE_FIREBASE
 using Binding;
 using Firebase.RemoteConfig;
 using UnityEngine;
