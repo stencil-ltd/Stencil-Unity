@@ -1,4 +1,5 @@
-﻿using PaperPlaneTools;
+﻿using System.Collections;
+using PaperPlaneTools;
 using Runner.Challenges;
 using Runner.Progression;
 using Runner.Scoring;
@@ -20,6 +21,14 @@ namespace Standard.Menu
             var challenge = ChallengeController.Instance.GetChallenge((int) score, out meta);
             Track.ResetAmounts(meta.ScoreThisChallenge, challenge.Score, meta.Index);
             ScreenshotZone.Instance?.SetScore(HighScore.Score ?? 0);
+            
+            StartCoroutine(_Rate());
+        }
+
+        private IEnumerator _Rate()
+        {
+            yield return new WaitForSeconds(1.25f);
+            RateBox.Instance?.Show();
         }
 
         public void Click_Play()
@@ -29,7 +38,7 @@ namespace Standard.Menu
 
         public void Click_Rating()
         {
-            RateBox.Instance.GoToRateUrl();
+            RateBox.Instance?.GoToRateUrl();
         }
 
         public void Click_Social()
