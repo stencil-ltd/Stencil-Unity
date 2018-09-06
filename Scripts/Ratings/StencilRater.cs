@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using Analytics;
 using Binding;
 using UnityEngine;
@@ -44,6 +43,19 @@ namespace Ratings
         private void Awake()
         {
             this.Bind();
+            
+            Cancel.onClick.AddListener(() => CancelRating(false));
+            Never.onClick.AddListener(NeverRating);
+            
+            CancelFeedback.onClick.AddListener(() => CancelRating(true));
+            SendFeedback.onClick.AddListener(Feedback);
+        }
+
+        private void OnEnable()
+        {
+            Debug.Log("Showing Rating");
+
+            _rated = false;
             for (var i = 0; i < Stars.Length; i++)
             {
                 var i1 = i;
@@ -56,15 +68,6 @@ namespace Ratings
             Initial.SetActive(true);
             Why.SetActive(false);
             
-            Cancel.onClick.AddListener(() => CancelRating(false));
-            Never.onClick.AddListener(NeverRating);
-            
-            CancelFeedback.onClick.AddListener(() => CancelRating(true));
-            SendFeedback.onClick.AddListener(Feedback);
-        }
-
-        private void OnEnable()
-        {
             Tracking.Instance.Track("rating_show")
                 .SetUserProperty("rating_shown", true);
         }
@@ -76,6 +79,7 @@ namespace Ratings
             var to = "contact@stencil.ltd";
             var subject = $"Feedback for {Application.productName}";
             var url = $"mailto:{to}?subject={Uri.EscapeDataString(subject)}";
+            Debug.Log($"Opening Email: {url}");
             Application.OpenURL(url);
             Dismiss();
         }
@@ -110,7 +114,7 @@ namespace Ratings
                 .SetUserProperty(posString, true);
             
             for (var i = 0; i < Stars.Length; i++)
-                Stars[i].enabled = i < count;
+                Stars[i].Fill.enabled = i < count;
 
             if (positive)
                 OnPositive?.Invoke(count);

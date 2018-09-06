@@ -1,11 +1,10 @@
 using PaperPlaneTools;
-using UI;
 using UnityEngine;
 
 namespace Ratings
 {
     [RequireComponent(typeof(RateBoxPrefabScript))]
-    public class StencilRateController : Controller<StencilRateController>
+    public class StencilRateController : MonoBehaviour
     {
         public bool CheckAtAwake = true;
         public StencilRater Rater;
