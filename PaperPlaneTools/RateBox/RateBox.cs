@@ -14,9 +14,9 @@
 	{
 #if UNITY_IOS
 		[DllImport("__Internal")]
-		extern static private bool _reviewControllerIsAvailable ();
+		extern static public bool _reviewControllerIsAvailable ();
 		[DllImport("__Internal")]
-		extern static private void _reviewControllerShow ();
+		extern static public void _reviewControllerShow ();
 #endif
 
 		/// <summary>
@@ -438,7 +438,7 @@
 			return true;
 		}
 
-		private int Time()
+		public int Time()
 		{
 			var epochStart = new System.DateTime(1970, 1, 1, 8, 0, 0, System.DateTimeKind.Utc);
 			return (int) Math.Floor((System.DateTime.UtcNow - epochStart).TotalSeconds);	
