@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BuildScript {
     
-    [MenuItem("Stencil/Build/Increment & Build")]
+    [MenuItem("Stencil/Build/Increment + Build")]
     public static void IncrementAndBuild()
     {
         IncrementVersion();

@@ -8,7 +8,7 @@ namespace Standard.States
     {
         public new enum State
         {
-            Loading, Menu, Store, Playing, Finished, Share
+            Loading, Menu, Store, Playing, Finished, Share, Options
         }   
     }
 }
