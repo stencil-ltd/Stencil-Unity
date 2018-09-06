@@ -19,7 +19,7 @@ namespace Ratings
         private void OnEnable()
         {
             if (CheckAtAwake)
-                Check();
+                Invoke(nameof(Check), 0.1f);
         }
 
         public bool Check()
