@@ -23,6 +23,10 @@ namespace State.Active
             Gates.AddRange(GetComponents<ActiveGate>());
             foreach(var g in Gates)
                 g.Register(this);
+        }
+
+        public override void DidRegister()
+        {
             Check();
         }
 
