@@ -1,3 +1,4 @@
+using System;
 using PaperPlaneTools;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Ratings
     [RequireComponent(typeof(RateBoxPrefabScript))]
     public class StencilRateController : MonoBehaviour
     {
+        public float DelayShow = 1f;
+        
         public bool CheckAtAwake = true;
         public StencilRater Rater;
 
@@ -19,7 +22,7 @@ namespace Ratings
         private void OnEnable()
         {
             if (CheckAtAwake)
-                Invoke(nameof(Check), 0.1f);
+                Invoke(nameof(Check), Math.Max(0.1f, DelayShow));
         }
 
         public bool Check()
