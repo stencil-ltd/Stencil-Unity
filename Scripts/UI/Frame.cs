@@ -18,10 +18,14 @@ namespace UI
 
         [CanBeNull] 
         public Action OnClick;
-
-        [CanBeNull] public RectMask2D Mask;
+        
+        [CanBeNull] public Mask GraphicMask;
+        
         public RectTransform Contents;
         [CanBeNull] public RectTransform Scrim;
+        
+        [Header("Deprecated")]
+        [CanBeNull] [Obsolete] public RectMask2D Mask;
 
         public float TopSafePadding { get; private set; }
 
@@ -40,7 +44,12 @@ namespace UI
 
         void Start()
         {
-            if(Mask != null) Mask.enabled = true;
+            if (Mask != null) Mask.enabled = true;
+            if (GraphicMask != null)
+            {
+                GraphicMask.enabled = true;
+                GraphicMask.GetComponent<Image>().enabled = true;
+            }
         }
 
         void OnMouseUpAsButton()
