@@ -18,7 +18,10 @@ namespace Util
             get
             {
                 if (!_instance)
+                {
                     _instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
+                    ((Singleton<T>)(object) _instance)?.OnFirstLoad();
+                }
                 return _instance;
             }
         }
@@ -37,7 +40,7 @@ namespace Util
         {
             SceneManager.sceneLoaded -= OnSceneLoad;
             Debug.Log($"Singleton Awake: {typeof(T).Name}");
-            ((Singleton<T>) (object) Instance).OnFirstLoad();
+            var _ = ((Singleton<T>) (object) Instance);
         }
         
         protected virtual void OnFirstLoad()
