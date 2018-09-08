@@ -4,6 +4,16 @@
     {
         public static T Instance { get; private set; }
 
+        private void Awake()
+        {
+            Instance = (T)this;
+        }
+
+        private void OnEnable()
+        {
+            Instance = (T)this;
+        }
+
         public override void Register()
         {
             Instance = (T)this;
