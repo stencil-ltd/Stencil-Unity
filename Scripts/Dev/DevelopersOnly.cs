@@ -4,7 +4,7 @@ namespace Dev
 {
     public class DevelopersOnly : MonoBehaviour
     {
-        private void Awake()
+        private void Start()
         {
             if (!Developers.Enabled)
                 gameObject.SetActive(false);
