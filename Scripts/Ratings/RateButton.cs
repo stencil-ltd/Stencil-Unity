@@ -9,7 +9,10 @@ namespace Ratings
     {
         private void Awake()
         {
-            GetComponent<Button>().onClick.AddListener(() => RateBox.Instance.GoToRateUrl());
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                StencilRateController.Instance.ForceShow();
+            });
         }
     }
 }

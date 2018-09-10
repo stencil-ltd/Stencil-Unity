@@ -1,11 +1,12 @@
 using System;
 using PaperPlaneTools;
+using UI;
 using UnityEngine;
 
 namespace Ratings
 {
     [RequireComponent(typeof(RateBoxPrefabScript))]
-    public class StencilRateController : MonoBehaviour
+    public class StencilRateController : Controller<StencilRateController>
     {
         public float DelayShow = 1f;
         
@@ -29,11 +30,11 @@ namespace Ratings
         {
             if (!RateBox.Instance.CheckConditionsAreMet()) 
                 return false;
-            Show();
+            ForceShow();
             return true;
         }
 
-        private void Show()
+        public void ForceShow()
         {
             var rate = RateBox.Instance;
             rate.Statistics.DialogShownAt = rate.Time();
