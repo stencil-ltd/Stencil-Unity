@@ -36,11 +36,13 @@ namespace Util
             SceneManager.sceneLoaded -= OnSceneLoad;
         }
 
-        public void OnSceneLoad(Scene arg0, LoadSceneMode loadSceneMode)
+        protected virtual void OnSceneLoad(Scene arg0, LoadSceneMode loadSceneMode)
         {
-            SceneManager.sceneLoaded -= OnSceneLoad;
             Debug.Log($"Singleton Awake: {typeof(T).Name}");
-            var _ = ((Singleton<T>) (object) Instance);
+            if (Instance == null)
+            {
+                var _ = ((Singleton<T>) (object) Instance);
+            }
         }
         
         protected virtual void OnFirstLoad()
