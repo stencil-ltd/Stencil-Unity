@@ -59,6 +59,20 @@ namespace Util
 #pragma warning restore 612
         }
         
+        public static bool? GetBoolNullable(string key)
+        {
+            var intVal = PlayerPrefs.GetInt(key, -1);
+            switch (intVal)
+            {
+                case 1:
+                    return true;
+                case -1:
+                    return null;
+                default:
+                    return false;
+            }
+        }
+        
         public static bool GetBool(string key, bool defaultValue = false)
         {
             var intVal = PlayerPrefs.GetInt(key, -1);
@@ -71,6 +85,14 @@ namespace Util
                 default:
                     return false;
             }
+        }
+        
+        public static void SetBoolNullable(string key, bool? value)
+        {
+            if (value == null)
+                PlayerPrefs.DeleteKey(key);
+            else
+                PlayerPrefs.SetInt(key, value.Value ? 1 : 0);
         }
 
         public static void SetBool(string key, bool value)
