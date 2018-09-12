@@ -4,17 +4,15 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Util;
+using Developers = Dev.Developers;
 
-#if UNITY_IOS
-using UnityEngine.iOS;
-#endif
-
-namespace UI
+namespace Plugins.UI
 {
     public class Frame : MonoBehaviour
     {
         public static Frame Instance;
+        
+        public static Rect SafeArea => Screen.safeArea;
 
         [CanBeNull] 
         public Action OnClick;
@@ -23,28 +21,44 @@ namespace UI
         
         public RectTransform Contents;
         [CanBeNull] public RectTransform Scrim;
-        
-        [Header("Deprecated")]
-        [CanBeNull] [Obsolete] public RectMask2D Mask;
 
+        [Header("Debug")] 
+        public bool DebugNotch;
+        public float DebugNotchTop = 132;
+        public float DebugNotchBottom = 102;
+        
         public float TopSafePadding { get; private set; }
+        public float BottomSafePadding { get; private set; }
 
         [Bind]
         private BoxCollider2D _collider;
         private int lockCount;
         private EventSystem eventSystem;
 
+        private float _bannerHeight;
+
         private void Awake()
         {
             Instance = this;
             this.Bind();
             eventSystem = EventSystem.current;
-            ApplyNotch();
+            var safe = SafeArea;
+            TopSafePadding = Screen.height - safe.yMax;
+            BottomSafePadding = safe.yMin;
+            if (Developers.Enabled && DebugNotch)
+            {
+                if (DebugNotchTop >= 1f)
+                    TopSafePadding = DebugNotchTop;
+                if (DebugNotchBottom >= 1f)
+                    BottomSafePadding = DebugNotchBottom;
+            }
+            
+            if (_bannerHeight <= 1f)
+                SetBannerHeight(0f, true);
         }
 
         void Start()
         {
-            if (Mask != null) Mask.enabled = true;
             if (GraphicMask != null)
             {
                 GraphicMask.enabled = true;
@@ -73,24 +87,35 @@ namespace UI
             _SetLocked(true);
         }
 
-        private void ApplyNotch()
+        private void SetScrim(bool top)
         {
-            var safe = Screen.safeArea;
-            
-#if UNITY_IOS
-            if (Device.generation == DeviceGeneration.iPhoneX 
-                && safe.width.IsAbout(Screen.width) 
-                && safe.height.IsAbout(Screen.height))
-            {
-                safe.yMax -= 150;
-            }
-#endif
+            var height = _bannerHeight;
+            height += top ? TopSafePadding : BottomSafePadding;
+            Scrim?.SetInsetAndSizeFromParentEdge(top ? RectTransform.Edge.Top : RectTransform.Edge.Bottom, 0, height);
+            Debug.Log($"Set Scrim {height}");
+        }
 
-            TopSafePadding = Screen.height - safe.yMax;
-            var offsetMin = new Vector2Int((int) safe.xMin, (int) safe.yMin);
-            var offsetMax = new Vector2Int((int) (Screen.width - safe.xMax), (int) (Screen.height - safe.yMax));
-            Contents.offsetMin += offsetMin;
-            Contents.offsetMax -= offsetMax;
+        private void SetContents(bool top)
+        {
+            var hTop = TopSafePadding;
+            if (top) hTop += _bannerHeight;
+            var hBot = BottomSafePadding;
+            if (!top) hBot += _bannerHeight;
+            Debug.Log($"Set Contents {hTop}x{hBot}");
+            Contents.offsetMax = new Vector2(0, -hTop);
+            Contents.offsetMin = new Vector2(0, hBot);
+        }
+
+        public void SetBannerHeight(float pixelHeight, bool top)
+        {
+            var scaler = GetComponentInParent<CanvasScaler>();
+            if (scaler == null) return;
+            var ratio = scaler.referenceResolution.x / Screen.width;
+            _bannerHeight = pixelHeight * ratio;
+            SetScrim(top);
+            SetContents(top);
+            Debug.Log($"Setting banner height to {_bannerHeight}");
+            Scrim?.gameObject.SetActive(pixelHeight >= 1f);
         }
 
         private void _SetLocked(bool locked)
