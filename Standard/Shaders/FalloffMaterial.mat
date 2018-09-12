@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: FalloffMaterial
   m_Shader: {fileID: 4800000, guid: 938bd0989e0a441b6946af2b39eb3639, type: 3}
-  m_ShaderKeywords: _APPLYTINT_ON
+  m_ShaderKeywords: _APPLYTINT_ON _USEDISTANCE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,7 +73,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _UseDistance: 0
+    - _UseDistance: 1
     - _UseHeight: 0
     - _ZWrite: 1
     m_Colors:
