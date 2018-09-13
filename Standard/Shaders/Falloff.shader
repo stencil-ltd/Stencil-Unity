@@ -13,6 +13,9 @@
 		
 		_FlashColor ("Flash Color", Color) = (1, 1, 1)
 		_Flash ("Flash", Range(0, 1)) = 0   
+		
+		[MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
+		_DropoffScale ("Dropoff Scale", Vector) = (1,1,1,1)
 	}
 	SubShader
 	{
@@ -50,10 +53,12 @@
 			int _ApplyTint;
 			int _UseDistance;
 			int _UseHeight;
+			int _DistanceDropoff;
 			float _Alpha;
 			
 			fixed3 _FlashColor;
 			fixed _Flash;
+			Vector _DropoffScale;
 			
 			// Globals
             float3 _FogPoint;
@@ -68,12 +73,18 @@
 			v2f vert (appdata_base v)
 			{
 				v2f o;
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+				if (_DistanceDropoff)
+				{				
+                    fixed4 world = mul (unity_ObjectToWorld, v.vertex);
+			        float d = distance(_FogPoint, world);
+                    float norm = (d - _FogDistMin) / (_FogDistMax - _FogDistMin);
+                    if (norm < 0) norm = 0;
+                    float smooth = 10 * norm * norm;
+				    v.vertex.y -= smooth / _DropoffScale.y;
+				}
 				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);  
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
-//                float3 worldViewDir = normalize(UnityWorldSpaceViewDir(o.worldPos));
-//                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-//                o.worldRefl = reflect(-worldViewDir, worldNormal);
 				return o;
 			}
 			
