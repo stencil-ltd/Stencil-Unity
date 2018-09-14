@@ -16,17 +16,6 @@ namespace Standard.Shaders.Colors
             this.Bind();
         }
 
-        private void Start()
-        {
-            foreach (var r in _materials.Renders)
-            {
-                foreach (var m in r.materials)
-                {
-                    m.SetVector("_DropoffScale", r.transform.lossyScale);
-                }
-            }
-        }
-
         private DateTime _lastFlash;
         public IEnumerator Flash()
         {            
