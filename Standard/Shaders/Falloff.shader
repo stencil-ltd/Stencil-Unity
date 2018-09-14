@@ -8,6 +8,7 @@
 		_AddColor("Tint Add", Color) = (0,0,0,0)
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		
+		[MaterialToggle] _DisableAllFades("Disable All Fades", Int) = 0
 		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
 		[MaterialToggle] _UseHeight ("Use Height", Int) = 0
 		[MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
@@ -58,12 +59,12 @@
 			int _ApplyTint;
 			int _UseDistance;
 			int _UseHeight;
+			int _DisableAllFades;
 			int _DistanceDropoff;
 			float _Alpha;
 			
 			fixed3 _FlashColor;
 			fixed _Flash;
-			Vector _DropoffScale;
 			
 			// Globals
 			float3 _FogPoint;
@@ -85,11 +86,12 @@
 				if (_DistanceDropoff)
 				{				
                     fixed4 world = mul (unity_ObjectToWorld, v.vertex);
+                    float yScale = length(float3(unity_ObjectToWorld[0].y, unity_ObjectToWorld[1].y, unity_ObjectToWorld[2].y));
 			        float d = distance(_FogPoint, world);
                     float norm = (d - _DropDistMin) / (_DropDistMax - _DropDistMin);
                     if (norm < 0) norm = 0;
                     float smooth = 10 * norm * norm;
-				    v.vertex.y -= smooth / _DropoffScale.y;
+				    v.vertex.y -= smooth / yScale;
 				}
 				o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
@@ -116,11 +118,11 @@
 			    }
 			    float d = 1;
 			    float norm = 0;
-			    if (_UseDistance) {
+			    if (!_DisableAllFades && _UseDistance) {
 			        d = distance(_FogPoint, i.worldPos);
                     norm = (d - _FogDistMin) / (_FogDistMax - _FogDistMin);
                 }
-			    if (_UseHeight) {
+			    if (!_DisableAllFades && _UseHeight) {
 			        d = _FogPoint.y - i.worldPos.y;
 			        norm = max(norm, (d - _FogHeightMin) / (_FogHeightMax - _FogHeightMin));
                 }

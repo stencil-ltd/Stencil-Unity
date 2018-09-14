@@ -19,7 +19,6 @@ namespace Standard.Shaders.Falloff
             {
                 foreach (var m in r.materials)
                 {
-                    m.SetVector("_DropoffScale", r.transform.lossyScale);
                     m.SetInt("_DistanceDropoff", 1);
                 }
             }
