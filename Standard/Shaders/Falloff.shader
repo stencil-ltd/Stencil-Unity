@@ -10,12 +10,10 @@
 		
 		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
 		[MaterialToggle] _UseHeight ("Use Height", Int) = 0
+		[MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
 		
 		_FlashColor ("Flash Color", Color) = (1, 1, 1)
-		_Flash ("Flash", Range(0, 1)) = 0   
-		
-		[MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
-		_DropoffScale ("Dropoff Scale", Vector) = (1,1,1,1)
+		_Flash ("Flash", Range(0, 1)) = 0   		
 	}
 	SubShader
 	{
@@ -68,7 +66,7 @@
 			Vector _DropoffScale;
 			
 			// Globals
-            float3 _FogPoint;
+			float3 _FogPoint;
             half4 _FogColor;
             
             float _FogHeightMin;
@@ -76,6 +74,9 @@
             
             float _FogDistMin;
             float _FogDistMax;
+            
+            float _DropDistMin;
+            float _DropDistMax;
 			
 			v2f vert (appdata_base v)
 			{
@@ -85,7 +86,7 @@
 				{				
                     fixed4 world = mul (unity_ObjectToWorld, v.vertex);
 			        float d = distance(_FogPoint, world);
-                    float norm = (d - _FogDistMin) / (_FogDistMax - _FogDistMin);
+                    float norm = (d - _DropDistMin) / (_DropDistMax - _DropDistMin);
                     if (norm < 0) norm = 0;
                     float smooth = 10 * norm * norm;
 				    v.vertex.y -= smooth / _DropoffScale.y;
