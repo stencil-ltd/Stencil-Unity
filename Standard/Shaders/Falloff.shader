@@ -19,7 +19,14 @@
 	}
 	SubShader
 	{
-        Tags{ Queue = Geometry RenderType = Transparent }
+        Tags
+        { 
+            "Queue" = "Transparent"
+            "IgnoreProjector" = "True" 
+            "RenderType" = "Transparent" 
+        }
+        
+//        ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
 		LOD 100
 
@@ -97,15 +104,15 @@
 			        tex += _AddColor;
 			    }
 			    tex.rgb = lerp(tex.rgb, _FlashColor, _Flash);
-				tex.a = _Alpha;
+				tex.a *= _Alpha;
 			
 			    fixed4 color = _FogColor;
+			    color.a = tex.a;
 			    if (_ApplyTint)
 			    {
 			        color *= _MultColor;
 			        color += _AddColor;
 			    }
-			    color.a = 0;
 			    float d = 1;
 			    float norm = 0;
 			    if (_UseDistance) {

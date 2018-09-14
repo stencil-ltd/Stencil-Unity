@@ -5,8 +5,9 @@ namespace Standard.Shaders
 {
     public class MaterialCollector : MonoBehaviour
     {
-        public Material[] Materials { get; private set; } = { };
-        public MeshRenderer[] Renders { get; private set; } = { };
+        [Header("Debug")]
+        public Material[] Materials;
+        public MeshRenderer[] Renders;
 
     private void Awake()
         {
