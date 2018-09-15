@@ -5,9 +5,20 @@ namespace Standard.Shaders
 {
     public class MaterialCollector : MonoBehaviour
     {
-        public bool Shared;
-        
         [Header("Debug")]
+
+        private Material[] _materials;
+
+        public Material[] Materials
+        {
+            get
+            {
+                if (_materials == null)
+                    _materials = Renders.SelectMany(m => m.materials).ToArray();
+                return _materials;
+            }
+        }
+
         public MeshRenderer[] Renders;
 
         private void Awake()
