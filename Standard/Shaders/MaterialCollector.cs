@@ -5,14 +5,14 @@ namespace Standard.Shaders
 {
     public class MaterialCollector : MonoBehaviour
     {
+        public bool Shared;
+        
         [Header("Debug")]
-        public Material[] Materials;
         public MeshRenderer[] Renders;
 
-    private void Awake()
+        private void Awake()
         {
             Renders = GetComponentsInChildren<MeshRenderer>(true);
-            Materials = Renders.SelectMany(m => m.materials).ToArray();
         }
     }
 }

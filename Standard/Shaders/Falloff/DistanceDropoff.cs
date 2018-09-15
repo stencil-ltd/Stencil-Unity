@@ -17,10 +17,10 @@ namespace Standard.Shaders.Falloff
         {
             foreach (var r in _materials.Renders)
             {
-                foreach (var m in r.materials)
-                {
-                    m.SetInt("_DistanceDropoff", 1);
-                }
+                var prop = new MaterialPropertyBlock();
+                r.GetPropertyBlock(prop);
+                prop.SetInt("_DistanceDropoff", 1);
+                r.SetPropertyBlock(prop);
             }
         }
     }

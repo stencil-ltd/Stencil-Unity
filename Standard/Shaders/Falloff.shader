@@ -4,17 +4,17 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		[MaterialToggle] _ApplyTint("Apply Tint", Int) = 1
-		_MultColor ("Tint Mult", Color) = (1,1,1,1)	
-		_AddColor("Tint Add", Color) = (0,0,0,0)
+		[PerRendererData] _MultColor ("Tint Mult", Color) = (1,1,1,1)	
+		[PerRendererData] _AddColor("Tint Add", Color) = (0,0,0,0)
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		
-		[MaterialToggle] _DisableAllFades("Disable All Fades", Int) = 0
-		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
-		[MaterialToggle] _UseHeight ("Use Height", Int) = 0
-		[MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
+		[PerRendererData] [MaterialToggle] _DisableAllFades("Disable All Fades", Int) = 0
+		[PerRendererData] [MaterialToggle] _UseDistance ("Use Distance", Int) = 0
+		[PerRendererData] [MaterialToggle] _UseHeight ("Use Height", Int) = 0
+		[PerRendererData] [MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
 		
-		_FlashColor ("Flash Color", Color) = (1, 1, 1)
-		_Flash ("Flash", Range(0, 1)) = 0   		
+		[PerRendererData] _FlashColor ("Flash Color", Color) = (1, 1, 1)
+		[PerRendererData] _Flash ("Flash", Range(0, 1)) = 0   		
 	}
 	SubShader
 	{
