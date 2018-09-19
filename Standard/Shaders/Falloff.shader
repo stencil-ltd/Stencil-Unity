@@ -4,28 +4,19 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		[MaterialToggle] _ApplyTint("Apply Tint", Int) = 1
-		[PerRendererData] _MultColor ("Tint Mult", Color) = (1,1,1,1)	
-		[PerRendererData] _AddColor("Tint Add", Color) = (0,0,0,0)
+		_MultColor ("Tint Mult", Color) = (1,1,1,1)	
+		_AddColor("Tint Add", Color) = (0,0,0,0)
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		
-		[PerRendererData] [MaterialToggle] _DisableAllFades("Disable All Fades", Int) = 0
-		[PerRendererData] [MaterialToggle] _UseDistance ("Use Distance", Int) = 0
-		[PerRendererData] [MaterialToggle] _UseHeight ("Use Height", Int) = 0
-		[PerRendererData] [MaterialToggle] _DistanceDropoff ("Distance Dropoff", Int) = 0
+		[MaterialToggle] _UseDistance ("Use Distance", Int) = 0
+		[MaterialToggle] _UseHeight ("Use Height", Int) = 0
 		
-		[PerRendererData] _FlashColor ("Flash Color", Color) = (1, 1, 1)
-		[PerRendererData] _Flash ("Flash", Range(0, 1)) = 0   		
+		_FlashColor ("Flash Color", Color) = (1, 1, 1)
+		_Flash ("Flash", Range(0, 1)) = 0   
 	}
 	SubShader
 	{
-        Tags
-        { 
-            "Queue" = "Transparent-100"
-            "IgnoreProjector" = "True" 
-            "RenderType" = "Transparent" 
-        }
-        
-//        ZWrite Off
+        Tags{ Queue = Geometry RenderType = Transparent }
         Blend SrcAlpha OneMinusSrcAlpha
 		LOD 100
 
@@ -59,15 +50,13 @@
 			int _ApplyTint;
 			int _UseDistance;
 			int _UseHeight;
-			int _DisableAllFades;
-			int _DistanceDropoff;
 			float _Alpha;
 			
 			fixed3 _FlashColor;
 			fixed _Flash;
 			
 			// Globals
-			float3 _FogPoint;
+            float3 _FogPoint;
             half4 _FogColor;
             
             float _FogHeightMin;
@@ -75,26 +64,16 @@
             
             float _FogDistMin;
             float _FogDistMax;
-            
-            float _DropDistMin;
-            float _DropDistMax;
 			
 			v2f vert (appdata_base v)
 			{
 				v2f o;
-				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-				if (_DistanceDropoff)
-				{				
-                    fixed4 world = mul (unity_ObjectToWorld, v.vertex);
-                    float yScale = length(float3(unity_ObjectToWorld[0].y, unity_ObjectToWorld[1].y, unity_ObjectToWorld[2].y));
-			        float d = distance(_FogPoint, world);
-                    float norm = (d - _DropDistMin) / (_DropDistMax - _DropDistMin);
-                    if (norm < 0) norm = 0;
-                    float smooth = 10 * norm * norm;
-				    v.vertex.y -= smooth / yScale;
-				}
 				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);  
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
+//                float3 worldViewDir = normalize(UnityWorldSpaceViewDir(o.worldPos));
+//                float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+//                o.worldRefl = reflect(-worldViewDir, worldNormal);
 				return o;
 			}
 			
@@ -107,22 +86,22 @@
 			        tex += _AddColor;
 			    }
 			    tex.rgb = lerp(tex.rgb, _FlashColor, _Flash);
-				tex.a *= _Alpha;
+				tex.a = _Alpha;
 			
 			    fixed4 color = _FogColor;
-			    color.a = tex.a;
 			    if (_ApplyTint)
 			    {
 			        color *= _MultColor;
 			        color += _AddColor;
 			    }
+			    color.a = 0;
 			    float d = 1;
 			    float norm = 0;
-			    if (!_DisableAllFades && _UseDistance) {
+			    if (_UseDistance) {
 			        d = distance(_FogPoint, i.worldPos);
                     norm = (d - _FogDistMin) / (_FogDistMax - _FogDistMin);
                 }
-			    if (!_DisableAllFades && _UseHeight) {
+			    if (_UseHeight) {
 			        d = _FogPoint.y - i.worldPos.y;
 			        norm = max(norm, (d - _FogHeightMin) / (_FogHeightMax - _FogHeightMin));
                 }

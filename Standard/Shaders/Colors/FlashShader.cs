@@ -11,14 +11,11 @@ namespace Standard.Shaders.Colors
         public FlashRender FlashSettings = new FlashRender();
         [Bind] private MaterialCollector _materials;
 
-        private MaterialPropertyBlock _property;
-
         private void Awake()
         {
             this.Bind();
-            _property = new MaterialPropertyBlock();
         }
-
+        
         private DateTime _lastFlash;
         public IEnumerator Flash()
         {            
@@ -34,22 +31,16 @@ namespace Standard.Shaders.Colors
             {
                 elapsed += Time.deltaTime;
                 var alpha = curve.Evaluate(elapsed / duration);
-                foreach (var m in _materials.Renders)
+                foreach (var m in _materials.Materials)
                 {
-                    m.GetPropertyBlock(_property);
-                    _property.SetColor("_FlashColor", color);
-                    _property.SetFloat("_Flash", alpha);
-                    m.SetPropertyBlock(_property);
+                    m.SetColor("_FlashColor", color);
+                    m.SetFloat("_Flash", alpha);
                 }
                 yield return null;
             }
-
-            foreach (var m in _materials.Renders)
-            {
-                m.GetPropertyBlock(_property);
-                _property.SetFloat("_Flash", 0);
-                m.SetPropertyBlock(_property);
-            }
+            
+            foreach (var m in _materials.Materials)
+                m.SetFloat("_Flash", 0f);
         }
         
     }
