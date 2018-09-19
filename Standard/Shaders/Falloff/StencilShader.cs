@@ -1,14 +1,14 @@
 using Binding;
+using Standard.Fog;
 using UnityEngine;
 
 namespace Standard.Shaders.Falloff
 {
     [RequireComponent(typeof(MaterialCollector))]
+    [ExecuteInEditMode]
     public class StencilShader : MonoBehaviour
     {
-        public bool DistanceFade;
-        public bool HeightFade;
-        public bool DistanceDropoff;
+        public FogConfig Config;
     
         [Bind] private MaterialCollector _materials;
 
@@ -19,15 +19,26 @@ namespace Standard.Shaders.Falloff
 
         private void Start()
         {
+            UpdateShaders();
+        }
+
+        private void UpdateShaders()
+        {
             foreach (var r in _materials.Renders)
             {
                 var prop = new MaterialPropertyBlock();
                 r.GetPropertyBlock(prop);
-                prop.SetInt("_UseDistance", DistanceFade ? 1 : 0);
-                prop.SetInt("_UseHeight", HeightFade ? 1 : 0);
-                prop.SetInt("_DistanceDropoff", DistanceDropoff ? 1 : 0);
+                Config.Apply(prop);
                 r.SetPropertyBlock(prop);
             }
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (!Application.isPlaying)
+                UpdateShaders();
+        }
+#endif
     }
 }
