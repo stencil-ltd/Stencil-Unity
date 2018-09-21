@@ -12,6 +12,15 @@ namespace Util
     {
         [Range(0,1)]
         public float Weight = 1f;
+
+        public WeightHaver()
+        {
+        }
+
+        public WeightHaver(float weight)
+        {
+            Weight = weight;
+        }
     }
 
     public static class WeightExtensions
