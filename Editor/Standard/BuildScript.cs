@@ -22,9 +22,11 @@ public class BuildScript {
     {
         PlayerSettings.Android.bundleVersionCode++;
         var backend = PlayerSettings.GetScriptingBackend(BuildTargetGroup.Android);
+        PlayerSettings.Android.targetArchitectures = AndroidArchitecture.X86 | AndroidArchitecture.ARMv7;
         PlayerSettings.SetScriptingBackend(BuildTargetGroup.Android, ScriptingImplementation.IL2CPP);
         PerformAndroidBuild();
         PlayerSettings.SetScriptingBackend(BuildTargetGroup.Android, backend);
+        PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7;
     }
     
     [MenuItem("Stencil/Production/iOS")]
