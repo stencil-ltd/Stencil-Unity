@@ -18,9 +18,9 @@ namespace Util
             return false;
         }
         
-        public static bool IsAbout(this float self, float other)
+        public static bool IsAbout(this float self, float other, float tolerance = TOLERANCE)
         {
-            return Math.Abs(self - other) < TOLERANCE;
+            return Math.Abs(self - other) < tolerance;
         }
         
         public static bool IsAbout(this Vector2 self, Vector2 other)
