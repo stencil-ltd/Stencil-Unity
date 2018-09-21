@@ -4,40 +4,41 @@ using UnityEditor;
 using UnityEngine;
 
 public class BuildScript {
-    
-    [MenuItem("Stencil/Build/Increment + Build")]
-    public static void IncrementAndBuild()
-    {
-        IncrementVersion();
-        PerformBothBuild();
-    }
-    
-    [MenuItem("Stencil/Build/Increment Version")]
-    public static void IncrementVersion()
-    {
-        PlayerSettings.Android.bundleVersionCode++;
-        PlayerSettings.iOS.buildNumber = "" + (int.Parse(PlayerSettings.iOS.buildNumber) + 1);
-    }
-    
-    [MenuItem("Stencil/Build/Both")]
-    public static void PerformBothBuild()
+
+    [MenuItem("Stencil/Production/Both")]
+    public static void ProductionBuild()
     {
 #if UNITY_ANDROID
-        PerformAndroidBuild();
-        PerformiOSBuild();
+        ProductionAndroid();
+        ProductionIphone();
 #elif UNITY_IOS
-        PerformiOSBuild();
-        PerformAndroidBuild();
+        ProductionIphone();
+        ProductionAndroid();
 #endif
     }
+
+    [MenuItem("Stencil/Production/Android")]
+    public static void ProductionAndroid()
+    {
+        PlayerSettings.Android.bundleVersionCode++;
+        var backend = PlayerSettings.GetScriptingBackend(BuildTargetGroup.Android);
+        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Android, ScriptingImplementation.IL2CPP);
+        PerformAndroidBuild();
+        PlayerSettings.SetScriptingBackend(BuildTargetGroup.Android, backend);
+    }
     
-    [MenuItem("Stencil/Build/Android")]
+    [MenuItem("Stencil/Production/iOS")]
+    public static void ProductionIphone()
+    {
+        PlayerSettings.iOS.buildNumber = "" + (int.Parse(PlayerSettings.iOS.buildNumber) + 1);
+        PerformiOSBuild();
+    }
+    
     public static void PerformAndroidBuild()
     { 
         Build(BuildTarget.Android);
     }
 
-    [MenuItem("Stencil/Build/iOS")]
     public static void PerformiOSBuild()
     {
         Build(BuildTarget.iOS);
@@ -51,7 +52,8 @@ public class BuildScript {
         var abspath = dir + path;
         if (Directory.Exists(abspath))
             Directory.Delete(abspath, true);
-        var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
+//        var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
+        var dev = BuildOptions.None;
         BuildPipeline.BuildPlayer(levels, path, target, dev);
     }
 }
