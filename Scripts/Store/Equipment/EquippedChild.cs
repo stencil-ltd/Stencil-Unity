@@ -6,6 +6,7 @@ namespace Store.Equipment
     public class EquippedChild : MonoBehaviour
     {
         public BuyableManager Manager;
+        public string SpawnName;
 
         public Buyable Buyable { get; private set; }
         public GameObject Prefab => Buyable.Prefab;
@@ -24,6 +25,8 @@ namespace Store.Equipment
             Buyable = buyable;
             transform.DestroyAllChildren();
             Equipped = Instantiate(Prefab, transform);
+            if (!string.IsNullOrEmpty(SpawnName))
+                Equipped.name = SpawnName;
         }
     }
 }
