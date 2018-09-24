@@ -7,7 +7,9 @@ namespace Physic
     public class PositionTracker : MonoBehaviour
     {
         public int HistoryFrames = 20;
-        
+
+        public float Distance => Vector3.Distance(transform.position, _positions.Last.Value);
+        public Vector3 Delta => transform.position - _positions.Last.Value;
         public Vector3[] History => _positions.ToArray();
 
         private readonly LinkedList<Vector3> _positions = new LinkedList<Vector3>();
