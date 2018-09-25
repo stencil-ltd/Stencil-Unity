@@ -8,6 +8,7 @@ namespace Store.Equipment
     {
         public BuyableManager Manager;
         public string SpawnName;
+        public bool ShowRoomMode = false;
 
         public Buyable Buyable { get; private set; }
         public GameObject Prefab => Buyable.Prefab;
@@ -28,7 +29,11 @@ namespace Store.Equipment
             Buyable = buyable;
             transform.DestroyAllChildren();
             Equipped = Instantiate(Prefab, Vector3.zero, Quaternion.identity, transform);
-            Equipped.GetComponent<StoreListable>()?.ConfigureForPlay();
+            if (ShowRoomMode)
+            {
+                Equipped.GetComponent<StoreListable>()?.ConfigureForStore();
+                Equipped.transform.localScale = Vector3.one;
+            } else Equipped.GetComponent<StoreListable>()?.ConfigureForPlay();
             
             if (!string.IsNullOrEmpty(SpawnName))
                 Equipped.name = SpawnName;
