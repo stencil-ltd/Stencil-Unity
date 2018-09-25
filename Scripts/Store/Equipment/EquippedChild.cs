@@ -27,7 +27,9 @@ namespace Store.Equipment
             if (buyable == Buyable) return;
             Buyable = buyable;
             transform.DestroyAllChildren();
-            Equipped = Instantiate(Prefab, transform);
+            Equipped = Instantiate(Prefab, Vector3.zero, Quaternion.identity, transform);
+            Equipped.GetComponent<StoreListable>()?.ConfigureForPlay();
+            
             if (!string.IsNullOrEmpty(SpawnName))
                 Equipped.name = SpawnName;
             OnRefresh?.Invoke();
