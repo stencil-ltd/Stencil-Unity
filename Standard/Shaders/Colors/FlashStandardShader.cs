@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections;
 using Binding;
+using Plugins.Util;
 using UnityEngine;
 
 namespace Standard.Shaders.Colors
 {
-    [RequireComponent(typeof(MaterialCollector))]
-    public class FlashShader : MonoBehaviour
+    public class FlashStandardShader : MonoBehaviour
     {
         public FlashRender FlashSettings = new FlashRender();
-        [Bind] private MaterialCollector _materials;
+
+        [Bind] private Renderer _render;
+        private Material[] _materials;
 
         private void Awake()
         {
             this.Bind();
+            _materials = _render.materials;
+            foreach (var m in _materials)
+            {
+                m.EnableKeyword("_EMISSION");
+            }
         }
         
         private DateTime _lastFlash;
@@ -31,34 +38,19 @@ namespace Standard.Shaders.Colors
             {
                 elapsed += Time.deltaTime;
                 var alpha = curve.Evaluate(elapsed / duration);
-                foreach (var r in _materials.Renders)
+                foreach (var m in _materials)
                 {
-                    var prop = new MaterialPropertyBlock();
-                    r.GetPropertyBlock(prop);
-                    prop.SetColor("_FlashColor", color);
-                    prop.SetFloat("_Flash", alpha);
-                    r.SetPropertyBlock(prop);
+                    var c1 = color * Mathf.LinearToGammaSpace(alpha);
+                    m.SetColor ("_EmissionColor", c1);
                 }
                 yield return null;
             }
             
-            foreach (var r in _materials.Renders)
+            foreach (var m in _materials)
             {
-                var prop = new MaterialPropertyBlock();
-                r.GetPropertyBlock(prop);
-                prop.SetFloat("_Flash", 0);
-                r.SetPropertyBlock(prop);
+                m.SetColor ("_EmissionColor", Color.black * Mathf.LinearToGammaSpace(0f));
             }
         }
         
-    }
-    
-    [Serializable]
-    public class FlashRender
-    {
-        public Color Color = Color.white;
-        public AnimationCurve Curve;
-        public float Duration = 0.3f;
-        public float Cooldown = 0.8f;
     }
 }

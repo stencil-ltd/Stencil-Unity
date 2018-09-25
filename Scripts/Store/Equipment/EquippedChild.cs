@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Util;
 
@@ -13,6 +14,8 @@ namespace Store.Equipment
         
         public GameObject Equipped { get; private set; }
 
+        public event EventHandler OnRefresh; 
+
         private void OnEnable()
         {
             Refresh();
@@ -27,6 +30,7 @@ namespace Store.Equipment
             Equipped = Instantiate(Prefab, transform);
             if (!string.IsNullOrEmpty(SpawnName))
                 Equipped.name = SpawnName;
+            OnRefresh?.Invoke();
         }
     }
 }
