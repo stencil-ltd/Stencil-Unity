@@ -1,5 +1,4 @@
 ﻿using System;
-using Binding;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,22 +13,25 @@ namespace Physic
         public ColliderEvent TriggerEnter;
         public ColliderEvent TriggerExit;
         
-        private void Awake()
+        public void OnCollisionEnter(Collision other)
         {
-            this.Bind();
+            CollisionEnter?.Invoke(other);
         }
 
-        private void OnCollisionEnter(Collision other) 
-            => CollisionEnter?.Invoke(other);
-        
-        private void OnCollisionExit(Collision other) 
-            => CollisionExit?.Invoke(other);
+        public void OnCollisionExit(Collision other)
+        {
+            CollisionExit?.Invoke(other);
+        }
 
-        private void OnTriggerEnter(Collider other) 
-            => TriggerEnter?.Invoke(other);
+        public void OnTriggerEnter(Collider other)
+        {
+            TriggerEnter?.Invoke(other);
+        }
 
-        private void OnTriggerExit(Collider other) 
-            => TriggerExit?.Invoke(other);
+        public void OnTriggerExit(Collider other)
+        {
+            TriggerExit?.Invoke(other);
+        }
     }
     
     [Serializable]

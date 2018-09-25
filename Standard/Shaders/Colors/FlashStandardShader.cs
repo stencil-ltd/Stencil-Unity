@@ -24,12 +24,12 @@ namespace Standard.Shaders.Colors
         }
         
         private DateTime _lastFlash;
-        public IEnumerator Flash()
+        public IEnumerator Flash(Color? overrideColor = null)
         {            
             var flash = FlashSettings;
             var duration = flash.Duration;
             var curve = flash.Curve;
-            var color = flash.Color;
+            var color = overrideColor ?? flash.Color;
             var now = DateTime.UtcNow;
             if ((now - _lastFlash).TotalSeconds < flash.Cooldown) yield break;
             _lastFlash = now;
