@@ -27,6 +27,7 @@ namespace Standard.Shaders.Falloff
             foreach (var r in _materials.Renders)
             {
                 var prop = new MaterialPropertyBlock();
+                if (r == null) continue;
                 r.GetPropertyBlock(prop);
                 Config.Apply(prop);
                 r.SetPropertyBlock(prop);
