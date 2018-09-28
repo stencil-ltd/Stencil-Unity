@@ -17,6 +17,11 @@ namespace Util
 
             return false;
         }
+
+        public static bool IsZero(this float self)
+        {
+            return self.IsAbout(0f);
+        }
         
         public static bool IsAbout(this float self, float other, float tolerance = TOLERANCE)
         {
