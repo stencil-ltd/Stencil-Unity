@@ -1,4 +1,5 @@
 ﻿using System;
+using Ads.Admob;
 using Binding;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -21,6 +22,9 @@ namespace Plugins.UI
         
         public RectTransform Contents;
         [CanBeNull] public RectTransform Scrim;
+        
+        [Tooltip("This frame will auto-adjust to the ad area.")]
+        public bool AutoAdZone = true;
 
         [Header("Debug")] 
         public bool DebugNotch;
@@ -52,18 +56,24 @@ namespace Plugins.UI
                 if (DebugNotchBottom >= 1f)
                     BottomSafePadding = DebugNotchBottom;
             }
-            
-            if (_bannerHeight <= 1f)
-                SetBannerHeight(0f, true);
         }
 
         void Start()
         {
+            if (_bannerHeight <= 1f) SetBannerHeight(0f, true);
+            AdmobBannerArea.OnChange += OnBanner;
+            OnBanner(null, null);
+            
             if (GraphicMask != null)
             {
                 GraphicMask.enabled = true;
                 GraphicMask.GetComponent<Image>().enabled = true;
             }
+        }
+
+        private void OnBanner(object sender, EventArgs eventArgs)
+        {
+            SetBannerHeight(AdmobBannerArea.BannerHeight, AdmobBannerArea.IsTop);
         }
 
         void OnMouseUpAsButton()
@@ -79,6 +89,7 @@ namespace Plugins.UI
         void OnDestroy()
         {
             if (Instance == this) Instance = null;
+            AdmobBannerArea.OnChange -= OnBanner;
         }
 
         public void Lock()
