@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Ads;
 using CustomOrder;
+using Dev;
+using Firebase;
+using Firebase.RemoteConfig;
 using Plugins.UI;
 using Store;
 using UI;
@@ -13,6 +17,7 @@ namespace Init
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
     {
+        public static event EventHandler OnRemoteConfig;
         public bool Started { get; private set; }
         
         protected sealed override void Awake()
@@ -26,22 +31,47 @@ namespace Init
             BuyableManager.Init();
             SceneManager.sceneLoaded += _OnNewScene;
             OnInit();
-            
-#if !EXCLUDE_FIREBASE
-            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-            {
-                var dependencyStatus = task.Result;
-                if (dependencyStatus != Firebase.DependencyStatus.Available)
-                {
-                    Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-                }
-                Objects.Enqueue(() => OnFirebase(dependencyStatus == Firebase.DependencyStatus.Available));
-            });
-#endif
-            
+            SetupFirebase();
+            SetupFacebook();
+        }
+
+        private static void SetupFacebook()
+        {
 #if !EXCLUDE_FACEBOOK
             Facebook.Unity.FB.Mobile.FetchDeferredAppLinkData();
             Facebook.Unity.FB.Init();
+#endif
+        }
+
+        private void SetupFirebase()
+        {
+#if !EXCLUDE_FIREBASE
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            {
+                var dependencyStatus = task.Result;
+                var success = dependencyStatus == DependencyStatus.Available;
+                if (!success)
+                    Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+
+                Objects.Enqueue(() =>
+                {
+                    if (success)
+                    {
+                        var settings = FirebaseRemoteConfig.Settings;
+                        settings.IsDeveloperMode = Developers.Enabled;
+                        FirebaseRemoteConfig.Settings = settings;
+                        var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(12);
+                        FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>
+                        {
+                            if (task1.IsFaulted) return;
+                            FirebaseRemoteConfig.ActivateFetched();
+                            Objects.Enqueue(() => OnRemoteConfig?.Invoke());
+                        });
+                    }
+
+                    OnFirebase(success);
+                });
+            });
 #endif
         }
 
