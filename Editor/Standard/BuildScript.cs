@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-public class BuildScript {
+public class BuildScript : IPreprocessBuildWithReport {
 
     [MenuItem("Stencil/Production/Both")]
     public static void ProductionBuild()
@@ -39,11 +42,24 @@ public class BuildScript {
     [MenuItem("Stencil/Production/Write Version")]
     public static void WriteVersionCodes()
     {
+        Debug.Log("Writing Version Codes");
         var path = "Assets/Resources/VersionCodes.json";
         var writer = new StreamWriter(path, false);
-        var android = PlayerSettings.Android.bundleVersionCode;
-        var ios = int.Parse(PlayerSettings.iOS.buildNumber);
-        writer.Write("{ \"android\": " + android + ", \"ios\": " + ios + " }");
+        var json = new VersionJson
+        {
+            android = new VersionPlatform
+            {
+                versionCode = PlayerSettings.Android.bundleVersionCode,
+                versionString = PlayerSettings.bundleVersion
+            },
+            ios = new VersionPlatform
+            {
+                versionCode = int.Parse(PlayerSettings.iOS.buildNumber),
+                versionString = PlayerSettings.bundleVersion
+            }
+        };
+        
+        writer.Write(JsonUtility.ToJson(json));
         writer.Close();
         AssetDatabase.ImportAsset(path); 
     }
@@ -60,7 +76,6 @@ public class BuildScript {
 
     public static void Build(BuildTarget target)
     {
-        WriteVersionCodes();
         var levels = EditorBuildSettings.scenes.ToArray();
         var path = $"Builds/{target}";
         var dir = $"{Application.dataPath}/../";
@@ -70,5 +85,26 @@ public class BuildScript {
 //        var dev = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None;
         var dev = BuildOptions.None;
         BuildPipeline.BuildPlayer(levels, path, target, dev);
+    }
+
+    public int callbackOrder => 0;
+
+    public void OnPreprocessBuild(BuildReport report)
+    {
+        WriteVersionCodes();
+    }
+    
+    [Serializable]
+    public class VersionPlatform
+    {
+        public int versionCode;
+        public string versionString;
+    }
+
+    [Serializable]
+    public class VersionJson
+    {
+        public VersionPlatform android;
+        public VersionPlatform ios;
     }
 }

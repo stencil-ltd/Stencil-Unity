@@ -12,12 +12,19 @@ namespace Versions
 #endif
 
         [Serializable]
+        public class VersionPlatform
+        {
+            public int versionCode;
+            public string versionString;
+        }
+
+        [Serializable]
         public class VersionJson
         {
-            public int android;
-            public int ios;
+            public VersionPlatform android;
+            public VersionPlatform ios;
 
-            public int platform
+            public VersionPlatform platform
             {
                 get
                 {
@@ -39,7 +46,7 @@ namespace Versions
                 _json = JsonUtility.FromJson<VersionJson>(res);
                 if (_json == null) _failed = true;
             }
-            return _json?.platform ?? 0;
+            return _json?.platform?.versionCode ?? 0;
         }
         
         public static int AndroidVersionCode() {
