@@ -58,7 +58,7 @@ namespace Init
                     if (success)
                     {
                         var settings = FirebaseRemoteConfig.Settings;
-                        settings.IsDeveloperMode = Developers.Enabled;
+                        settings.IsDeveloperMode = !StencilRemote.IsProd();
                         FirebaseRemoteConfig.Settings = settings;
                         var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(StencilRemote.CacheHours);
                         FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>

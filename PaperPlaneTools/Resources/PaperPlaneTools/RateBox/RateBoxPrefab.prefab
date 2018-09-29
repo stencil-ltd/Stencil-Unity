@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486122}
-  - component: {fileID: 114591968823904626}
+  - component: {fileID: 114830047155256798}
   m_Layer: 0
   m_Name: RateBoxPrefab
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 128170}
   m_IsPrefabAsset: 1
---- !u!114 &114591968823904626
+--- !u!114 &114830047155256798
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,23 +48,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 128170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48d8cf306a9d447b8a4be963435b5959, type: 3}
+  m_Script: {fileID: 11500000, guid: 276fa57461d14591bdf93df391593ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSessionCount: 0
-  minCustomEventsCount: 0
-  delayAfterInstallInHours: 0
-  delayAfterLaunchInHours: 0
-  postponeCooldownInHours: 0
-  requireInternetConnection: 1
-  title: Like the game?
-  message: Take a moment to rate us!
-  rateButton: Rate
-  postponeButton: Later
-  rejectButton: 
-  appStoreAppId: 1420714809
-  playMarketAppBundleId: ltd.stencil.moto
-  useIOSReview: 1
-  customUIWindow: {fileID: 0}
-  clearOnStart: 0
-  logDebugMessages: 1
+  Settings:
+    AppStoreId: 0
+    MinSessionCount: 3
+    HoursAfterInstall: 24
+    HoursAfterLaunch: 0
+    HoursAfterPostpone: 72
+  DelayShow: 1
+  CheckAtAwake: 1
+  Rater: {fileID: 0}
