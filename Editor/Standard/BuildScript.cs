@@ -35,7 +35,19 @@ public class BuildScript {
         PlayerSettings.iOS.buildNumber = "" + (int.Parse(PlayerSettings.iOS.buildNumber) + 1);
         PerformiOSBuild();
     }
-    
+
+    [MenuItem("Stencil/Production/Write Version")]
+    public static void WriteVersionCodes()
+    {
+        var path = "Assets/Resources/VersionCodes.json";
+        var writer = new StreamWriter(path, false);
+        var android = PlayerSettings.Android.bundleVersionCode;
+        var ios = int.Parse(PlayerSettings.iOS.buildNumber);
+        writer.Write("{ \"android\": " + android + ", \"ios\": " + ios + " }");
+        writer.Close();
+        AssetDatabase.ImportAsset(path); 
+    }
+
     public static void PerformAndroidBuild()
     { 
         Build(BuildTarget.Android);
@@ -48,6 +60,7 @@ public class BuildScript {
 
     public static void Build(BuildTarget target)
     {
+        WriteVersionCodes();
         var levels = EditorBuildSettings.scenes.ToArray();
         var path = $"Builds/{target}";
         var dir = $"{Application.dataPath}/../";

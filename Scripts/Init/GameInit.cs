@@ -19,6 +19,7 @@ namespace Init
     public class GameInit : Permanent<GameInit>
     {
         public bool Started { get; private set; }
+        public static bool FirebaseReady;
         
         protected sealed override void Awake()
         {
@@ -52,6 +53,7 @@ namespace Init
                 var success = dependencyStatus == DependencyStatus.Available;
                 if (!success)
                     Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                FirebaseReady = success;
 
                 Objects.Enqueue(() =>
                 {
