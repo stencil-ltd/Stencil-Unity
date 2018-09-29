@@ -65,12 +65,15 @@ namespace Init
                         var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(StencilRemote.CacheHours);
                         FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>
                         {
-                            if (task1.IsFaulted) return;
+                            if (task1.IsFaulted)
+                            {
+                                Debug.LogError($"Firebase Remote Config failed. {task1.Exception?.InnerException.Message}");
+                                return;
+                            }
                             FirebaseRemoteConfig.ActivateFetched();
                             Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
                         });
                     }
-
                     OnFirebase(success);
                 });
             });
