@@ -39,6 +39,14 @@ public class BuildScript : IPreprocessBuildWithReport {
         PerformiOSBuild();
     }
 
+    [MenuItem("Stencil/Production/Bump Versions")]
+    public static void BumpVersions()
+    {
+        PlayerSettings.Android.bundleVersionCode++;
+        PlayerSettings.iOS.buildNumber = "" + (int.Parse(PlayerSettings.iOS.buildNumber) + 1);
+        WriteVersionCodes();
+    }
+
     [MenuItem("Stencil/Production/Write Version")]
     public static void WriteVersionCodes()
     {
