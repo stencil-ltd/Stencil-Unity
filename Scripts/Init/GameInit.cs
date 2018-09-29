@@ -6,6 +6,7 @@ using Dev;
 using Firebase;
 using Firebase.RemoteConfig;
 using Plugins.UI;
+using Scripts.RemoteConfig;
 using Store;
 using UI;
 using UnityEngine;
@@ -17,7 +18,6 @@ namespace Init
     [ExecutionOrder(-100)]
     public class GameInit : Permanent<GameInit>
     {
-        public static event EventHandler OnRemoteConfig;
         public bool Started { get; private set; }
         
         protected sealed override void Awake()
@@ -65,7 +65,7 @@ namespace Init
                         {
                             if (task1.IsFaulted) return;
                             FirebaseRemoteConfig.ActivateFetched();
-                            Objects.Enqueue(() => OnRemoteConfig?.Invoke());
+                            Objects.Enqueue(StencilRemote.NotifyRemoteConfig);
                         });
                     }
 
