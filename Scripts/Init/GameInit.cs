@@ -60,7 +60,7 @@ namespace Init
                         var settings = FirebaseRemoteConfig.Settings;
                         settings.IsDeveloperMode = Developers.Enabled;
                         FirebaseRemoteConfig.Settings = settings;
-                        var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(12);
+                        var cache = settings.IsDeveloperMode ? TimeSpan.Zero : TimeSpan.FromHours(StencilRemote.CacheHours);
                         FirebaseRemoteConfig.FetchAsync(cache).ContinueWith(task1 =>
                         {
                             if (task1.IsFaulted) return;
