@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Standard.States;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Standard.Menu
@@ -38,7 +39,7 @@ namespace Standard.Menu
         public void Click_Camera()
         {
             ScreenshotZone.SetScore(Score.Value);
-            ScreenshotZone.gameObject.SetActive(true);   
+            PlayStates.Instance.RequestState(PlayStates.State.Share);   
         }
     }
 }
