@@ -4,7 +4,7 @@ namespace Store
 {
     public abstract class StoreListable : MonoBehaviour
     {
-        public abstract void ConfigureForStore();
-        public abstract void ConfigureForPlay();
+        public abstract void ConfigureForStore(Buyable buyable);
+        public abstract void ConfigureForPlay(Buyable buyable);
     }
 }

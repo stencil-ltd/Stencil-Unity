@@ -31,9 +31,9 @@ namespace Store.Equipment
             Equipped = Instantiate(Prefab, Vector3.zero, Quaternion.identity, transform);
             if (ShowRoomMode)
             {
-                Equipped.GetComponent<StoreListable>()?.ConfigureForStore();
+                Equipped.GetComponent<StoreListable>()?.ConfigureForStore(buyable);
                 Equipped.transform.localScale = Vector3.one;
-            } else Equipped.GetComponent<StoreListable>()?.ConfigureForPlay();
+            } else Equipped.GetComponent<StoreListable>()?.ConfigureForPlay(buyable);
             
             if (!string.IsNullOrEmpty(SpawnName))
                 Equipped.name = SpawnName;

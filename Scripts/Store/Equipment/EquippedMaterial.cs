@@ -1,5 +1,6 @@
 using System;
 using Binding;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Store.Equipment
@@ -8,6 +9,7 @@ namespace Store.Equipment
     public class EquippedMaterial : MonoBehaviour
     {
         public BuyableManager Manager;
+        [CanBeNull] public BuyableTag Tag;
 
         [Bind]
         private MeshRenderer _renderer;
@@ -31,7 +33,14 @@ namespace Store.Equipment
 
         private void Refresh()
         {
-            _renderer.material = Manager.SingleEquipped.Material ?? _renderer.material;
+            if (Tag != null)
+            {
+                _renderer.material = Manager.GetForTag(Tag)?.Material ?? _renderer.material;
+            }
+            else
+            {
+                _renderer.material = Manager.SingleEquipped.Material ?? _renderer.material;
+            }
         }        
     }
 }

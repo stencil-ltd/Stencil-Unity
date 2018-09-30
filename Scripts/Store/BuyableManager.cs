@@ -41,6 +41,14 @@ namespace Store
                 r._Init();
         }
 
+        [CanBeNull]
+        public Buyable GetForTag(BuyableTag tag)
+        {
+            Buyable ret;
+            _tagEquipMap.TryGetValue(tag, out ret);
+            return ret;
+        }
+
         private void _Init()
         {
             Debug.Log($"Init {this}");
