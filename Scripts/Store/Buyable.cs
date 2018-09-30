@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Currencies;
+using JetBrains.Annotations;
 using Util;
 
 namespace Store
@@ -13,10 +14,12 @@ namespace Store
 
         public string Id;
         public string Title;
-        
+        [CanBeNull] public BuyableTag Tag;
+
         [Header("Assets")]
         public Sprite Icon;
         public Texture Texture;
+        public Material Material;
         public Mesh Mesh;
         public GameObject Prefab;
         
