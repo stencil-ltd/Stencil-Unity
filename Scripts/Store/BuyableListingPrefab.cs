@@ -30,7 +30,7 @@ namespace Store
             Parent.DestroyAllChildren();
             var obj = Instantiate(arg0.Prefab, Parent);
             var listable = obj.GetComponent<StoreListable>();
-            if (listable) listable.ConfigureForStore(arg0);
+            if (listable) listable.ConfigureForStore(arg0, false);
             Rotation.enabled = arg0.Equipped;
             var scale = new Vector3(1, 1, 1);
             if (!arg0.Equipped)
