@@ -23,7 +23,9 @@ namespace Standard.Shaders
 
         private void Awake()
         {
-            Renders = GetComponentsInChildren<MeshRenderer>(true);
+            Renders = GetRenders();
         }
+
+        public MeshRenderer[] GetRenders() => GetComponentsInChildren<MeshRenderer>(true);
     }
 }

@@ -24,7 +24,10 @@ namespace Standard.Shaders.Falloff
 
         private void UpdateShaders()
         {
-            foreach (var r in _materials.Renders)
+            var renders = _materials.Renders;
+            if (!Application.isPlaying)
+                renders = _materials.GetRenders();
+            foreach (var r in renders)
             {
                 var prop = new MaterialPropertyBlock();
                 if (r == null) continue;
