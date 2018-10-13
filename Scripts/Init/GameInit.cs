@@ -3,8 +3,6 @@ using System.Collections;
 using Ads;
 using CustomOrder;
 using Dev;
-using Firebase;
-using Firebase.RemoteConfig;
 using Plugins.UI;
 using Scripts.RemoteConfig;
 using Store;
@@ -12,6 +10,11 @@ using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Util;
+
+#if !EXCLUDE_FIREBASE
+using Firebase;
+using Firebase.RemoteConfig;
+#endif
 
 namespace Init
 {
