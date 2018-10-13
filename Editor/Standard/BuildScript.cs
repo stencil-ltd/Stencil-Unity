@@ -51,6 +51,9 @@ public class BuildScript : IPreprocessBuildWithReport {
     public static void WriteVersionCodes()
     {
         Debug.Log("Writing Version Codes");
+        if (!Directory.Exists("Assets/Resources"))
+            Directory.CreateDirectory("Assets/Resources");
+        
         var path = "Assets/Resources/VersionCodes.json";
         var writer = new StreamWriter(path, false);
         var json = new VersionJson
