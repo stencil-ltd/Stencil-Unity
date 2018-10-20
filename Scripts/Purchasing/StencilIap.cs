@@ -1,6 +1,9 @@
 using System.Linq;
 using JetBrains.Annotations;
+
+#if UNITY_PURCHASING
 using UnityEngine.Purchasing;
+#endif
 
 namespace Purchasing
 {

@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using Binding;
-using NatShareU;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+
+#if !EXCLUDE_NATSHARE
+using NatShareU;
+#endif
 
 namespace UI
 {
@@ -35,7 +38,11 @@ namespace UI
             else
             {
                 var image = ScreenCapture.CaptureScreenshotAsTexture();
+#if EXCLUDE_NATSHARE
+                Debug.LogWarning("Need to install NatShare!");
+#else
                 NatShare.ShareImage(image);
+#endif
             }
             Flash?.SetActive(false);
             Flash?.SetActive(true);
