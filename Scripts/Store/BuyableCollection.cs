@@ -28,7 +28,7 @@ namespace Store
                 listing.transform.localPosition = Vector3.zero;
                 listing.transform.localRotation = Quaternion.identity;
                 listing.transform.localScale = Vector3.one;
-                listing.Configure(b);
+                listing.Configure(b, b.Equipped);
             }
         }
 
