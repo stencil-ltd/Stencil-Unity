@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 
 namespace Standard.Fog
 {
-    [Serializable]
     [CreateAssetMenu(menuName = "Stencil/Fog")]
     public class FogConfig : ScriptableObject
     {

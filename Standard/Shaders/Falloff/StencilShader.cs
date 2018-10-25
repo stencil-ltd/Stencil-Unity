@@ -24,6 +24,11 @@ namespace Standard.Shaders.Falloff
 
         private void UpdateShaders()
         {
+            if (Config == null)
+            {
+                Debug.LogWarning($"No config specified for {gameObject}");
+                return;
+            }
             var renders = _materials.Renders;
             if (!Application.isPlaying)
                 renders = _materials.GetRenders();
