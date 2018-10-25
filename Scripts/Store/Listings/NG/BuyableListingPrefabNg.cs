@@ -1,36 +1,22 @@
-﻿using Binding;
 using Physic;
 using UnityEngine;
 using Util;
 
-namespace Store
+namespace Store.NG
 {
-    [RequireComponent(typeof(BuyableListing))]
-    public class BuyableListingPrefab : MonoBehaviour
+    public class BuyableListingPrefabNg : BaseBuyableListing
     {
         public Transform Parent;
         public ConstantRotation Rotation;
 
-        [Bind] 
-        private BuyableListing _listing;
-
-        private void Awake()
+        protected override void OnBuyableUpdated()
         {
-            this.Bind();
-            _listing.OnUpdateBuyable.AddListener(OnUpdateBuyable);
-        }
-
-        private void Start()
-        {
-            // enableable
-        }
-
-        private void OnUpdateBuyable(Buyable arg0)
-        {
+            var arg0 = Buyable;
             Parent.DestroyAllChildren();
             var obj = Instantiate(arg0.Prefab, Parent);
             var listable = obj.GetComponent<StoreListable>();
             if (listable) listable.ConfigureForStore(arg0, false);
+//            obj.transform.localPosition = Vector3.zero;
             Rotation.enabled = arg0.Equipped;
             var scale = new Vector3(1, 1, 1);
             if (!arg0.Equipped)

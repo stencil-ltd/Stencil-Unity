@@ -7,13 +7,16 @@ namespace Store
 {
     public class BuyableCollection : MonoBehaviour
     {
+        [Header("UI")]
+        public RectTransform Container;
+        
+        [Header("Config")]
+        public BuyableManager Manager;
+        public BaseBuyableListing ListingPrefab;
+        
+        [Header("Audio")]
         public AudioClip OnPurchase;
         public AudioClip OnEquip;
-        
-        public RectTransform Container;
-
-        public BuyableManager Manager;
-        public BuyableListing ListingPrefab;
         
         private void Start()
         {

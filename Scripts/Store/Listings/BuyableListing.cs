@@ -8,10 +8,8 @@ using UnityEngine.UI;
 namespace Store
 {
     [RequireComponent(typeof(Button))]
-    public class BuyableListing : MonoBehaviour
+    public class BuyableListing : BaseBuyableListing
     {
-        public Buyable Buyable;
-        
         public GameObject CoinSection;
         public Text CoinText;
 
@@ -23,8 +21,6 @@ namespace Store
 
         [Bind] 
         private Button _button;
-
-        public BuyableEvent OnUpdateBuyable;
 
         private void Awake()
         {
@@ -48,37 +44,7 @@ namespace Store
             _button.enabled = true;
         }
 
-        public void Configure(Buyable buyable)
-        {
-            if (Buyable != null)
-            {
-                Buyable.OnAcquireChanged -= OnAcquireChanged;
-                Buyable.OnEquipChanged -= OnEquipChanged;
-            }
-            Buyable = buyable;
-            Buyable.OnAcquireChanged += OnAcquireChanged;
-            Buyable.OnEquipChanged += OnEquipChanged;
-            UpdateBuyable();
-        }
-
-        private void OnEquipChanged(object sender, Buyable buyable)
-        {
-            UpdateBuyable();
-        }
-
-        private void OnAcquireChanged(object sender, Buyable buyable)
-        {
-            UpdateBuyable();
-        }
-
-        protected virtual void OnDestroy()
-        {
-            if (Buyable == null) return;
-            Buyable.OnEquipChanged -= OnEquipChanged;
-            Buyable.OnAcquireChanged -= OnAcquireChanged;
-        }
-
-        private void UpdateBuyable()
+        protected override void OnBuyableUpdated()
         {
             var acquired = Buyable.Acquired;
             var equipped = Buyable.Equipped;
@@ -88,11 +54,6 @@ namespace Store
             Equip.gameObject.SetActive(acquired && !equipped);
             if (Highlight != null)
                 Highlight.SetActive(equipped);
-            OnUpdateBuyable?.Invoke(Buyable);
         }
     }
-    
-    [Serializable]
-    public class BuyableEvent : UnityEvent<Buyable>
-    {}
 }
