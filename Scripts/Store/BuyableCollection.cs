@@ -13,6 +13,7 @@ namespace Store
         [Header("Config")]
         public BuyableManager Manager;
         public BaseBuyableListing ListingPrefab;
+        public bool Selectable = false;
         
         [Header("Audio")]
         public AudioClip OnPurchase;
@@ -29,6 +30,24 @@ namespace Store
                 listing.transform.localRotation = Quaternion.identity;
                 listing.transform.localScale = Vector3.one;
                 listing.Configure(b, b.Equipped);
+                if (Selectable)
+                    listing.OnClick += (sender, args) => Select(listing);
+            }
+        }
+
+        private void Select(BaseBuyableListing listing)
+        {
+            if (listing.Selected && listing.Buyable.Acquired)
+            {
+                listing.Buyable.Equipped = true;
+                return;
+            }
+            
+            foreach (var t in Container.GetChildren())
+            {
+                var other = t.GetComponent<BaseBuyableListing>();
+                if (!other) continue;
+                other.Select(listing == other);
             }
         }
 

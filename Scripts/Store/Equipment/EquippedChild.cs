@@ -20,6 +20,17 @@ namespace Store.Equipment
         private void OnEnable()
         {
             Refresh();
+            Manager.OnEquipChanged += OnEquip;
+        }
+
+        private void OnDisable()
+        {
+            Manager.OnEquipChanged -= OnEquip;
+        }
+
+        private void OnEquip(object sender, EventArgs e)
+        {
+            Refresh();
         }
 
         public void Refresh()
