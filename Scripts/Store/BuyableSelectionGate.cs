@@ -49,13 +49,20 @@ namespace Store
             return retval;
         }
 
-        private static SelectionType GetSelection(Buyable buyable)
+        private SelectionType GetSelection(Buyable buyable)
         {
+            if (!buyable.Unlocked)
+                return SelectionType.None;
             if (buyable.Equipped)
                 return SelectionType.OwnedEquipped;
             if (buyable.Acquired)
                 return SelectionType.Owned;
-            
+            if (buyable.Currency == _wrenches)
+                return _wrenches.CanSpend(buyable.Price) ? SelectionType.GetWrench : SelectionType.RequirementsWrench;
+            if (buyable.Currency == _cash)
+                return _cash.CanSpend(buyable.Price) ? SelectionType.GetCash : SelectionType.RequirementsCash;
+
+            return SelectionType.None;
         }
     }
 }

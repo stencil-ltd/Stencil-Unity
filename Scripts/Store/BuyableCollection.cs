@@ -1,5 +1,6 @@
 ﻿using System;
 using Standard.Audio;
+using Store.Util;
 using UnityEngine;
 using Util;
 
@@ -13,7 +14,8 @@ namespace Store
         [Header("Config")]
         public BuyableManager Manager;
         public BaseBuyableListing ListingPrefab;
-        public bool Selectable = false;
+        public bool Selectable;
+        public bool ShowLocked;
         
         [Header("Audio")]
         public AudioClip OnPurchase;
@@ -21,12 +23,21 @@ namespace Store
 
         [Header("Events")] 
         public BaseBuyableListing.BuyableEvent OnSelect;
+
+        [Header("Query")] 
+        public BuyableQueryUi Query = new BuyableQueryUi();
         
         private void Start()
         {
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             Container.DestroyAllChildren();
             if (Manager == null) return;
-            foreach (var b in Manager.Buyables)
+            var q = Query.ToQuery();
+            foreach (var b in Manager.Buyables(q))
             {
                 var listing = Instantiate(ListingPrefab, Container, false);
                 listing.transform.localPosition = Vector3.zero;
