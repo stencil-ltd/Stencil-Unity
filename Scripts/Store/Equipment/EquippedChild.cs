@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using Util;
 
@@ -6,7 +7,7 @@ namespace Store.Equipment
 {
     public class EquippedChild : MonoBehaviour
     {
-        public BuyableManager Manager;
+        [CanBeNull] public BuyableManager Manager;
         public string SpawnName;
         public bool ShowRoomMode = false;
 
@@ -15,17 +16,25 @@ namespace Store.Equipment
         
         public GameObject Equipped { get; private set; }
 
-        public event EventHandler OnRefresh; 
+        public event EventHandler OnRefresh;
+
+        public void Configure(Buyable buyable)
+        {
+            Buyable = buyable;
+            Refresh();
+        }
 
         private void OnEnable()
         {
             Refresh();
-            Manager.OnEquipChanged += OnEquip;
+            if (Manager)
+                Manager.OnEquipChanged += OnEquip;
         }
 
         private void OnDisable()
         {
-            Manager.OnEquipChanged -= OnEquip;
+            if (Manager)
+                Manager.OnEquipChanged -= OnEquip;
         }
 
         private void OnEquip(object sender, EventArgs e)
@@ -35,7 +44,7 @@ namespace Store.Equipment
 
         public void Refresh()
         {
-            var buyable = Manager.SingleEquipped;
+            var buyable = Manager?.SingleEquipped ?? Buyable;
             Buyable = buyable;
             transform.DestroyAllChildren();
             Equipped = Instantiate(Prefab, Vector3.zero, Quaternion.identity, transform);

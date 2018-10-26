@@ -18,6 +18,9 @@ namespace Store
         [Header("Audio")]
         public AudioClip OnPurchase;
         public AudioClip OnEquip;
+
+        [Header("Events")] 
+        public BaseBuyableListing.BuyableEvent OnSelect;
         
         private void Start()
         {
@@ -32,6 +35,8 @@ namespace Store
                 listing.Configure(b, b.Equipped);
                 if (Selectable)
                     listing.OnClick += (sender, args) => Select(listing);
+                if (b.Equipped)
+                    OnSelect?.Invoke(b);
             }
         }
 
@@ -49,6 +54,7 @@ namespace Store
                 if (!other) continue;
                 other.Select(listing == other);
             }
+            OnSelect?.Invoke(listing.Buyable);
         }
 
         private void OnEnable()
