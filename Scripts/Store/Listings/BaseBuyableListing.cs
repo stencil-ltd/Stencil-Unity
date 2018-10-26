@@ -15,7 +15,7 @@ namespace Store
         
         [Header("Events")]
         public BuyableEvent OnUpdateBuyable;
-
+        
         [Header("Equipped")] 
         public GameObject[] EquippedUI = { };
         public GameObject[] UnequippedUI = { };

@@ -31,10 +31,12 @@ namespace Store
         [Header("Equip")]
         public bool Equippable = true;
         public bool InitialEquip;
+        public bool Unlockable;
 
         [Header("Debug")]
         public bool DebugAcquired;
         public bool DebugEquipped;
+        public bool DebugUnlocked;
         
         public BuyableManager Manager { get; internal set; }
 
@@ -42,6 +44,7 @@ namespace Store
         
         public event EventHandler<Buyable> OnAcquireChanged;
         public event EventHandler<Buyable> OnEquipChanged;
+        public event EventHandler<Buyable> OnUnlockChanged;
 
         internal bool _unsafe;
  
@@ -76,6 +79,22 @@ namespace Store
                     Manager._OnEquip(this);
                     OnEquipChanged?.Invoke(this);
                 }
+            }
+        }
+        
+        public DateTime? DateUnlocked => PlayerPrefsX.GetDateTime($"{Key}_unlock");
+        public bool Unlocked
+        {
+            get { return !Unlockable || DateUnlocked != null; }
+            set
+            {
+                if (!_unsafe && Unlocked == value) return;
+                if (value)
+                    PlayerPrefsX.SetDateTime($"{Key}_unlock", DateTime.Now);
+                else PlayerPrefs.DeleteKey($"{Key}_unlock");
+                PlayerPrefs.Save();
+                UpdateDebug();
+                if (!_unsafe) OnUnlockChanged?.Invoke(this);
             }
         }
         
@@ -125,6 +144,7 @@ namespace Store
             #if UNITY_EDITOR
             DebugAcquired = Acquired;
             DebugEquipped = Equipped;
+            DebugUnlocked = Unlocked;
             #endif
         }
     }
