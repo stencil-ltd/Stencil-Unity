@@ -12,7 +12,7 @@ namespace Store.Equipment
         public bool ShowRoomMode = false;
 
         public Buyable Buyable { get; private set; }
-        public GameObject Prefab => Buyable.Prefab;
+        public GameObject Prefab => Buyable?.Prefab;
         
         public GameObject Equipped { get; private set; }
 
