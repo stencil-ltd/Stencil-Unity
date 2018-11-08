@@ -45,6 +45,8 @@ namespace Store.Equipment
         public void Refresh()
         {
             var buyable = Manager?.SingleEquipped ?? Buyable;
+            if (buyable == Buyable) return;
+            Debug.Log($"Equip Child: {buyable} (was {Buyable})");
             Buyable = buyable;
             transform.DestroyAllChildren();
             Equipped = Instantiate(Prefab, Vector3.zero, Quaternion.identity, transform);
