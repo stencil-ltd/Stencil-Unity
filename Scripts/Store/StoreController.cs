@@ -13,7 +13,7 @@ namespace Store
 
         public void Click_StoreTab()
         {
-            CarStoreStates.Instance.RequestState(CarStoreStates.Instance.State.Next());
+            StoreStates.Instance.RequestState(StoreStates.Instance.State.Next());
         }
 
         public void OnLob(Lob lob)
