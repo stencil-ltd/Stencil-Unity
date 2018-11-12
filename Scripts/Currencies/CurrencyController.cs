@@ -35,7 +35,7 @@ namespace Currencies
         public CurrencyController Save()
         {
             foreach (var type in Types)
-                type.Save();
+                type?.Save();
             PlayerPrefs.Save();
             return this;
         }
