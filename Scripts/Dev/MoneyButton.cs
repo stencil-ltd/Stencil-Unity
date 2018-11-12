@@ -7,12 +7,17 @@ namespace Dev
     [RequireComponent(typeof(Button))]
     public class MoneyButton : MonoBehaviour
     {
-        public Currency Currency;
-        public long Amount;
-
+        public Price[] Grants = { };
         private void Awake()
         {
-            GetComponent<Button>().onClick.AddListener(() => Currency.Add(Amount).AndSave());
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                foreach (var g in Grants)
+                {
+                    if (g == null || g.Currency == null) continue;
+                    g.Currency.Add(g.Amount).AndSave();
+                }
+            });
         }
     }
 }
