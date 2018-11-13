@@ -8,9 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11d35fd679be47568cd3e9bf41c63414, type: 3}
-  m_Name: Play States
+  m_Script: {fileID: 11500000, guid: 2deb580a27464d16bb76130773fa3226, type: 3}
+  m_Name: EOL States
   m_EditorClassIdentifier: 
-  Color: {r: 0.80859995, g: 0, b: 1, a: 0}
-  InitialState: 8
-  State: 1
+  Color: {r: 1, g: 0, b: 0.2861972, a: 0}
+  InitialState: 0
+  State: 0
