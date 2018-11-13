@@ -11,6 +11,12 @@ namespace UI
         public GameObject ToDismiss;
         public UnityEvent CustomDismiss;
 
+        private void Awake()
+        {
+            if (ToDismiss == null && CustomDismiss == null)
+                ToDismiss = gameObject;
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             CustomDismiss?.Invoke();
