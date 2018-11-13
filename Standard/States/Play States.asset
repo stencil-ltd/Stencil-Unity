@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: Play States
   m_EditorClassIdentifier: 
   Color: {r: 0.80859995, g: 0, b: 1, a: 0}
-  InitialState: 8
+  InitialState: 1
   State: 1
