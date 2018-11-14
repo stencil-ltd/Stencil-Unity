@@ -7,23 +7,18 @@ using Util;
 
 namespace Currencies
 {
+    [ExecuteInEditMode]
     public class CurrencyController : Permanent<CurrencyController>
     {
-        public Currency[] Types = { };
         public bool SaveOnWrite;
         
-        private readonly Dictionary<string, Currency> _types = new Dictionary<string, Currency>();
+        [Obsolete]
+        public Currency[] Types = { };
 
+        [Obsolete]
         public Currency Get(string name)
         {
-            return _types[name];
-        }
-
-        private void Start()
-        {
-            if (!Valid) return;
-            foreach (var type in Types)
-                _types[type.Name] = type;
+            return CurrencyManager.Instance.Get(name);
         }
 
         protected override void OnDestroy()
@@ -34,7 +29,8 @@ namespace Currencies
 
         public CurrencyController Save()
         {
-            foreach (var type in Types)
+            if (!Application.isPlaying) return this;
+            foreach (var type in CurrencyManager.Instance.Types)
                 type?.Save();
             PlayerPrefs.Save();
             return this;
@@ -42,7 +38,8 @@ namespace Currencies
 
         public CurrencyController Clear()
         {
-            foreach (var type in Types)
+            if (!Application.isPlaying) return this;
+            foreach (var type in CurrencyManager.Instance.Types)
                 type.Clear();
             return this;
         }

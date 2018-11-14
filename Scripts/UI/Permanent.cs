@@ -9,7 +9,7 @@ namespace Plugins.UI
 
         protected virtual void Awake()
         {
-            if (Instance != null)
+            if (Instance != null && Application.isPlaying)
             {
                 Destroy(gameObject);
                 return;
@@ -17,7 +17,8 @@ namespace Plugins.UI
 
             Valid = true;
             Instance = (T) this;
-            DontDestroyOnLoad(gameObject);
+            if (Application.isPlaying)
+                DontDestroyOnLoad(gameObject);
         }
 
         protected virtual void OnDestroy()

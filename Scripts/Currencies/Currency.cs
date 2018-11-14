@@ -49,6 +49,7 @@ namespace Currencies
         
         private void OnEnable()
         {
+            CurrencyManager.Instance.Register(this);
             InitializeData(false);
             ResetButton.OnGlobalReset += (sender, args) => Clear();
         }
