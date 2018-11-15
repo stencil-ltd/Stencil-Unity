@@ -19,9 +19,11 @@ namespace Rewards
     {
         public Currency Currency;
         public long Amount;
-        
+
         public Lobber OptionalLobber;
         public GameObject Glow;
+        public Text AmountText;
+        public Transform LobberOrigin;
 
         public RewardEvent OnReward;
 
@@ -40,18 +42,13 @@ namespace Rewards
         private void OnEnable()
         {
             StencilAds.Rewarded.OnResult += _OnComplete;
-            OptionalLobber?.OnLobEnded.AddListener(OnLobEnded);
+            if (AmountText != null)
+                AmountText.text = $"x{Amount}";
         }
 
         private void OnDisable()
         {
             StencilAds.Rewarded.OnResult -= _OnComplete;
-            OptionalLobber?.OnLobEnded.RemoveListener(OnLobEnded);
-        }
-
-        private void OnLobEnded(Lob arg0)
-        {
-            Currency.Commit(arg0.Amount).AndSave();
         }
 
         private void _OnButton()
@@ -73,14 +70,17 @@ namespace Rewards
             }
             else
             {
-                Currency.Stage(Amount).AndSave();
                 StartCoroutine(Lob());
             }       
         }
 
         private IEnumerator Lob()
         {
-            yield return StartCoroutine(OptionalLobber.LobMany(Amount));
+            var overrides = new LobOverrides
+            {
+                From = LobberOrigin
+            };
+            yield return StartCoroutine(OptionalLobber.LobCurrency(Currency, Amount, overrides));
             _lobbing = false;
             OnReward?.Invoke(Currency, Amount);
         }
