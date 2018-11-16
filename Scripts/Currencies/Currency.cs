@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Analytics;
+using Common;
 using JetBrains.Annotations;
 using Plugins.Data;
 using UnityEngine;
@@ -9,7 +10,7 @@ using Util;
 namespace Currencies
 {
     [CreateAssetMenu(menuName = "New Currency")]
-    public partial class Currency : ScriptableObject
+    public partial class Currency : ScriptableObject, INameable
     {
         public string Name;
 
@@ -23,6 +24,8 @@ namespace Currencies
         public SpriteSpecial[] SpecialSprites;
         [CanBeNull] public Sprite InfiniteSprite;
         [CanBeNull] public GameObject Sprite3D;
+
+        public string GetName() => Name;
 
         [CanBeNull]
         public Sprite SpecialSprite(string tag)
