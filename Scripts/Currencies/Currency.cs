@@ -275,5 +275,10 @@ namespace Currencies
         private CurrencyOperation Fail() => CurrencyOperation.Fail(this);
         private CurrencyOperation Unchanged() => CurrencyOperation.Unchanged(this);
         private CurrencyOperation Succeed() => CurrencyOperation.Succeed(this);
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, {nameof(Name)}: {Name}, {nameof(Key)}: {Key}";
+        }
     }
 }
