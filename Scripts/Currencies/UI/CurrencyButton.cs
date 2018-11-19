@@ -49,9 +49,20 @@ namespace Currencies.UI
             OnSuccess?.Invoke(Price);
         }
 
+        public void SetAmount(int amount)
+        {
+            Price.Amount = amount;
+            RefreshUi();
+        }
+
         public void SetPrice(Price price)
         {
             Price = price;
+            RefreshUi();
+        }
+
+        private void RefreshUi()
+        {
             if (AmountText)
                 AmountText.text = $"x{Price.Amount}";
         }
