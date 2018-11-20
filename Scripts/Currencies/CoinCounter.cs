@@ -1,4 +1,6 @@
 ﻿using System;
+using Binding;
+using JetBrains.Annotations;
 using Lobbing;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +31,16 @@ namespace Currencies
         [Header("UI")]
         public Text Text;
         
+        [CanBeNull]
+        [Bind]
+        public Lobber Lobber { get; private set; }
+        
         private Coroutine _co;
+
+        private void Awake()
+        {
+            this.Bind();
+        }
 
         private void OnEnable()
         {
@@ -98,5 +109,9 @@ namespace Currencies
             else
                 Currency.Add(lob.Amount).AndSave();
         }
+
+        [CanBeNull]
+        public static implicit operator Lobber(CoinCounter counter)
+            => counter.Lobber;
     }
 }
