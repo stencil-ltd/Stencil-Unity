@@ -19,13 +19,13 @@ namespace Standard.Shaders
             }
         }
 
-        public MeshRenderer[] Renders;
+        public Renderer[] Renders;
 
         private void Awake()
         {
             Renders = GetRenders();
         }
 
-        public MeshRenderer[] GetRenders() => GetComponentsInChildren<MeshRenderer>(true);
+        public Renderer[] GetRenders() => GetComponentsInChildren<Renderer>(true);
     }
 }
