@@ -2,8 +2,6 @@ using System.Collections;
 using Binding;
 using JetBrains.Annotations;
 using Lobbing;
-using Play;
-using Standard.States;
 using UnityEngine;
 using UnityEngine.UI;
 

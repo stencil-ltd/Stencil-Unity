@@ -41,7 +41,7 @@ namespace UI
 #if EXCLUDE_NATSHARE
                 Debug.LogWarning("Need to install NatShare!");
 #else
-                NatShare.ShareImage(image);
+                NatShare.Share(image);
 #endif
             }
             Flash?.SetActive(false);
