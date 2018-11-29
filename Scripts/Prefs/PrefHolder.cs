@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Prefs
 {
-    [Obsolete]
     public static class PrefHolders
     {
         private static Dictionary<Type, IPrefStrategy> _strategies = new Dictionary<Type, IPrefStrategy>
@@ -49,7 +48,7 @@ namespace Prefs
         public readonly T Default;
         private readonly IPrefStrategy _strategy;
 
-        internal PrefHolder(string key, T defaultValue)
+        internal PrefHolder(string key, T defaultValue = default(T))
         {
             Key = key;
             Default = defaultValue;
@@ -67,16 +66,18 @@ namespace Prefs
             return this;
         }
 
-        public void Set(T value, bool andSave = false)
+        public PrefHolder<T> Set(T value, bool andSave = false)
         {
             _strategy.SetValue(Key, value);
             MaybeSave(andSave);
+            return this;
         }
         
-        public void Delete(bool andSave = false)
+        public PrefHolder<T> Delete(bool andSave = false)
         {
             PlayerPrefs.DeleteKey(Key);
             MaybeSave(andSave);
+            return this;
         }
 
         public override string ToString()
@@ -90,5 +91,7 @@ namespace Prefs
         }
 
         public static implicit operator T(PrefHolder<T> pref) => pref.Get();
+        public static PrefHolder<T> operator +(PrefHolder<T> first, T second) 
+            => first.Set(second, true);
     }
 }
