@@ -15,9 +15,9 @@ namespace Currencies.UI
 
         [Header("UI")] 
         public Text AmountText;
-        [CanBeNull] 
-        public Lobber Lobber;
+        [CanBeNull] public Lobber Lobber;
         public PriceEvent OnSuccess;
+        public PriceEvent OnFailure;
         
         [Bind] 
         private Button _button;
@@ -32,6 +32,7 @@ namespace Currencies.UI
         {
             if (Price.Purchase().AndSave())
                 StartCoroutine(Success());
+            else OnFailure?.Invoke(Price);
         }
 
         private IEnumerator Success()
