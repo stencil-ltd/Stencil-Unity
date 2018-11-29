@@ -7,56 +7,10 @@ namespace Util
 {
     public static class PlayerPrefsX
     {
-        #region Strategies
-
-        private class BoolStrategy : IPrefStrategy
-        {
-            public object GetValue(string key, object defaultValue)
-            {
-                return GetBool(key, (bool) defaultValue);
-            }
-
-            public void SetValue(string key, object value)
-            {
-                SetBool(key, (bool) value);
-            }
-        }
-
-        private class LongStrategy : IPrefStrategy
-        {
-            public object GetValue(string key, object defaultValue)
-            {
-                return GetLong(key, (long) defaultValue);
-            }
-
-            public void SetValue(string key, object value)
-            {
-                SetLong(key, (long) value);
-            }
-        }
-
-        private class DateTimeStrategy : IPrefStrategy
-        {
-            public object GetValue(string key, object defaultValue)
-            {
-                return GetDateTime(key, (DateTime?) defaultValue);
-            }
-
-            public void SetValue(string key, object value)
-            {
-                SetDateTime(key, (DateTime?) value);
-            }
-        }
-        
-        #endregion
-        
+        [Obsolete]
         public static void RegisterStrategies()
         {
-#pragma warning disable 612
-            PrefHolders.RegisterTypeStrategy(typeof(bool), new BoolStrategy());
-            PrefHolders.RegisterTypeStrategy(typeof(long), new LongStrategy());
-            PrefHolders.RegisterTypeStrategy(typeof(DateTime?), new DateTimeStrategy());
-#pragma warning restore 612
+            // Nothing.
         }
         
         public static bool? GetBoolNullable(string key)

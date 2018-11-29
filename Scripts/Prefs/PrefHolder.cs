@@ -11,8 +11,10 @@ namespace Prefs
         {
             { typeof(string), new PrefStrategyString() },
             { typeof(int), new PrefStrategyInt() },
+            { typeof(long), new PrefStrategyLong() },
             { typeof(bool), new PrefStrategyBool() },
             { typeof(float), new PrefStrategyFloat() },
+            { typeof(DateTime?), new PrefStrategyDateTime() }
         };
 
         internal static IPrefStrategy Get(Type t) 
@@ -41,7 +43,6 @@ namespace Prefs
         } 
     }
     
-    [Obsolete]
     public class PrefHolder<T>
     {
         public readonly string Key;
