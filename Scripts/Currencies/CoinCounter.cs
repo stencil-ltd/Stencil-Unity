@@ -27,8 +27,9 @@ namespace Currencies
         [Header("Format")]
         public string String = "x{0}";
         public string Format = "N0";
-        
-        [Header("UI")]
+
+        [Header("UI")] 
+        public Image Icon;
         public Text Text;
         
         [CanBeNull]
@@ -40,6 +41,11 @@ namespace Currencies
         private void Awake()
         {
             this.Bind();
+            if (Icon && Currency)
+            {
+                Icon.sprite = Currency.BestSprite();
+                Icon.SetNativeSize();
+            }
         }
 
         private void OnEnable()
