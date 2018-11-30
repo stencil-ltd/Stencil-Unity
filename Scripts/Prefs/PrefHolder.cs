@@ -42,7 +42,7 @@ namespace Prefs
         } 
     }
     
-    public class PrefHolder<T>
+    public struct PrefHolder<T>
     {
         public readonly string Key;
         public readonly T Default;

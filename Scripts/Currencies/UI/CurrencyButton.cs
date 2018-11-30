@@ -12,6 +12,7 @@ namespace Currencies.UI
     {
         [Header("Configure")]
         public Price Price;
+        public bool DisableOnFail;
 
         [Header("UI")] 
         public Text AmountText;
@@ -22,10 +23,22 @@ namespace Currencies.UI
         [Bind] 
         private Button _button;
 
+        [Bind] 
+        private CanvasGroup _canvasGroup;
+
         private void Awake()
         {
             this.Bind();
             _button.onClick.AddListener(Purchase);
+        }
+
+        private void Update()
+        {
+            var canAfford = Price.CanAfford;
+            if (DisableOnFail)
+                _button.enabled = canAfford; 
+            if (_canvasGroup != null) 
+                _canvasGroup.alpha = canAfford ? 1 : 0.5f;
         }
 
         private void Purchase()
@@ -48,7 +61,7 @@ namespace Currencies.UI
             OnSuccess?.Invoke(Price);
         }
 
-        public void SetAmount(int amount)
+        public void SetAmount(long amount)
         {
             Price.Amount = amount;
             RefreshUi();

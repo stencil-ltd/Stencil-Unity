@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Linq;
 using Analytics;
+using Binding;
 using Common;
 using JetBrains.Annotations;
 using Plugins.Data;
 using Scripts.Prefs;
+using Scripts.RemoteConfig;
 using UnityEngine;
 using Util;
 
 namespace Currencies
 {
     [CreateAssetMenu(menuName = "New Currency")]
-    public partial class Currency : ScriptableObject, INameable
+    public partial class Currency : ScriptableObject, INameable, IRemoteId
     {
         public string Name;
 
+        [RemoteField("currency_max")]
         public long Max = -1;
+        [RemoteField("currency_start")]
         public long StartAmount = 0;
+        [RemoteField("currency_force")]
         public long ForceAmount = -1;
 
         public Sprite ColorSprite;
@@ -30,6 +35,7 @@ namespace Currencies
         public StencilPrefs Prefs = StencilPrefs.Default;
 
         public string GetName() => Name;
+        public string ProcessRemoteId(string id) => $"{Key.ToLower()}_{id}";
 
         [CanBeNull]
         public Sprite SpecialSprite(string tag)
