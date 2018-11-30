@@ -4,6 +4,7 @@ using Analytics;
 using Common;
 using JetBrains.Annotations;
 using Plugins.Data;
+using Scripts.Prefs;
 using UnityEngine;
 using Util;
 
@@ -24,6 +25,9 @@ namespace Currencies
         public SpriteSpecial[] SpecialSprites;
         [CanBeNull] public Sprite InfiniteSprite;
         [CanBeNull] public GameObject Sprite3D;
+        
+        [HideInInspector]
+        public StencilPrefs Prefs = StencilPrefs.Default;
 
         public string GetName() => Name;
 
@@ -247,7 +251,7 @@ namespace Currencies
             _dirty = false;
             SetMultipliers(GetMultipliers().Where(multiplier => IsValid(multiplier.Until)).ToList());
             var json = JsonUtility.ToJson(_data);
-            PlayerPrefs.SetString(Key, json);
+            Prefs.SetString(Key, json);
             Debug.Log($"Saved {Key}:\n{json}");
         }
 

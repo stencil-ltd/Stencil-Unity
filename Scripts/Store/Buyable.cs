@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Currencies;
 using JetBrains.Annotations;
+using Scripts.Prefs;
 using Util;
 
 namespace Store
@@ -39,6 +40,7 @@ namespace Store
         public bool DebugUnlocked;
         
         public BuyableManager Manager { get; internal set; }
+        public StencilPrefs Prefs => Manager.Prefs;
 
         public string Key => GetKey(Manager, Id);
         
@@ -48,7 +50,7 @@ namespace Store
 
         internal bool _unsafe;
  
-        public DateTime? DateAcquired => PlayerPrefsX.GetDateTime(Key);
+        public DateTime? DateAcquired => Prefs.GetDateTime(Key);
         public bool Acquired
         {
             get { return DateAcquired != null; }
@@ -56,9 +58,9 @@ namespace Store
             {
                 if (!_unsafe && Acquired == value) return;
                 if (value)
-                    PlayerPrefsX.SetDateTime(Key, DateTime.Now);
-                else PlayerPrefs.DeleteKey(Key);
-                PlayerPrefs.Save();
+                    Prefs.SetDateTime(Key, DateTime.Now);
+                else Prefs.DeleteKey(Key);
+                Prefs.Save();
                 UpdateDebug();
                 if (!_unsafe) OnAcquireChanged?.Invoke(this);
             }
@@ -66,13 +68,13 @@ namespace Store
 
         public bool Equipped
         {
-            get { return PlayerPrefsX.GetBool($"{Key}_equip"); }
+            get { return Prefs.GetBool($"{Key}_equip"); }
             set
             {
                 if (!_unsafe && value == Equipped) return;
                 if (!Equippable) throw new Exception("This cannot be equipped");
-                PlayerPrefsX.SetBool($"{Key}_equip", value);
-                PlayerPrefs.Save();
+                Prefs.SetBool($"{Key}_equip", value);
+                Prefs.Save();
                 UpdateDebug();
                 if (!_unsafe)
                 {
@@ -82,7 +84,7 @@ namespace Store
             }
         }
         
-        public DateTime? DateUnlocked => PlayerPrefsX.GetDateTime($"{Key}_unlock");
+        public DateTime? DateUnlocked => Prefs.GetDateTime($"{Key}_unlock");
         public bool Unlocked
         {
             get { return !Unlockable || DateUnlocked != null; }
@@ -90,9 +92,9 @@ namespace Store
             {
                 if (!_unsafe && Unlocked == value) return;
                 if (value)
-                    PlayerPrefsX.SetDateTime($"{Key}_unlock", DateTime.Now);
-                else PlayerPrefs.DeleteKey($"{Key}_unlock");
-                PlayerPrefs.Save();
+                    Prefs.SetDateTime($"{Key}_unlock", DateTime.Now);
+                else Prefs.DeleteKey($"{Key}_unlock");
+                Prefs.Save();
                 UpdateDebug();
                 if (!_unsafe) OnUnlockChanged?.Invoke(this);
             }
@@ -128,15 +130,15 @@ namespace Store
 
         public void ConfigureDefaults()
         {
-            if (PlayerPrefsX.GetBool($"{Key}_configured")) return;
+            if (Prefs.GetBool($"{Key}_configured")) return;
             _unsafe = true;
             if (InitialGrant)
                 Acquired = true;
             if (InitialEquip && Equippable)
                 Equipped = true;
             _unsafe = false;
-            PlayerPrefsX.SetBool($"{Key}_configured", true);
-            PlayerPrefs.Save();
+            Prefs.SetBool($"{Key}_configured", true);
+            Prefs.Save();
         }
 
         private void UpdateDebug()

@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Lifecycle;
 using Plugins.Data;
+using Scripts.Prefs;
 using UnityEngine;
 using Util;
 
@@ -28,6 +29,9 @@ namespace Store
         [Header("Debug")]
         [CanBeNull] public Buyable SingleEquipped;
         [CanBeNull] public Buyable[] TagSingleEquipped;
+        
+        [HideInInspector]
+        public StencilPrefs Prefs = StencilPrefs.Default;
 
         private Dictionary<BuyableTag, Buyable> _tagEquipMap = new Dictionary<BuyableTag, Buyable>();
 

@@ -11,7 +11,7 @@ namespace Currencies
 
         private void InitializeData(bool reset)
         {
-            var str = PlayerPrefs.GetString(Key);
+            var str = Prefs.GetString(Key);
             var fresh = reset || string.IsNullOrEmpty(str);
             if (!fresh)
                 _data = JsonUtility.FromJson<CurrencyModifier>(str);
@@ -23,10 +23,10 @@ namespace Currencies
                 };
             
             var force = ForceAmount;
-            if (PlayerPrefs.HasKey(LegacyKey))
+            if (Prefs.HasKey(LegacyKey))
             {
-                force = PlayerPrefs.GetInt(LegacyKey);
-                PlayerPrefs.DeleteKey(LegacyKey);
+                force = Prefs.GetInt(LegacyKey);
+                Prefs.DeleteKey(LegacyKey);
             }
             if (force >= 0) _data.Total = force;
             _dirty = fresh || force >= 0;
