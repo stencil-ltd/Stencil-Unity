@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Scripts.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,11 @@ namespace Util
         public static void SetAmount(this Text text, string format, string numberType, long to)
         {
             text.text = string.Format(format, to.ToString(numberType));
+        }
+        
+        public static void SetAmount(this Text text, string format, NumberFormats.Format numberType, long to)
+        {
+            text.text = string.Format(format, NumberFormats.FormatAmount(to, numberType));
         }
         
         public static IEnumerator LerpAmount(this Text text, string format, string numberType, long to, float duration)

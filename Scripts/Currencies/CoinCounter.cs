@@ -2,6 +2,7 @@
 using Binding;
 using JetBrains.Annotations;
 using Lobbing;
+using Scripts.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
@@ -27,6 +28,7 @@ namespace Currencies
         [Header("Format")]
         public string String = "x{0}";
         public string Format = "N0";
+        public NumberFormats.Format CustomFormatter;
 
         [Header("UI")] 
         public Image Icon;
@@ -99,12 +101,19 @@ namespace Currencies
         private void OnChange(object sender, Currency e)
         {
             if (_co != null) StopCoroutine(_co);
-            _co = StartCoroutine(Text.LerpAmount(String, Format, Amount, 1f));
+            
+            if (CustomFormatter == NumberFormats.Format.None)
+                _co = StartCoroutine(Text.LerpAmount(String, Format, Amount, 1f));
+            else 
+                Text.SetAmount(String, CustomFormatter, Amount);
         }
 
         private void UpdateText()
         {
-            Text.SetAmount(String, Format, Amount);
+            if (CustomFormatter == NumberFormats.Format.None)
+                Text.SetAmount(String, Format, Amount);
+            else 
+                Text.SetAmount(String, CustomFormatter, Amount);
         }
         
         public void OnLobEnd(Lob lob)
