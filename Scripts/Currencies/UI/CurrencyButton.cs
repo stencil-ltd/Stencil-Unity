@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Binding;
 using JetBrains.Annotations;
@@ -29,6 +30,8 @@ namespace Currencies.UI
         private void Awake()
         {
             this.Bind();
+            if (_button == null)
+                throw new Exception($"{gameObject} doesn't have a button");
             _button.onClick.AddListener(Purchase);
         }
 
@@ -76,7 +79,10 @@ namespace Currencies.UI
         private void RefreshUi()
         {
             if (AmountText)
-                AmountText.text = $"x{Price.Amount}";
+                AmountText.text = $"x{Format(Price)}";
         }
+
+        protected virtual string Format(Price price)
+            => $"{Price.Amount}";
     }
 }
