@@ -62,6 +62,7 @@ namespace Currencies
         
         private void OnEnable()
         {
+            if (Application.isPlaying) this.BindRemoteConfig();
             CurrencyManager.Instance.Register(this);
             InitializeData(false);
             ResetButton.OnGlobalReset += (sender, args) => Clear();
