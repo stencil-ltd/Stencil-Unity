@@ -69,9 +69,9 @@ namespace Scripts.Util
                     var name = $"{all[i]}".ToLower().Last();
                     if (last == name) break;
                 }
+                s = s.Remove(s.Length - 1, 1);
             }
 
-            s = s.Remove(s.Length - 1, 1);
             var retval = long.TryParse(s, out result);
             if (retval) result *= mult;
             return retval;
