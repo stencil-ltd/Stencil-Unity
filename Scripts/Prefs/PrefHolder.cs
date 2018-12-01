@@ -55,6 +55,7 @@ namespace Prefs
             _strategy = PrefHolders.Get(typeof(T));
         }
 
+        public bool HasValue => PlayerPrefs.HasKey(Key);
         public T Get() => (T) _strategy.GetValue(Key, Default);
 
         // Used for random defaults like guids.
