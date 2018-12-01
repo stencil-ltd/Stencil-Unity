@@ -105,7 +105,7 @@ namespace Currencies
             if (CustomFormatter == NumberFormats.Format.None)
                 _co = StartCoroutine(Text.LerpAmount(String, Format, Amount, 1f));
             else 
-                Text.SetAmount(String, CustomFormatter, Amount);
+                _co = StartCoroutine(Text.LerpAmount(String, CustomFormatter, Amount, 1f));
         }
 
         private void UpdateText()

@@ -21,6 +21,21 @@ namespace Util
             text.text = string.Format(format, NumberFormats.FormatAmount(to, numberType));
         }
         
+        public static IEnumerator LerpAmount(this Text text, string format, NumberFormats.Format numberType, long to, float duration)
+        {
+            long from = 0;
+            NumberFormats.TryParse(text.text.ToLower().Replace(",", "").Replace("$", "").Replace("x", ""), numberType, out from);
+            var start = DateTime.UtcNow;
+            for (;;)
+            {
+                var elapsed = (float) (DateTime.UtcNow - start).TotalSeconds;
+                var normed = from + (to - from) * Curve.Evaluate(elapsed / duration);
+                text.SetAmount(format, numberType, (long) normed);
+                if (elapsed >= duration) yield break;
+                yield return null;
+            }
+        }
+        
         public static IEnumerator LerpAmount(this Text text, string format, string numberType, long to, float duration)
         {
             long from = 0;

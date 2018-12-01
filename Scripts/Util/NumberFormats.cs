@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Scripts.Util
 {
@@ -41,6 +42,39 @@ namespace Scripts.Util
             }
             var strSuffix = suffix == Suffix.None ? "" : $"{suffix}";
             return $"{amount:N0}{strSuffix}";
+        }
+
+        public static bool TryParse(string s, Format format, out long result)
+        {
+            switch (format)
+            {
+                case Format.MassiveAmount:
+                    return TryParseMassiveAmount(s, out result);
+                default:
+                    return long.TryParse(s, out result);
+            }
+        }
+
+        public static bool TryParseMassiveAmount(string s, out long result)
+        {
+            var last = s.LastOrDefault();
+            var mult = 1L;
+            if (char.IsLetter(last))
+            {
+                last = char.ToLower(last);
+                var all = (Suffix[]) Enum.GetValues(typeof(Suffix));
+                for (int i = 1; i < all.Length; i++)
+                {
+                    mult *= 1000L;
+                    var name = $"{all[i]}".ToLower().Last();
+                    if (last == name) break;
+                }
+            }
+
+            s = s.Remove(s.Length - 1, 1);
+            var retval = long.TryParse(s, out result);
+            if (retval) result *= mult;
+            return retval;
         }
     }
 }
