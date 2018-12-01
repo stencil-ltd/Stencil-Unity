@@ -27,11 +27,10 @@ namespace Currencies.UI
         [Bind] 
         private CanvasGroup _canvasGroup;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             this.Bind();
-            if (_button == null)
-                throw new Exception($"{gameObject} doesn't have a button");
+            _button = _button ?? GetComponent<Button>();
             _button.onClick.AddListener(Purchase);
         }
 
