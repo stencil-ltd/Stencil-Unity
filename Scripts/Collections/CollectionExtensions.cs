@@ -28,5 +28,11 @@ namespace Plugins.Collections
                 list[n] = value;  
             }  
         }
+
+        public static void MaybeAdd<T>(this ICollection<T> coll, T obj)
+        {
+            if (obj == null) return;
+            coll.Add(obj);
+        }
     }
 }
