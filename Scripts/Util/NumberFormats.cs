@@ -15,7 +15,7 @@ namespace Scripts.Util
 
         private enum Suffix
         {
-            None, K, M, B, T, Q, Qt
+            None, K, M, B, T, Q, Qt, Sx, Sp, Oc, N, D, Ud, Dd, Td, Qd, Qnd  
         }
 
         public static string FormatAmount(long amount, Format format)
