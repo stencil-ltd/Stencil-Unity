@@ -92,7 +92,5 @@ namespace Prefs
         }
 
         public static implicit operator T(PrefHolder<T> pref) => pref.Get();
-        public static PrefHolder<T> operator +(PrefHolder<T> first, T second) 
-            => first.Set(second, true);
     }
 }
