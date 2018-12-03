@@ -44,6 +44,9 @@ namespace Scripts.Util
             return $"{amount:N0}{strSuffix}";
         }
 
+        public static string SanitizeNumber(this string s) 
+            => s.ToLower().Replace(",", "").Replace("$", "").Replace("x", "");
+
         public static bool TryParse(string s, Format format, out long result)
         {
             switch (format)

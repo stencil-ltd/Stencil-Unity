@@ -27,6 +27,12 @@ namespace Currencies.UI
         [Bind] 
         private CanvasGroup _canvasGroup;
 
+        public long Amount
+        {
+            get { return Price.Amount; }
+            set { SetAmount(value); }
+        }
+
         protected virtual void Awake()
         {
             this.Bind();
