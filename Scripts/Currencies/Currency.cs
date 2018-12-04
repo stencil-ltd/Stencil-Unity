@@ -30,6 +30,8 @@ namespace Currencies
         public SpriteSpecial[] SpecialSprites;
         [CanBeNull] public Sprite InfiniteSprite;
         [CanBeNull] public GameObject Sprite3D;
+
+        public bool Silent;
         
         [HideInInspector]
         public StencilPrefs Prefs = StencilPrefs.Default;
@@ -101,7 +103,7 @@ namespace Currencies
             if (staged) SetStaged(GetStaged() + amount);
             MarkAdded();
             AmountsChanged(oldTotal, oldSpendable);
-            Debug.Log($"Add {Name} x{amount} [staged={staged}]");
+            if (!Silent) Debug.Log($"Add {Name} x{amount} [staged={staged}]");
             return Succeed();
         }
 
@@ -144,7 +146,7 @@ namespace Currencies
             }
             SetTotal(total - amount);
             AmountsChanged(oldTotal, oldSpendable);
-            Debug.Log($"Spend {Name} x{amount}");
+            if (!Silent) Debug.Log($"Spend {Name} x{amount}");
             Tracking.Instance.Track($"spend_{Name}", "amount", amount);
             return Succeed();
         }
@@ -167,7 +169,7 @@ namespace Currencies
             amount = (int) (amount * mult);
             SetStaged(Math.Max(0, staged - amount));
             AmountsChanged(oldTotal, oldSpendable);
-            Debug.Log($"Commit {Name} x{amount}");
+            if (!Silent) Debug.Log($"Commit {Name} x{amount}");
             return Succeed();
         }
         
@@ -189,7 +191,7 @@ namespace Currencies
             inf += duration;
             SetInfinite(inf);
             AnythingChanged();
-            Debug.Log($"Infinite {Name} for {duration.Hours} hours");
+            if (!Silent) Debug.Log($"Infinite {Name} for {duration.Hours} hours");
             return Succeed();
         }
 
@@ -248,7 +250,7 @@ namespace Currencies
             current.Until = (DateTime.FromBinary(current.Until) + duration).ToBinary();
             if (!found) mults.Add(current);
             AnythingChanged();
-            Debug.Log($"Multiplier {Name} x{multiplier} for {duration.Hours} hours");
+            if (!Silent) Debug.Log($"Multiplier {Name} x{multiplier} for {duration.Hours} hours");
             return Succeed();
         }
         
@@ -259,7 +261,7 @@ namespace Currencies
             SetMultipliers(GetMultipliers().Where(multiplier => IsValid(multiplier.Until)).ToList());
             var json = JsonUtility.ToJson(_data);
             Prefs.SetString(Key, json);
-            Debug.Log($"Saved {Key}:\n{json}");
+            if (!Silent) Debug.Log($"Saved {Key}:\n{json}");
         }
 
         private bool IsValid(long until)

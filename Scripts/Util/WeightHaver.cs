@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Binding;
 using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +17,7 @@ namespace Util
     public class WeightHaver : IWeightHaver
     {
         [Range(0,1)]
+        [RemoteField("weight")]
         public float Weight = 1f;
         public float GetWeight() => Weight;
 
