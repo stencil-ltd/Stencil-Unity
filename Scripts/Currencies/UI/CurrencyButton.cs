@@ -3,6 +3,7 @@ using System.Collections;
 using Binding;
 using JetBrains.Annotations;
 using Lobbing;
+using Scripts.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Currencies.UI
         [Header("Configure")]
         public Price Price;
         public bool DisableOnFail;
+        public NumberFormats.Format NumberFormat;
 
         [Header("UI")] 
         public Text AmountText;
@@ -88,6 +90,6 @@ namespace Currencies.UI
         }
 
         protected virtual string Format(Price price)
-            => $"{Price.Amount}";
+            => NumberFormat.FormatAmount(price.Amount);
     }
 }

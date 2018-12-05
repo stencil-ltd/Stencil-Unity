@@ -18,7 +18,7 @@ namespace Scripts.Util
             None, K, M, B, T, Q, Qt, Sx, Sp, Oc, N, D, Ud, Dd, Td, Qd, Qnd  
         }
 
-        public static string FormatAmount(long amount, Format format)
+        public static string FormatAmount(this Format format, long amount)
         {
             switch (format)
             {

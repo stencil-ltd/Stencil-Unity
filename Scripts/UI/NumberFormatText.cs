@@ -17,11 +17,11 @@ namespace Scripts.UI
             this.Bind();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             long result;
             if (!long.TryParse(_text.text.SanitizeNumber(), out result)) return;
-            _text.text = NumberFormats.FormatAmount(result, format);
+            _text.text = format.FormatAmount(result);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Util
         
         public static void SetAmount(this Text text, string format, NumberFormats.Format numberType, long to)
         {
-            text.text = string.Format(format, NumberFormats.FormatAmount(to, numberType));
+            text.text = string.Format(format, numberType.FormatAmount(to));
         }
         
         public static IEnumerator LerpAmount(this Text text, string format, NumberFormats.Format numberType, long to, float duration)
