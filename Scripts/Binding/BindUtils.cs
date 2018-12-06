@@ -8,15 +8,20 @@ namespace Binding
 {
     public static class BindUtils
     {
-        public static void Bind(this MonoBehaviour obj)
+        private static BindingFlags GetFlags()
+        {
+            return BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        }
+        
+        public static void Bind(this MonoBehaviour obj, bool subclasses = false)
         {
             var attr = typeof(Bind);
             var type = obj.GetType();
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            var fields = type.GetFields(GetFlags())
                 .Where(field => field.IsDefined(attr, true));
             foreach (var field in fields)
                 field.SetValue(obj, obj.GetComponent(field.FieldType));
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            var props = type.GetProperties(GetFlags())
                 .Where(prop => prop.IsDefined(attr, true));
             foreach (var prop in props)
                 prop.SetValue(obj, obj.GetComponent(prop.PropertyType));
@@ -28,7 +33,7 @@ namespace Binding
             var type = obj.GetType();
             var states = Resources.FindObjectsOfTypeAll<DynamicState>();
 
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            var fields = type.GetFields(GetFlags())
                 .Where(field => field.IsDefined(attr, true));
             foreach (var field in fields)
             {
@@ -36,7 +41,7 @@ namespace Binding
                 field.SetValue(obj, Find(bstate.Name ?? field.Name, states));
             }
 
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            var props = type.GetProperties(GetFlags())
                 .Where(prop => prop.IsDefined(attr, true));
             foreach (var prop in props)
             {
