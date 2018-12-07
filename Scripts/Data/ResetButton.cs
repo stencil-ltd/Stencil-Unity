@@ -2,6 +2,7 @@
 using Binding;
 using Plugins.Util;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Util;
 
@@ -21,6 +22,9 @@ namespace Plugins.Data
             this.Bind();
             _button.onClick.AddListener(() =>
             {
+                foreach (var obj in SceneManager.GetActiveScene().GetRootGameObjects())
+                    obj.SetActive(false);
+                
                 PlayerPrefs.DeleteAll();
                 PlayerPrefs.Save();
                 Storage.Prefs.ClearAll();
