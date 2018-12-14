@@ -21,5 +21,11 @@ namespace Scripts.Maths
             => Math.Min(value, constraint);
         public static double AtMost(this double value, double constraint)
             => Math.Min(value, constraint);
+        
+        // Enums I guess?
+        public static T AtLeast<T>(this T value, T constraint) where T : struct
+            => (T) (object) Math.Max((long) (object) value, (long) (object) constraint);
+        public static T AtMost<T>(this T value, T constraint) where T : struct
+            => (T) (object) Math.Min((long) (object) value, (long) (object) constraint);
     }
 }
