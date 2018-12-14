@@ -1,9 +1,12 @@
-﻿using Standard.States;
+﻿using System;
+using Standard.States;
 using UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Standard.Ftui
 {
+    [Obsolete]
     public class FtuiController : Controller<FtuiController>
     {
         private static int _ftuiIndex = 0;
