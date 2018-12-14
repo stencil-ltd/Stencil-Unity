@@ -24,8 +24,8 @@ namespace Scripts.Maths
         
         // Enums I guess?
         public static T AtLeast<T>(this T value, T constraint) where T : struct
-            => (T) (object) Math.Max((long) (object) value, (long) (object) constraint);
+            => (T) (object) Math.Max((int) (object) value, (int) (object) constraint);
         public static T AtMost<T>(this T value, T constraint) where T : struct
-            => (T) (object) Math.Min((long) (object) value, (long) (object) constraint);
+            => (T) (object) Math.Min((int) (object) value, (int) (object) constraint);
     }
 }
