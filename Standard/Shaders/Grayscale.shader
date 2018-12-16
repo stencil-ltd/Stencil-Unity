@@ -4,6 +4,7 @@
  Properties {
      _MainTex ("Texture", 2D) = "white" { }
      _Factor ("Factor", Range(0, 1)) = 1
+     _Tint ("Tint", Color) = (1,1,1,1)
  }
  SubShader {
      Pass {
@@ -23,6 +24,7 @@
  
  float4 _MainTex_ST;
  float _Factor;
+ fixed4 _Tint;
  
  v2f vert (appdata_base v)
  {
@@ -35,9 +37,9 @@
  half4 frag (v2f i) : COLOR
  {
      half4 texcol = tex2D (_MainTex, i.uv);
+     texcol.rgb = dot(texcol.rgb, _Tint);
      float3 rgb = dot(texcol.rgb, float3(0.3, 0.59, 0.11));     
-     float smooth = _Factor;
-     texcol.rgb = lerp(texcol.rgb, rgb, smooth);
+     texcol.rgb = lerp(texcol.rgb, rgb, _Factor);
      return texcol;
  }
  ENDCG
