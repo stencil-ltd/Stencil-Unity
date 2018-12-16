@@ -29,7 +29,7 @@ namespace Particles
         {
             this.Bind();
             _particles = GetComponentsInChildren<ParticleSystem>();
-            if (Application.isPlaying && ActiveStates.Length > 0)
+            if (PlayStates.Instance != null && Application.isPlaying && ActiveStates.Length > 0)
             {
                 PlayStates.Instance.OnChange += OnState;
                 OnState(null, new StateChange<PlayStates.State>(null, PlayStates.Instance.State));
@@ -38,7 +38,7 @@ namespace Particles
 
         private void OnDestroy()
         {
-            if (Application.isPlaying)
+            if (PlayStates.Instance != null && Application.isPlaying)
                 PlayStates.Instance.OnChange -= OnState;
         }
 
