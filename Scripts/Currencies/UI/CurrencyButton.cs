@@ -6,6 +6,7 @@ using Lobbing;
 using Scripts.Util;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 
 namespace Currencies.UI
 {
@@ -54,7 +55,7 @@ namespace Currencies.UI
         private void Purchase()
         {
             if (Price.Purchase().AndSave())
-                StartCoroutine(Success());
+                Objects.StartCoroutine(Success());
             else OnFailure?.Invoke(Price);
         }
 
@@ -66,7 +67,7 @@ namespace Currencies.UI
                 {
                     From = AmountText.transform
                 };
-                yield return StartCoroutine(Lobber?.LobMany(Price.Amount, overrides));
+                yield return Objects.StartCoroutine(Lobber?.LobMany(Price.Amount, overrides));
             }
             OnSuccess?.Invoke(Price);
         }
