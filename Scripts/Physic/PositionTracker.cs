@@ -8,11 +8,13 @@ namespace Physic
     {
         public int HistoryFrames = 20;
 
-        public float Distance => Vector3.Distance(transform.position, _positions.Last.Value);
-        public Vector3 Delta => transform.position - _positions.Last.Value;
+        public float Distance => Delta.magnitude;
+        public Vector3 Delta => _position - _lastPosition;
         public Vector3[] History => _positions.ToArray();
 
         private readonly LinkedList<Vector3> _positions = new LinkedList<Vector3>();
+
+        private Vector3 _lastPosition;
         private Vector3 _position;
 
         public Vector3? GetFrame(int index, bool lookback = false)
@@ -31,13 +33,15 @@ namespace Physic
         private void OnEnable()
         {
             _position = transform.position;
+            _lastPosition = _position;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             while (_positions.Count > HistoryFrames)
                 _positions.RemoveFirst();
-            
+
+            _lastPosition = _position;
             _position = transform.position;
             _positions.AddLast(_position);
         }
