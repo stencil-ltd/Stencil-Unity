@@ -15,7 +15,7 @@ namespace Physic
         private readonly LinkedList<Vector3> _positions = new LinkedList<Vector3>();
         private Vector3 _position;
 
-        public Vector3 GetFrame(int index, bool lookback = false)
+        public Vector3? GetFrame(int index, bool lookback = false)
         {
             if (lookback)
             {
@@ -25,7 +25,7 @@ namespace Physic
                 if (index < hist.Length)
                     return hist[index];
             }
-            return _positions.First.Value;
+            return _positions.FirstOrDefault();
         }
         
         private void OnEnable()
