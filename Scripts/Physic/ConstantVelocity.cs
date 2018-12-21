@@ -8,35 +8,20 @@ namespace Physic
 
         public float x
         {
-            get { return Velocity.x; }
-            set
-            {
-                var vel = Velocity;
-                vel.x = value;
-                Velocity = vel;
-            }
+            get => Velocity.x;
+            set => Velocity.x = value;
         }
 
         public float y
         {
-            get { return Velocity.y; }
-            set
-            {
-                var vel = Velocity;
-                vel.y = value;
-                Velocity = vel;
-            }
+            get => Velocity.y;
+            set => Velocity.y = value;
         }
 
         public float z
         {
-            get { return Velocity.z; }
-            set
-            {
-                var vel = Velocity;
-                vel.z = value;
-                Velocity = vel;
-            }
+            get => Velocity.z;
+            set => Velocity.z = value;
         }
 
         private void FixedUpdate()
