@@ -22,7 +22,8 @@ namespace Physic
                 var hist = History;
                 index = hist.Length - (index + 1);
                 if (index < 0) index = 0;
-                return hist[index];
+                if (index < hist.Length)
+                    return hist[index];
             }
             return _positions.First.Value;
         }
