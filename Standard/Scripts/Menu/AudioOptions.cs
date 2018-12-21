@@ -1,4 +1,5 @@
 ﻿using Audio;
+using Scripts.Audio;
 using UI;
 using UnityEngine;
 
@@ -9,11 +10,20 @@ namespace Standard.Menu
         public Toggle Sfx;
         public Toggle Music;
 
+#if STENCIL_AUDIO_LEGACY
         private AudioSystem _audio;
+#else
+        private AudioSystem2 _audio;
+#endif
         
         private void Awake()
         {
+            
+#if STENCIL_AUDIO_LEGACY
             _audio = AudioSystem.Instance;
+#else
+            _audio = AudioSystem2.Instance;
+#endif
             UpdateAudio();
             
             _audio.OnSfxChanged += OnAudioChange;

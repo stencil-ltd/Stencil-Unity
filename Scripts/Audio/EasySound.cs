@@ -62,7 +62,10 @@ namespace UI
                 Source.Play();
         }
 
-        public void Play() => Source.Play();
+        public void Play()
+        {
+            if (Source != null) Source.Play();
+        }
 
 #if UNITY_EDITOR
         private void Update()
