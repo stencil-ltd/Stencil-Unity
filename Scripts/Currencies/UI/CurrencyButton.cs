@@ -25,7 +25,7 @@ namespace Currencies.UI
         public PriceEvent OnFailure;
         
         [Bind] 
-        private Button _button;
+        public Button button { get; private set; }
 
         [Bind] 
         private CanvasGroup _canvasGroup;
@@ -39,15 +39,15 @@ namespace Currencies.UI
         protected virtual void Awake()
         {
             this.Bind();
-            _button = _button ?? GetComponent<Button>();
-            _button.onClick.AddListener(Purchase);
+            button = button ?? GetComponent<Button>();
+            button.onClick.AddListener(Purchase);
         }
 
         private void Update()
         {
             var canAfford = Price.CanAfford;
             if (DisableOnFail)
-                _button.enabled = canAfford; 
+                button.enabled = canAfford; 
             if (_canvasGroup != null) 
                 _canvasGroup.alpha = canAfford ? 1 : 0.5f;
         }
