@@ -6,12 +6,26 @@ using UnityEngine.UI;
 namespace UI
 {
     [RequireComponent(typeof(Image))]
-    public class TapToDismiss : MonoBehaviour, IPointerClickHandler
+    public class TapToDismiss : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
+        public bool downToDismiss;
+        
         public GameObject ToDismiss;
         public UnityEvent CustomDismiss;
 
         public void OnPointerClick(PointerEventData eventData)
+        {
+            if (downToDismiss) return;
+            Dismiss();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!downToDismiss) return;
+            Dismiss();
+        }
+
+        private void Dismiss()
         {
             CustomDismiss?.Invoke();
             if (ToDismiss != null) ToDismiss.SetActive(false);
