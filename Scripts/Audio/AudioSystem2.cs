@@ -13,10 +13,17 @@ namespace Scripts.Audio
         public event EventHandler<bool> OnSfxChanged;
         public event EventHandler<bool> OnMusicChanged;
 
-        [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void OnLoad()
         {
             Instance?.UpdateMixers();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (Application.isPlaying)
+                UpdateMixers();
         }
 
         public bool SoundEnabled
@@ -45,7 +52,7 @@ namespace Scripts.Audio
             }
         }
 
-        private void UpdateMixers()
+        public void UpdateMixers()
         {
             mixer.SetFloat("Sfx", SoundEnabled ? 0f : -80f);
             mixer.SetFloat("Music", MusicEnabled ? 0f : -80f);
