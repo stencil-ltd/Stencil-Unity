@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    [RequireComponent(typeof(Image))]
     public class TapToDismiss : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         public bool downToDismiss;
