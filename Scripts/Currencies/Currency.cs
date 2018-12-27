@@ -61,6 +61,7 @@ namespace Currencies
         public long Total() => GetTotal();
         public long Spendable() => Total() - Staged();
         public long Staged() => GetStaged();
+        public long Lifetime() => GetLifetime();
         
         private void OnEnable()
         {
@@ -282,7 +283,9 @@ namespace Currencies
 
         private void AmountsChanged(long oldTotal, long oldSpendable)
         {
-            if (Total() != oldTotal) OnTotalChanged?.Invoke(this, this);
+            var total = GetTotal();
+            if (total > oldTotal) SetLifetime(GetLifetime() + total - oldTotal);
+            if (total != oldTotal) OnTotalChanged?.Invoke(this, this);
             if (Spendable() != oldSpendable) OnSpendableChanged?.Invoke(this, this);
             UpdateTracking();
             AnythingChanged();

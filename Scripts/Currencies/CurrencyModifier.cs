@@ -18,5 +18,7 @@ namespace Currencies
         [NonSerialized] public long Staged;
         public long InfiniteUntil;
         public List<Multiplier>Multipliers;
+
+        public long Lifetime;
     }
 }

@@ -19,7 +19,8 @@ namespace Currencies
                 _data = new CurrencyModifier
                 {
                     Multipliers = new List<CurrencyModifier.Multiplier>(),
-                    Total = StartAmount
+                    Total = StartAmount,
+                    Lifetime = StartAmount
                 };
             
             var force = ForceAmount;
@@ -43,6 +44,9 @@ namespace Currencies
 
         private void SetStaged(long staged) => _data.Staged = staged;
         private long GetStaged() => _data.Staged;
+
+        private void SetLifetime(long lifetime) => _data.Lifetime = lifetime;
+        private long GetLifetime() => _data.Lifetime;
 
         private void SetMultipliers(List<CurrencyModifier.Multiplier> mults) => _data.Multipliers = mults;
         private List<CurrencyModifier.Multiplier> GetMultipliers() => _data.Multipliers;
