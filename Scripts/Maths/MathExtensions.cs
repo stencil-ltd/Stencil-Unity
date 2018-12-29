@@ -21,11 +21,20 @@ namespace Scripts.Maths
             => Math.Min(value, constraint);
         public static double AtMost(this double value, double constraint)
             => Math.Min(value, constraint);
+        public static DateTime AtMost(this DateTime value, DateTime constraint)
+            => value > constraint ? constraint : value;
+        
+        // IComparable
+        public static T AtLeast<T>(this T value, T constraint) where T : IComparable<T>
+            => value.CompareTo(constraint) < 0 ? constraint : value;
+        
+        public static T AtMost<T>(this T value, T constraint) where T : IComparable<T>
+            => value.CompareTo(constraint) > 0 ? constraint : value;
         
         // Enums I guess?
-        public static T AtLeast<T>(this T value, T constraint) where T : struct
+        public static T AtLeastEnum<T>(this T value, T constraint) where T : struct
             => (T) (object) Math.Max((int) (object) value, (int) (object) constraint);
-        public static T AtMost<T>(this T value, T constraint) where T : struct
+        public static T AtMostEnum<T>(this T value, T constraint) where T : struct
             => (T) (object) Math.Min((int) (object) value, (int) (object) constraint);
     }
 }
