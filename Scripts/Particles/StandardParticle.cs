@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using Binding;
 using Standard.States;
 using State;
@@ -24,6 +25,17 @@ namespace Particles
         [Bind]
         public ParticleSystem ParticleSystem { get; set; }
         private ParticleSystem[] _particles;
+
+        public void Play()
+        {
+            if (!gameObject.activeSelf)
+            {
+                gameObject.SetActive(true);
+                return;
+            }
+            gameObject.SetActive(false);
+            gameObject.SetActive(true);
+        }
 
         private void Awake()
         {
