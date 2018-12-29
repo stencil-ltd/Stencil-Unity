@@ -76,6 +76,7 @@ namespace UI
 
         private void UpdateSource()
         {
+            Source.playOnAwake = false;
             Source.loop = Loop;
             Source.clip = Clip;
             switch (Type)
