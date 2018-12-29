@@ -37,6 +37,12 @@ namespace Particles
             gameObject.SetActive(true);
         }
 
+        public void Stop()
+        {
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
+        }
+
         private void Awake()
         {
             this.Bind();
