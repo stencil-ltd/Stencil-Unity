@@ -54,6 +54,7 @@ namespace Currencies.UI
 
         private void Purchase()
         {
+            if (Price.Amount == 0) return;
             if (Price.Purchase().AndSave())
                 Objects.StartCoroutine(Success());
             else OnFailure?.Invoke(Price);
