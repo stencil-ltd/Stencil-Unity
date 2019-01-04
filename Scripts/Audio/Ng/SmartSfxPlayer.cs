@@ -7,7 +7,7 @@ namespace Scripts.Audio.Ng
     {
         public SmartSfx sfx;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (sfx.playOnAwake) sfx.Play();
         }
