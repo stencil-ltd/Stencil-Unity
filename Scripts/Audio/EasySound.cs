@@ -21,10 +21,14 @@ namespace UI
         public static AudioMixerGroup Music;
         public static AudioMixerGroup Sfx;
 
-        public bool PlayOnAwake;
-        public bool Loop;
-        public SoundType Type = SoundType.Sfx;
+        [Header("UI")] 
+        public SmartSfx sfx;
         public AudioClip Clip;
+        
+        [Header("Legacy")]
+        [Obsolete] public bool PlayOnAwake;
+        [Obsolete] public bool Loop;
+        [Obsolete] public SoundType Type = SoundType.Sfx;
         
         [Bind] 
         public AudioSource Source { get; private set; }
@@ -58,7 +62,7 @@ namespace UI
 
         private void OnEnable()
         {
-            if (Application.isPlaying && PlayOnAwake)
+            if (Application.isPlaying && (sfx?.playOnAwake ?? PlayOnAwake))
                 Source.Play();
         }
 
@@ -77,9 +81,9 @@ namespace UI
         private void UpdateSource()
         {
             Source.playOnAwake = false;
-            Source.loop = Loop;
-            Source.clip = Clip;
-            switch (Type)
+            Source.loop = sfx?.loop ?? Loop;
+            Source.clip = sfx?.clip ?? Clip;
+            switch (sfx?.type ?? Type)
             {
                 case SoundType.Sfx:
                     Source.outputAudioMixerGroup = Sfx;
@@ -92,7 +96,7 @@ namespace UI
                     break;
             }
         }
-        #endif 
+#endif 
     }
 
     [Serializable]
