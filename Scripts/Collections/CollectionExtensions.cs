@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Scripts.Util;
 
 namespace Plugins.Collections
 {
@@ -13,7 +14,7 @@ namespace Plugins.Collections
 
         public static T Random<T>(this IList<T> coll)
         {
-            var idx = UnityEngine.Random.Range(0, coll.Count);
+            var idx = StencilRandom.Range(0, coll.Count);
             return coll[idx];
         }
         

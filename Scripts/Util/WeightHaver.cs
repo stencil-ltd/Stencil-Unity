@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Binding;
 using JetBrains.Annotations;
+using Scripts.Util;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Util
 {
@@ -37,7 +37,7 @@ namespace Util
         public static T WeightedRandom<T>(this ICollection<T> coll, float? total = null) where T : IWeightHaver
         {
             total = total ?? coll.Sum(w => w.GetWeight());
-            var rand = Random.Range(0f, total.Value);
+            var rand = StencilRandom.Range(0f, total.Value);
             var test = 0f;
             foreach (var p in coll)
             {
