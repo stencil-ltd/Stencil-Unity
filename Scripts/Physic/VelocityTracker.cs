@@ -21,7 +21,7 @@ namespace Physic
             _position = transform.position;
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             while (_velocities.Count > VelocityHistoryFrames)
                 _velocities.RemoveFirst();

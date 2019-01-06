@@ -24,7 +24,7 @@ namespace Physic
             set => Velocity.z = value;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             var pos = transform.position;
             pos += Velocity * Time.deltaTime;

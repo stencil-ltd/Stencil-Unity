@@ -32,7 +32,7 @@ namespace Physic
             Tick();
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             Tick();
         }
