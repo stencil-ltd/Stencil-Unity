@@ -15,7 +15,7 @@ namespace Scripts.Util
 
         private enum Suffix
         {
-            None, K, M, B, T, Q, Qt, Sx, Sp, Oc, N, D, Ud, Dd, Td, Qd, Qnd, Sxd, Spd, Ocd, Nvd, Vgt 
+            None = 0, K, M, B, T, Q, Qt, Sx, Sp, Oc, N, D, Ud, Dd, Td, Qd, Qnd, Sxd, Spd, Ocd, Nvd, Vgt 
         }
 
         public static string FormatAmount(this Format format, long amount)
@@ -40,7 +40,12 @@ namespace Scripts.Util
                 amount /= 1000;
                 suffix++;
             }
-            var strSuffix = suffix == Suffix.None ? "" : $"{suffix}";
+
+            var strSuffix = "";
+            if (!Enum.IsDefined(typeof(Suffix), suffix))
+                strSuffix = "???";
+            else if (suffix > Suffix.None)
+                strSuffix = $"{suffix}";
             return $"{amount:N0}{strSuffix}";
         }
 
