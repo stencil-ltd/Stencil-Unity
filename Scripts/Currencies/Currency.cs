@@ -277,6 +277,7 @@ namespace Currencies
         private void UpdateTracking()
         {
             Tracking.Instance.SetUserProperty(Name, Total());
+            Tracking.Instance.SetUserProperty($"{Name}_lifetime", Lifetime());
         }
 
         private void AmountsChanged(ulong oldTotal, ulong oldSpendable)
