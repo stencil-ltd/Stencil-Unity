@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Currencies;
-using Standard.Currencies;
+using Game;
 using State.Active;
 
 namespace Store
@@ -26,8 +26,8 @@ namespace Store
 
         private void Awake()
         {
-            _wrenches = CurrencyController.Instance.Wrenches();
-            _cash = CurrencyController.Instance.Cash();
+            _wrenches = CurrencyManager.Instance.Wrenches();
+            _cash = CurrencyManager.Instance.Cash();
         }
 
         public void Configure(Buyable buyable)
