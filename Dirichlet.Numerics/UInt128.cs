@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -2641,6 +2642,17 @@ namespace Dirichlet.Numerics
             UInt128 w;
             Reduce(out w, ref t, ref n, k0);
             return w;
+        }
+
+        public static UInt128 Lerp(UInt128 a, UInt128 b, float norm)
+        {
+            if (norm == 0f) return a;
+            if (norm == 1f) return b;
+            var neg = a > b;
+            var diff = neg ? a - b : b - a;
+            diff *= (uint) (norm * 100);
+            diff /= 100;
+            return neg ? a - diff : a + diff;
         }
 
         public UInt128(SerializationInfo info, StreamingContext context)

@@ -1,5 +1,6 @@
 ﻿using System;
 using Binding;
+using Dirichlet.Numerics;
 using JetBrains.Annotations;
 using Lobbing;
 using Scripts.Util;
@@ -26,7 +27,7 @@ namespace Currencies
         public CurrencyDisplay Display = CurrencyDisplay.Spendable;
 
         [Header("Format")]
-        public string String = "x{0}";
+        public string String = "{0}";
         public string Format = "N0";
         public NumberFormats.Format CustomFormatter;
 
@@ -50,31 +51,7 @@ namespace Currencies
 
         private void OnEnable()
         {
-            if (Currency != null)
-            {
-                switch (Display)
-                {
-                    case CurrencyDisplay.Spendable:
-                        Currency.OnSpendableChanged += OnChange;
-                        break;
-                    case CurrencyDisplay.Total:
-                    case CurrencyDisplay.Staged:
-                        Currency.OnTotalChanged += OnChange;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
             UpdateText();
-        }
-
-        private void OnDisable()
-        {
-            if (Currency != null)
-            {
-                Currency.OnSpendableChanged -= OnChange;
-                Currency.OnTotalChanged -= OnChange;
-            }
         }
 
         private ulong Amount
@@ -96,26 +73,26 @@ namespace Currencies
             }
         }
 
-        private void OnChange(object sender, Currency e)
+        private void Update()
         {
-            UpdateText();
+            if (!NumberFormats.TryParse(Text.text.SanitizeNumber(), CustomFormatter, out UInt128 amount)) return;
+            var target = Amount;
+            UpdateText(UInt128.Lerp(amount, target, Speed * Time.smoothDeltaTime));
         }
 
-        private void UpdateText()
+        private void UpdateText(UInt128? amount = null)
         {
-            if (CustomFormatter == NumberFormats.Format.None)
-                Text.SetAmount(String, Format, Amount);
-            else 
-                Text.SetAmount(String, CustomFormatter, Amount);
+            amount = amount ?? Amount;
+            Text.SetAmount(String, CustomFormatter, amount.Value);
         }
         
         public void OnLobEnd(Lob lob)
         {
             if (Currency == null) return;
             if (OnlyCommitAmount)
-                Currency.Commit((ulong) lob.Amount).AndSave();
+                Currency.Commit(lob.Amount).AndSave();
             else
-                Currency.Add((ulong) lob.Amount).AndSave();
+                Currency.Add(lob.Amount).AndSave();
         }
 
         [CanBeNull]
