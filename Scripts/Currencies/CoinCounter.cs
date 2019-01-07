@@ -38,8 +38,6 @@ namespace Currencies
         [Bind]
         public Lobber Lobber { get; private set; }
         
-        private Coroutine _co;
-
         private void Awake()
         {
             this.Bind();
@@ -79,7 +77,7 @@ namespace Currencies
             }
         }
 
-        private long Amount
+        private ulong Amount
         {
             get
             {
@@ -100,12 +98,7 @@ namespace Currencies
 
         private void OnChange(object sender, Currency e)
         {
-            if (_co != null) StopCoroutine(_co);
-            
-            if (CustomFormatter == NumberFormats.Format.None)
-                _co = StartCoroutine(Text.LerpAmount(String, Format, Amount, 1f));
-            else 
-                _co = StartCoroutine(Text.LerpAmount(String, CustomFormatter, Amount, 1f));
+            UpdateText();
         }
 
         private void UpdateText()
@@ -120,9 +113,9 @@ namespace Currencies
         {
             if (Currency == null) return;
             if (OnlyCommitAmount)
-                Currency.Commit(lob.Amount).AndSave();
+                Currency.Commit((ulong) lob.Amount).AndSave();
             else
-                Currency.Add(lob.Amount).AndSave();
+                Currency.Add((ulong) lob.Amount).AndSave();
         }
 
         [CanBeNull]

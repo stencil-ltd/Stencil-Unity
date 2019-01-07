@@ -3,6 +3,7 @@ using System.Linq;
 using Analytics;
 using Binding;
 using Common;
+using Dirichlet.Numerics;
 using JetBrains.Annotations;
 using Plugins.Data;
 using Scripts.Prefs;
@@ -20,7 +21,7 @@ namespace Currencies
         [RemoteField("currency_max")]
         public long Max = -1;
         [RemoteField("currency_start")]
-        public long StartAmount = 0;
+        public ulong StartAmount = 0;
         [RemoteField("currency_force")]
         public long ForceAmount = -1;
 
@@ -58,10 +59,10 @@ namespace Currencies
         private string Key => $"resource_{Name}";
         [NonSerialized] private bool _dirty;
 
-        public long Total() => GetTotal();
-        public long Spendable() => Total() - Staged();
-        public long Staged() => GetStaged();
-        public long Lifetime() => GetLifetime();
+        public ulong Total() => GetTotal();
+        public ulong Spendable() => Total() - Staged();
+        public ulong Staged() => GetStaged();
+        public UInt128 Lifetime() => GetLifetime();
         
         private void OnEnable()
         {
@@ -76,8 +77,8 @@ namespace Currencies
             InitializeData(true);
         }
 
-        public CurrencyOperation Add(long amount, bool raw = false) => Add(amount, false, raw);
-        public CurrencyOperation Stage(long amount, bool raw = false) => Add(amount, true, raw);
+        public CurrencyOperation Add(ulong amount, bool raw = false) => Add(amount, false, raw);
+        public CurrencyOperation Stage(ulong amount, bool raw = false) => Add(amount, true, raw);
 
         public void Unstage()
         {
@@ -87,19 +88,19 @@ namespace Currencies
             AmountsChanged(oldTotal, oldSpendable);
         }
 
-        private CurrencyOperation Add(long amount, bool staged, bool raw)
+        private CurrencyOperation Add(ulong amount, bool staged, bool raw)
         {
             if (amount == 0) return Unchanged();
             if (amount < 0) return Fail();
             var mult = raw ? 1 : Multiplier();
             if (mult <= 0) mult = 1;
-            amount = (long) (amount * mult);
+            amount = (ulong) (amount * mult);
             
             var oldTotal = Total();
             var oldSpendable = Spendable();
 
             var newTotal = oldTotal + amount;
-            if (Max >= 0) newTotal = Math.Min(Max, newTotal);
+            if (Max >= 0) newTotal = (ulong) Math.Min(Max, (long) newTotal);
             SetTotal(newTotal);
             if (staged) SetStaged(GetStaged() + amount);
             MarkAdded();
@@ -108,7 +109,7 @@ namespace Currencies
             return Succeed();
         }
 
-        private bool CanSpendInternal(long amount, out long total, out long spendable, out bool shortCircuit)
+        private bool CanSpendInternal(ulong amount, out ulong total, out ulong spendable, out bool shortCircuit)
         {
             total = Total();
             spendable = Spendable();
@@ -121,18 +122,15 @@ namespace Currencies
             return amount <= total;
         }
 
-        public bool CanSpend(long amount)
+        public bool CanSpend(ulong amount)
         {
-            long total;
-            long spendable;
-            bool shortCircuit;
-            return CanSpendInternal(amount, out total, out spendable, out shortCircuit);
+            return CanSpendInternal(amount, out _, out _, out _);
         }
 
-        public CurrencyOperation Spend(long amount)
+        public CurrencyOperation Spend(ulong amount)
         {
-            long total;
-            long spendable;
+            ulong total;
+            ulong spendable;
             bool shortCircuit;
             if (!CanSpendInternal(amount, out total, out spendable, out shortCircuit))
                 return Fail();
@@ -152,7 +150,7 @@ namespace Currencies
             return Succeed();
         }
 
-        public CurrencyOperation Commit(long amount, bool bestEffort = false)
+        public CurrencyOperation Commit(ulong amount, bool bestEffort = false)
         {
             var oldTotal = Total();
             var oldSpendable = Spendable();
@@ -167,7 +165,7 @@ namespace Currencies
             }
             var mult = Multiplier();
             if (mult <= 0) mult = 1;
-            amount = (int) (amount * mult);
+            amount = (ulong) (amount * mult);
             SetStaged(Math.Max(0, staged - amount));
             AmountsChanged(oldTotal, oldSpendable);
             if (!Silent) Debug.Log($"Commit {Name} x{amount}");
@@ -281,7 +279,7 @@ namespace Currencies
             Tracking.Instance.SetUserProperty(Name, Total());
         }
 
-        private void AmountsChanged(long oldTotal, long oldSpendable)
+        private void AmountsChanged(ulong oldTotal, ulong oldSpendable)
         {
             var total = GetTotal();
             if (total > oldTotal) SetLifetime(GetLifetime() + total - oldTotal);

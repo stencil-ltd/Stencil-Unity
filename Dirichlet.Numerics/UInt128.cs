@@ -430,6 +430,12 @@ namespace Dirichlet.Numerics
             return c;
         }
 
+        public static UInt128 operator +(UInt128 a, Int128 b)
+        {
+            if (b >= 0) return a + (UInt128) b;
+            return a - (UInt128) (-b);
+        }
+
         public static UInt128 operator +(UInt128 a, ulong b)
         {
             UInt128 c;

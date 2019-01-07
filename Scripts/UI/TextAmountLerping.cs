@@ -27,10 +27,7 @@ namespace UI
             if (Text == null) this.Bind();
             if (_co != null) StopCoroutine(_co);
             _co = null;
-            if (animated)
-                _co = StartCoroutine(Text.LerpAmount(Format, NumberType, amount, 1f));
-            else
-                Text.SetAmount(Format, NumberType, amount);
+            Text.SetAmount(Format, NumberType, amount);
         }
     }
 }

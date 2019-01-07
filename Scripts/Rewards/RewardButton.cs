@@ -11,14 +11,14 @@ using UnityEngine.UI;
 namespace Rewards
 {
     [Serializable]
-    public class RewardEvent : UnityEvent<Currency, long>
+    public class RewardEvent : UnityEvent<Currency, ulong>
     {}
 
     [RequireComponent(typeof(Button), typeof(CanvasGroup))]
     public class RewardButton : MonoBehaviour
     {
         public Currency Currency;
-        public long Amount;
+        public ulong Amount;
 
         public Lobber OptionalLobber;
         public GameObject Glow;

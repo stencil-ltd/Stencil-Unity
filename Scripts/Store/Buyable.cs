@@ -26,7 +26,7 @@ namespace Store
         
         [Header("Money")]
         public Currency Currency;
-        public long Price;
+        public ulong Price;
         public bool InitialGrant;
         
         [Header("Equip")]

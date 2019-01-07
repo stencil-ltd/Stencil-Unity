@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dirichlet.Numerics;
 
 namespace Currencies
 {
@@ -14,11 +15,21 @@ namespace Currencies
         }
 
         public bool HasAdded;
-        public long Total;
-        [NonSerialized] public long Staged;
+        public ulong Total;
+        [NonSerialized] public ulong Staged;
         public long InfiniteUntil;
         public List<Multiplier>Multipliers;
 
-        public long Lifetime;
+        public UInt128 Lifetime
+        {
+            set => lifetime = value.ToString();
+            get
+            {
+                UInt128.TryParse(lifetime, out var retval);
+                return retval;
+            }
+        }
+
+        public string lifetime;
     }
 }

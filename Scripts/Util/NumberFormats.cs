@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Dirichlet.Numerics;
+using UnityEngine;
 
 namespace Scripts.Util
 {
@@ -60,6 +61,11 @@ namespace Scripts.Util
                 strSuffix = "???";
             else if (suffix > Suffix.None)
                 strSuffix = $"{suffix}";
+
+            if (strSuffix == "Ud")
+            {
+                Debug.LogWarning("WTF");
+            }
             return $"{amount:N0}{strSuffix}";
         }
         

@@ -30,10 +30,10 @@ namespace Currencies.UI
         [Bind] 
         private CanvasGroup _canvasGroup;
 
-        public long Amount
+        public ulong Amount
         {
-            get { return Price.Amount; }
-            set { SetAmount(value); }
+            get => Price.Amount;
+            set => SetAmount(value);
         }
 
         protected virtual void Awake()
@@ -73,7 +73,7 @@ namespace Currencies.UI
             OnSuccess?.Invoke(Price);
         }
 
-        public void SetAmount(long amount)
+        public void SetAmount(ulong amount)
         {
             Price.Amount = amount;
             RefreshUi();
