@@ -39,6 +39,8 @@ namespace Currencies
         [Bind]
         public Lobber Lobber { get; private set; }
         
+        private Coroutine _co;
+        
         private void Awake()
         {
             this.Bind();
@@ -51,7 +53,37 @@ namespace Currencies
 
         private void OnEnable()
         {
+            if (Currency != null)
+            {
+                switch (Display)
+                {
+                    case CurrencyDisplay.Spendable:
+                        Currency.OnSpendableChanged += OnChange;
+                        break;
+                    case CurrencyDisplay.Total:
+                    case CurrencyDisplay.Staged:
+                        Currency.OnTotalChanged += OnChange;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
             UpdateText();
+        }
+
+        private void OnDisable()
+        {
+            if (Currency != null)
+            {
+                Currency.OnSpendableChanged -= OnChange;
+                Currency.OnTotalChanged -= OnChange;
+            }
+        }
+
+        private void OnChange(object sender, Currency e)
+        {           
+            if (_co != null) StopCoroutine(_co);
+            _co = StartCoroutine(Text.LerpAmount(String, CustomFormatter, Amount, 1f));
         }
 
         private ulong Amount
@@ -73,33 +105,11 @@ namespace Currencies
             }
         }
 
-        private void Update()
+        private void UpdateText()
         {
-            UpdateText(Amount);
-//            if (!NumberFormats.TryParse(Text.text.SanitizeNumber(), CustomFormatter, out UInt128 amount))
-//            {
-//                Debug.LogError($"Could not parse number: {Text.text}");
-//                return;
-//            }
-//            var target = Amount;
-//            UpdateText(UInt128.Lerp(amount, target, Speed * Time.deltaTime));
-        }
-
-        private void UpdateText(UInt128? amount = null)
-        {
-            amount = amount ?? Amount;
-            Text.SetAmount(String, CustomFormatter, amount.Value);
+            Text.SetAmount(String, CustomFormatter, Amount);
         }
         
-        public void OnLobEnd(Lob lob)
-        {
-            if (Currency == null) return;
-            if (OnlyCommitAmount)
-                Currency.Commit(lob.Amount).AndSave();
-            else
-                Currency.Add(lob.Amount).AndSave();
-        }
-
         [CanBeNull]
         public static implicit operator Lobber(CoinCounter counter)
             => counter.Lobber;
