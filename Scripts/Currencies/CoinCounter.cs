@@ -75,9 +75,14 @@ namespace Currencies
 
         private void Update()
         {
-            if (!NumberFormats.TryParse(Text.text.SanitizeNumber(), CustomFormatter, out UInt128 amount)) return;
-            var target = Amount;
-            UpdateText(UInt128.Lerp(amount, target, Speed * Time.smoothDeltaTime));
+            UpdateText(Amount);
+//            if (!NumberFormats.TryParse(Text.text.SanitizeNumber(), CustomFormatter, out UInt128 amount))
+//            {
+//                Debug.LogError($"Could not parse number: {Text.text}");
+//                return;
+//            }
+//            var target = Amount;
+//            UpdateText(UInt128.Lerp(amount, target, Speed * Time.deltaTime));
         }
 
         private void UpdateText(UInt128? amount = null)
