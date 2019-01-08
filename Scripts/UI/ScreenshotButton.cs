@@ -11,8 +11,9 @@ using NatShareU;
 namespace UI
 {
     [RequireComponent(typeof(Button))]
-    public class ScreenshotButton : MonoBehaviour 
+    public class ScreenshotButton : MonoBehaviour
     {
+        public GameObject[] Show = {};
         public GameObject[] Hide = {};
         public GameObject Flash;
         
@@ -28,7 +29,9 @@ namespace UI
         {
             foreach (var o in Hide)
                 o.SetActive(false);
-            
+            foreach (var o in Show) 
+                o.SetActive(true);
+
             yield return new WaitForEndOfFrame();
             if (Application.isEditor)
             {
@@ -49,6 +52,8 @@ namespace UI
             yield return null;
             foreach (var o in Hide)
                 o.SetActive(true);
+            foreach (var o in Show) 
+                o.SetActive(false);
         }
     }
 }
