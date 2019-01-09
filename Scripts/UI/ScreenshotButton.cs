@@ -33,6 +33,18 @@ namespace UI
                 o.SetActive(true);
 
             yield return new WaitForEndOfFrame();
+            Capture();
+            Flash?.SetActive(false);
+            Flash?.SetActive(true);
+            yield return null;
+            foreach (var o in Hide)
+                o.SetActive(true);
+            foreach (var o in Show) 
+                o.SetActive(false);
+        }
+
+        public static void Capture()
+        {
             if (Application.isEditor)
             {
                 ScreenCapture.CaptureScreenshot("Screenshot.png");
@@ -47,13 +59,6 @@ namespace UI
                 NatShare.Share(image);
 #endif
             }
-            Flash?.SetActive(false);
-            Flash?.SetActive(true);
-            yield return null;
-            foreach (var o in Hide)
-                o.SetActive(true);
-            foreach (var o in Show) 
-                o.SetActive(false);
         }
     }
 }
