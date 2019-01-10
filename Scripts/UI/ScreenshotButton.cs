@@ -33,7 +33,7 @@ namespace UI
                 o.SetActive(true);
 
             yield return new WaitForEndOfFrame();
-            Capture();
+            yield return StartCoroutine(Capture());
             Flash?.SetActive(false);
             Flash?.SetActive(true);
             yield return null;
@@ -43,8 +43,9 @@ namespace UI
                 o.SetActive(false);
         }
 
-        public static void Capture()
+        public static IEnumerator Capture()
         {
+            yield return new WaitForEndOfFrame();
             if (Application.isEditor)
             {
                 ScreenCapture.CaptureScreenshot("Screenshot.png");
