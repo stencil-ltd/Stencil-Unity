@@ -46,7 +46,12 @@ namespace Currencies
         private void SetStaged(ulong staged) => _data.Staged = staged;
         private ulong GetStaged() => _data.Staged;
 
-        private void SetLifetime(UInt128 lifetime) => _data.Lifetime = lifetime;
+        private void SetLifetime(UInt128 lifetime)
+        {
+            _data.Lifetime = lifetime;
+            OnLifetimeChanged?.Invoke(this, this);
+        }
+
         private UInt128 GetLifetime() => _data.Lifetime;
 
         private void SetMultipliers(List<CurrencyModifier.Multiplier> mults) => _data.Multipliers = mults;

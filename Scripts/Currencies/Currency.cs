@@ -54,6 +54,7 @@ namespace Currencies
 
         public event EventHandler<Currency> OnTotalChanged;
         public event EventHandler<Currency> OnSpendableChanged;
+        public event EventHandler<Currency> OnLifetimeChanged;
 
         private string LegacyKey => Name?.ToLower() ?? "";
         private string Key => $"resource_{Name}";
