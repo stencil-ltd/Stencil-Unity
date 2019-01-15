@@ -26,7 +26,9 @@ namespace Standard.Shaders
             Renders = GetRenders();
         }
 
-        public Renderer[] GetRenders() => GetComponentsInChildren<Renderer>(true);
+        public Renderer[] GetRenders() => GetComponentsInChildren<Renderer>(true)
+            .Where(renderer1 => renderer1.GetComponent<ParticleSystem>() == null)
+            .ToArray();
 
         #region Shader Setters
 
