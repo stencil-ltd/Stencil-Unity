@@ -96,12 +96,12 @@
 				if (_DistanceDropoff)
 				{				
                     fixed4 world = mul (unity_ObjectToWorld, v.vertex);
-                    float yScale = length(float3(unity_ObjectToWorld[0].y, unity_ObjectToWorld[1].y, unity_ObjectToWorld[2].y));
 			        float d = distance(_FogPoint, world);
                     float norm = (d - _DropDistMin) / (_DropDistMax - _DropDistMin);
                     if (norm < 0) norm = 0;
                     float smooth = 10 * norm * norm;
-				    v.vertex.y -= smooth / yScale;
+                    world.y -= smooth;
+                    v.vertex = mul (unity_WorldToObject, world);
 				}
 				o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
