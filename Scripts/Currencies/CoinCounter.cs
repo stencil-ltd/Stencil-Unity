@@ -80,7 +80,7 @@ namespace Currencies
             }
         }
 
-        private void OnChange(object sender, Currency e)
+        private void OnChange(object sender, CurrencyEvent currencyEvent)
         {           
             if (_co != null) StopCoroutine(_co);
             _co = StartCoroutine(Text.LerpAmount(String, CustomFormatter, Amount, 1f));

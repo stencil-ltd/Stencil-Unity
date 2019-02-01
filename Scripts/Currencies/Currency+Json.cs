@@ -48,8 +48,9 @@ namespace Currencies
 
         private void SetLifetime(UInt128 lifetime)
         {
+            var old = _data.Lifetime;
             _data.Lifetime = lifetime;
-            OnLifetimeChanged?.Invoke(this, this);
+            OnLifetimeChanged?.Invoke(this, new CurrencyEvent(this, old, lifetime));
         }
 
         private UInt128 GetLifetime() => _data.Lifetime;

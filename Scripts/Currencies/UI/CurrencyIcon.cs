@@ -28,7 +28,7 @@ namespace Currencies.UI
             Currency.OnSpendableChanged -= OnChange;
         }
 
-        private void OnChange(object sender, Currency e)
+        private void OnChange(object sender, CurrencyEvent currencyEvent)
         {
             MyUpdate();
         }

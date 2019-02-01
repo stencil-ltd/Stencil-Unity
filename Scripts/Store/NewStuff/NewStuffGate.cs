@@ -52,7 +52,7 @@ namespace Store.NewStuff
             LastBuyableCount = BuyableCount;
         }
 
-        private void OnChange(object sender, Currency e)
+        private void OnChange(object sender, CurrencyEvent currencyEvent)
         {
             ActiveManager.Check();
         }

@@ -52,9 +52,9 @@ namespace Currencies
             return MultiplierSprites?.FirstOrDefault(multiplier => multiplier.Multiplier == mult).Sprite;
         }
 
-        public event EventHandler<Currency> OnTotalChanged;
-        public event EventHandler<Currency> OnSpendableChanged;
-        public event EventHandler<Currency> OnLifetimeChanged;
+        public event EventHandler<CurrencyEvent> OnTotalChanged;
+        public event EventHandler<CurrencyEvent> OnSpendableChanged;
+        public event EventHandler<CurrencyEvent> OnLifetimeChanged;
 
         private string LegacyKey => Name?.ToLower() ?? "";
         private string Key => $"resource_{Name}";
@@ -285,8 +285,8 @@ namespace Currencies
         {
             var total = GetTotal();
             if (total > oldTotal) SetLifetime(GetLifetime() + total - oldTotal);
-            if (total != oldTotal) OnTotalChanged?.Invoke(this, this);
-            if (Spendable() != oldSpendable) OnSpendableChanged?.Invoke(this, this);
+            if (total != oldTotal) OnTotalChanged?.Invoke(this, new CurrencyEvent(this, oldTotal, total));
+            if (Spendable() != oldSpendable) OnSpendableChanged?.Invoke(this, new CurrencyEvent(this, oldSpendable, Spendable()));
             UpdateTracking();
             AnythingChanged();
         }
