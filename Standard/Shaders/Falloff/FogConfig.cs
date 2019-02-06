@@ -42,14 +42,6 @@ namespace Standard.Fog
         public string ProcessRemoteId(string field) => 
             $"{remoteKey}__{field}";
 
-        private bool _init;
-        public void MaybeInit()
-        {
-            if (_init) return;
-            _init = true;
-            if (!string.IsNullOrEmpty(remoteKey)) 
-                this.BindRemoteConfig();
-        }
 
         public void Apply(MaterialPropertyBlock prop)
         {

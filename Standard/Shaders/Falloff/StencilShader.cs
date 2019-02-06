@@ -15,7 +15,6 @@ namespace Standard.Shaders.Falloff
         private void Awake()
         {
             this.Bind();
-            Config.MaybeInit();
         }
 
         private void Start()
