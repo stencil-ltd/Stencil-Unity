@@ -42,7 +42,6 @@ namespace Standard.Fog
         public string ProcessRemoteId(string field) => 
             $"{remoteKey}__{field}";
 
-
         public void Apply(MaterialPropertyBlock prop)
         {
             prop.SetInt("_UseHeight", UseHeight ? 1 : 0);
