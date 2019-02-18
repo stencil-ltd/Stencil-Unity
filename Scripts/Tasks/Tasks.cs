@@ -51,5 +51,14 @@ namespace Plugins.Tasks
                 return task1.Result;
             });
         }
+
+        public static void SetTask<T>(this TaskCompletionSource<T> tcs, Task<T> task)
+        {
+            if (task.IsCanceled)
+                tcs.SetCanceled();
+            else if (task.IsFaulted)
+                tcs.SetException(task.Exception);
+            else tcs.SetResult(task.Result);
+        }
     }
 }
