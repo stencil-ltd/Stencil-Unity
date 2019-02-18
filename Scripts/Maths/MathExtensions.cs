@@ -1,4 +1,5 @@
 using System;
+using Dirichlet.Numerics;
 
 namespace Scripts.Maths
 {
@@ -8,6 +9,8 @@ namespace Scripts.Maths
             => Math.Max(value, constraint);
         public static long AtLeast(this long value, long constraint)
             => Math.Max(value, constraint);
+        public static ulong AtLeast(this ulong value, ulong constraint)
+            => Math.Max(value, constraint);
         public static float AtLeast(this float value, float constraint)
             => Math.Max(value, constraint);
         public static double AtLeast(this double value, double constraint)
@@ -16,6 +19,8 @@ namespace Scripts.Maths
         public static int AtMost(this int value, int constraint)
             => Math.Min(value, constraint);
         public static long AtMost(this long value, long constraint)
+            => Math.Min(value, constraint);
+        public static ulong AtMost(this ulong value, ulong constraint)
             => Math.Min(value, constraint);
         public static float AtMost(this float value, float constraint)
             => Math.Min(value, constraint);
