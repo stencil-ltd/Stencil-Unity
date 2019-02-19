@@ -82,6 +82,15 @@ namespace Util
                 Object.Destroy(child.gameObject);
             transform.DetachChildren();
         }
+
+        public static void DestroyAllChildren<T>(this Transform transform) where T : Component
+        {
+            foreach (var child in transform.GetChildren())
+            {
+                if (child.GetComponent<T>() != null)
+                    Object.Destroy(child.gameObject);
+            }
+        }
         
         public static RectTransform[] GetChildren(this RectTransform transform)
         {
