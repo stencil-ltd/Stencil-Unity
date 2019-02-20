@@ -19,7 +19,6 @@ namespace Currencies
             else
                 _data = new CurrencyModifier
                 {
-                    Multipliers = new List<CurrencyModifier.Multiplier>(),
                     Total = StartAmount,
                     Lifetime = StartAmount
                 };
@@ -40,11 +39,11 @@ namespace Currencies
 
         private void SetInfinite(DateTime? until) => _data.InfiniteUntil = until?.ToBinary() ?? 0L;
 
-        private void SetTotal(ulong total) => _data.Total = total;
-        private ulong GetTotal() => _data.Total;
+        private void SetTotal(UInt128 total) => _data.Total = total;
+        private UInt128 GetTotal() => _data.Total;
 
-        private void SetStaged(ulong staged) => _data.Staged = staged;
-        private ulong GetStaged() => _data.Staged;
+        private void SetStaged(UInt128 staged) => _data.Staged = staged;
+        private UInt128 GetStaged() => _data.Staged;
 
         private void SetLifetime(UInt128 lifetime)
         {
@@ -54,8 +53,5 @@ namespace Currencies
         }
 
         private UInt128 GetLifetime() => _data.Lifetime;
-
-        private void SetMultipliers(List<CurrencyModifier.Multiplier> mults) => _data.Multipliers = mults;
-        private List<CurrencyModifier.Multiplier> GetMultipliers() => _data.Multipliers;
     }
 }

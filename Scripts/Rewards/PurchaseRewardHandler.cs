@@ -19,7 +19,7 @@ namespace Rewards
             {
                 From = From
             };
-            StartCoroutine(Lobber.LobCurrency(Reward.Currency, Reward.Amount, overrides));
+            StartCoroutine(Lobber.LobCurrency(Reward.Currency, (ulong) Reward.GetAmount(), overrides));
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason reason)

@@ -15,7 +15,7 @@ namespace Dev
                 foreach (var g in Grants)
                 {
                     if (g == null || g.Currency == null) continue;
-                    g.Currency.Add(g.Amount).AndSave();
+                    g.Currency.Add(g.GetAmount()).AndSave();
                 }
             });
         }

@@ -86,7 +86,7 @@ namespace Currencies
             _co = StartCoroutine(Text.LerpAmount(String, CustomFormatter, Amount, 1f));
         }
 
-        private ulong Amount
+        private UInt128 Amount
         {
             get
             {

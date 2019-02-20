@@ -6,6 +6,7 @@ using Common;
 using Dirichlet.Numerics;
 using JetBrains.Annotations;
 using Plugins.Data;
+using Scripts.Maths;
 using Scripts.Prefs;
 using Scripts.RemoteConfig;
 using UnityEngine;
@@ -27,7 +28,6 @@ namespace Currencies
 
         public Sprite ColorSprite;
         public Sprite PlainSprite;
-        public SpriteMultiplier[] MultiplierSprites;
         public SpriteSpecial[] SpecialSprites;
         [CanBeNull] public Sprite InfiniteSprite;
         [CanBeNull] public GameObject Sprite3D;
@@ -46,12 +46,6 @@ namespace Currencies
             return SpecialSprites?.FirstOrDefault(special => special.Tag == tag).Sprite;
         }
 
-        [CanBeNull]
-        public Sprite SpriteForMultiplier(int mult)
-        {
-            return MultiplierSprites?.FirstOrDefault(multiplier => multiplier.Multiplier == mult).Sprite;
-        }
-
         public event EventHandler<CurrencyEvent> OnTotalChanged;
         public event EventHandler<CurrencyEvent> OnSpendableChanged;
         public event EventHandler<CurrencyEvent> OnLifetimeChanged;
@@ -60,9 +54,9 @@ namespace Currencies
         private string Key => $"resource_{Name}";
         [NonSerialized] private bool _dirty;
 
-        public ulong Total() => GetTotal();
-        public ulong Spendable() => Total() - Staged();
-        public ulong Staged() => GetStaged();
+        public UInt128 Total() => GetTotal();
+        public UInt128 Spendable() => Total() - Staged();
+        public UInt128 Staged() => GetStaged();
         public UInt128 Lifetime() => GetLifetime();
         
         private void OnEnable()
@@ -78,8 +72,8 @@ namespace Currencies
             InitializeData(true);
         }
 
-        public CurrencyOperation Add(ulong amount, bool raw = false) => Add(amount, false, raw);
-        public CurrencyOperation Stage(ulong amount, bool raw = false) => Add(amount, true, raw);
+        public CurrencyOperation Add(UInt128 amount, bool raw = false) => Add(amount, false, raw);
+        public CurrencyOperation Stage(UInt128 amount, bool raw = false) => Add(amount, true, raw);
 
         public void Unstage()
         {
@@ -89,19 +83,16 @@ namespace Currencies
             AmountsChanged(oldTotal, oldSpendable);
         }
 
-        private CurrencyOperation Add(ulong amount, bool staged, bool raw)
+        private CurrencyOperation Add(UInt128 amount, bool staged, bool raw)
         {
             if (amount == 0) return Unchanged();
             if (amount < 0) return Fail();
-            var mult = raw ? 1 : Multiplier();
-            if (mult <= 0) mult = 1;
-            amount = (ulong) (amount * mult);
             
             var oldTotal = Total();
             var oldSpendable = Spendable();
 
             var newTotal = oldTotal + amount;
-            if (Max >= 0) newTotal = (ulong) Math.Min(Max, (long) newTotal);
+            if (Max >= 0) newTotal = (UInt128) Math.Min(Max, (long) newTotal);
             SetTotal(newTotal);
             if (staged) SetStaged(GetStaged() + amount);
             MarkAdded();
@@ -110,7 +101,7 @@ namespace Currencies
             return Succeed();
         }
 
-        private bool CanSpendInternal(ulong amount, out ulong total, out ulong spendable, out bool shortCircuit)
+        private bool CanSpendInternal(UInt128 amount, out UInt128 total, out UInt128 spendable, out bool shortCircuit)
         {
             total = Total();
             spendable = Spendable();
@@ -123,15 +114,15 @@ namespace Currencies
             return amount <= total;
         }
 
-        public bool CanSpend(ulong amount)
+        public bool CanSpend(UInt128 amount)
         {
             return CanSpendInternal(amount, out _, out _, out _);
         }
 
-        public CurrencyOperation Spend(ulong amount)
+        public CurrencyOperation Spend(UInt128 amount)
         {
-            ulong total;
-            ulong spendable;
+            UInt128 total;
+            UInt128 spendable;
             bool shortCircuit;
             if (!CanSpendInternal(amount, out total, out spendable, out shortCircuit))
                 return Fail();
@@ -151,7 +142,7 @@ namespace Currencies
             return Succeed();
         }
 
-        public CurrencyOperation Commit(ulong amount, bool bestEffort = false)
+        public CurrencyOperation Commit(UInt128 amount, bool bestEffort = false)
         {
             var oldTotal = Total();
             var oldSpendable = Spendable();
@@ -164,10 +155,7 @@ namespace Currencies
                     amount = staged;
                 else return Fail();
             }
-            var mult = Multiplier();
-            if (mult <= 0) mult = 1;
-            amount = (ulong) (amount * mult);
-            SetStaged(Math.Max(0, staged - amount));
+            SetStaged(staged - amount);
             AmountsChanged(oldTotal, oldSpendable);
             if (!Silent) Debug.Log($"Commit {Name} x{amount}");
             return Succeed();
@@ -194,71 +182,11 @@ namespace Currencies
             if (!Silent) Debug.Log($"Infinite {Name} for {duration.Hours} hours");
             return Succeed();
         }
-
-        public int MultiplierInt() => (int) Multiplier();
-        public float Multiplier()
-        {
-            var best = GetBestMultiplier();
-            var retval = best?.Amount ?? 1f;
-            if (retval <= 0) retval = 1f;
-            return retval;
-        }
-
-        private CurrencyModifier.Multiplier GetBestMultiplier()
-        {
-            var mults = GetMultipliers();
-            CurrencyModifier.Multiplier best = null;
-            foreach (var entry in mults)
-            {
-                if (!IsValid(entry.Until)) continue;
-                if (best == null || best.Amount < entry.Amount)
-                    best = entry;
-            }
-
-            return best;
-        }
-
-        public DateTime? MultiplierBestExpiration()
-        {
-            var best = GetBestMultiplier();
-            if (best == null) return null;
-            return DateTime.FromBinary(best.Until);
-        }
-
-        public CurrencyOperation AddMultiplier(float multiplier, TimeSpan duration)
-        {
-            if (multiplier <= 0) return Fail();
-            if (duration.Ticks < 0) return Fail();
-            var mults = GetMultipliers();
-            CurrencyModifier.Multiplier current = null;
-            var found = false;
-            foreach (var entry in mults)
-            {
-                if (entry.Amount.IsAbout(multiplier))
-                {
-                    current = entry;
-                    found = true;
-                    break;
-                }       
-            }
-
-            current = current ?? new CurrencyModifier.Multiplier
-            {
-                Until = DateTime.Now.ToBinary()
-            };
-            current.Amount = multiplier;
-            current.Until = (DateTime.FromBinary(current.Until) + duration).ToBinary();
-            if (!found) mults.Add(current);
-            AnythingChanged();
-            if (!Silent) Debug.Log($"Multiplier {Name} x{multiplier} for {duration.Hours} hours");
-            return Succeed();
-        }
         
         public void Save()
         {
             if (!_dirty) return;
             _dirty = false;
-            SetMultipliers(GetMultipliers().Where(multiplier => IsValid(multiplier.Until)).ToList());
             var json = JsonUtility.ToJson(_data);
             Prefs.SetString(Key, json);
             if (!Silent) Debug.Log($"Saved {Key}:\n{json}");
@@ -281,7 +209,7 @@ namespace Currencies
             Tracking.Instance.SetUserProperty($"{Name}_lifetime", Lifetime());
         }
 
-        private void AmountsChanged(ulong oldTotal, ulong oldSpendable)
+        private void AmountsChanged(UInt128 oldTotal, UInt128 oldSpendable)
         {
             var total = GetTotal();
             if (total > oldTotal) SetLifetime(GetLifetime() + total - oldTotal);

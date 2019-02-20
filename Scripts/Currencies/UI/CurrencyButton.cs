@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Binding;
+using Dirichlet.Numerics;
 using JetBrains.Annotations;
 using Lobbing;
 using Scripts.Util;
@@ -30,9 +31,9 @@ namespace Currencies.UI
         [Bind] 
         private CanvasGroup _canvasGroup;
 
-        public ulong Amount
+        public UInt128 Amount
         {
-            get => Price.Amount;
+            get => Price.GetAmount();
             set => SetAmount(value);
         }
 
@@ -54,7 +55,7 @@ namespace Currencies.UI
 
         private void Purchase()
         {
-            if (Price.Amount == 0) return;
+            if (Price.GetAmount() == 0) return;
             if (Price.Purchase().AndSave())
                 Objects.StartCoroutine(Success());
             else OnFailure?.Invoke(Price);
@@ -68,14 +69,14 @@ namespace Currencies.UI
                 {
                     From = AmountText.transform
                 };
-                yield return Objects.StartCoroutine(Lobber?.LobMany(Price.Amount, overrides));
+                yield return Objects.StartCoroutine(Lobber?.LobMany((ulong) Price.GetAmount(), overrides));
             }
             OnSuccess?.Invoke(Price);
         }
 
-        public void SetAmount(ulong amount)
+        public void SetAmount(UInt128 amount)
         {
-            Price.Amount = amount;
+            Price.SetAmount(amount);
             RefreshUi();
         }
 
@@ -92,6 +93,6 @@ namespace Currencies.UI
         }
 
         protected virtual string Format(Price price)
-            => NumberFormat.FormatAmount(price.Amount);
+            => NumberFormat.FormatAmount(price.GetAmount());
     }
 }

@@ -7,18 +7,10 @@ namespace Currencies
     [Serializable]
     internal class CurrencyModifier
     {
-        [Serializable]
-        internal class Multiplier
-        {
-            public float Amount;
-            public long Until;
-        }
-
         public bool HasAdded;
-        public ulong Total;
-        [NonSerialized] public ulong Staged;
+        public UInt128 Total;
+        [NonSerialized] public UInt128 Staged;
         public long InfiniteUntil;
-        public List<Multiplier>Multipliers;
 
         public UInt128 Lifetime
         {

@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization;
+using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace Dirichlet.Numerics
 {
@@ -41,7 +42,10 @@ namespace Dirichlet.Numerics
             }
         }
 
+        [SerializeField]
         private ulong s0;
+        
+        [SerializeField]
         private ulong s1;
 
         private static readonly UInt128 maxValue = ~(UInt128)0;
