@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 
 namespace Dirichlet.Numerics
 {
@@ -14,7 +13,7 @@ namespace Dirichlet.Numerics
             var numerator = (1 - ((bits[3] >> 30) & 2)) *
                                    unchecked(((long)(uint)bits[2] << 64) |
                                              ((long)(uint)bits[1] << 32) |
-                                             (long)(uint)bits[0]);
+                                             (uint)bits[0]);
             var denominator = (long) Math.Pow(10, (bits[3] >> 16) & 0xff);
             return new Fraction(numerator, denominator);
         }
