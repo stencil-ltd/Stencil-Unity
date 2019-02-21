@@ -4,21 +4,21 @@ namespace Dirichlet.Numerics
 {
     public struct Fraction
     {
-        public readonly long numerator;
-        public readonly long denominator;
+        public readonly Int128 numerator;
+        public readonly Int128 denominator;
 
         public static Fraction Get(decimal d)
         {
             var bits = decimal.GetBits(d);
             var numerator = (1 - ((bits[3] >> 30) & 2)) *
-                                   unchecked(((long)(uint)bits[2] << 64) |
-                                             ((long)(uint)bits[1] << 32) |
+                                   unchecked(((uint)bits[2] << 64) |
+                                             ((uint)bits[1] << 32) |
                                              (uint)bits[0]);
-            var denominator = (long) Math.Pow(10, (bits[3] >> 16) & 0xff);
+            var denominator = (Int128) Math.Pow(10, (bits[3] >> 16) & 0xff);
             return new Fraction(numerator, denominator);
         }
 
-        public Fraction(long numerator, long denominator)
+        public Fraction(Int128 numerator, Int128 denominator)
         {
             this.numerator = numerator;
             this.denominator = denominator;
