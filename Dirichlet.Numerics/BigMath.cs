@@ -17,7 +17,7 @@ namespace Dirichlet.Numerics
 
         public static UInt128 Multiply(this UInt128 value, Fraction fraction)
         {
-            return (UInt128) (value * fraction.numerator / fraction.denominator);
+            return value * (uint) fraction.numerator / (uint) fraction.denominator;
         }
     }
 }

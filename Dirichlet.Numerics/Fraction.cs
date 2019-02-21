@@ -1,24 +1,25 @@
+using System;
 using System.Numerics;
 
 namespace Dirichlet.Numerics
 {
     public struct Fraction
     {
-        public readonly BigInteger numerator;
-        public readonly BigInteger denominator;
+        public readonly long numerator;
+        public readonly long denominator;
 
         public static Fraction Get(decimal d)
         {
-            int[] bits = decimal.GetBits(d);
-            BigInteger numerator = (1 - ((bits[3] >> 30) & 2)) *
-                                   unchecked(((BigInteger)(uint)bits[2] << 64) |
-                                             ((BigInteger)(uint)bits[1] << 32) |
-                                             (BigInteger)(uint)bits[0]);
-            BigInteger denominator = BigInteger.Pow(10, (bits[3] >> 16) & 0xff);
+            var bits = decimal.GetBits(d);
+            var numerator = (1 - ((bits[3] >> 30) & 2)) *
+                                   unchecked(((long)(uint)bits[2] << 64) |
+                                             ((long)(uint)bits[1] << 32) |
+                                             (long)(uint)bits[0]);
+            var denominator = (long) Math.Pow(10, (bits[3] >> 16) & 0xff);
             return new Fraction(numerator, denominator);
         }
 
-        public Fraction(BigInteger numerator, BigInteger denominator)
+        public Fraction(long numerator, long denominator)
         {
             this.numerator = numerator;
             this.denominator = denominator;
