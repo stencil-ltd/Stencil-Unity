@@ -7,6 +7,8 @@ namespace Scripts.Maths
     {
         public static int AtLeast(this int value, int constraint)
             => Math.Max(value, constraint);
+        public static uint AtLeast(this uint value, uint constraint)
+            => Math.Max(value, constraint);
         public static long AtLeast(this long value, long constraint)
             => Math.Max(value, constraint);
         public static ulong AtLeast(this ulong value, ulong constraint)
@@ -17,6 +19,8 @@ namespace Scripts.Maths
             => Math.Max(value, constraint);
         
         public static int AtMost(this int value, int constraint)
+            => Math.Min(value, constraint);
+        public static uint AtMost(this uint value, uint constraint)
             => Math.Min(value, constraint);
         public static long AtMost(this long value, long constraint)
             => Math.Min(value, constraint);
