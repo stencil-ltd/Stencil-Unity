@@ -14,11 +14,22 @@ namespace Purchasing
         {
             return CodelessIAPStoreListener.initializationComplete;
         }
+
+        public static bool HasPurchased(string productId)
+        {
+            return IsReady() && GetProduct(productId)?.hasReceipt == true;
+        }
         
         [CanBeNull]
         public static Product GetProduct(this IAPButton button)
         {
-            return CodelessIAPStoreListener.Instance.GetProduct(button.productId);
+            return GetProduct(button.productId);
+        }
+
+        [CanBeNull]
+        public static Product GetProduct(string id)
+        {
+            return CodelessIAPStoreListener.Instance.GetProduct(id);
         }
         
         public static bool HasProduct(this IAPButton button)
