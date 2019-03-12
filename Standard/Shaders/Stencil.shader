@@ -6,6 +6,9 @@
 		[MaterialToggle] _ApplyTint("Apply Tint", Int) = 1
 		_Alpha ("Alpha", Range(0, 1)) = 1
 		
+		[MaterialToggle] _ApplyCel("Apply Cel", Int) = 0
+		_CelRamp ("Cel Ramp", 2D) = "white" {}
+		
 		[PerRendererData] _MultColor ("Tint Mult", Color) = (1,1,1,1)	
 		[PerRendererData] _AddColor("Tint Add", Color) = (0,0,0,0)
 		
@@ -33,6 +36,7 @@
             "Queue" = "Transparent-100"
             "IgnoreProjector" = "True" 
             "RenderType" = "Transparent" 
+            "LightMode" = "ForwardBase" // allows shadow rec/cast
         }
         
 //        ZWrite Off
@@ -50,6 +54,7 @@
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				float3 normal : NORMAL;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -59,6 +64,7 @@
 				UNITY_FOG_COORDS(1)
 				float4 vertex : SV_POSITION;
                 float3 worldPos : TEXCOORD1;
+				float3 normal : NORMAL;                
 //                half3 worldRefl : TEXCOORD2;
 			};
 
@@ -69,6 +75,9 @@
 			int _ApplyTint;
 			int _DisableAllFades;
 			float _Alpha;
+			
+			int _ApplyCel;
+			sampler2D _CelRamp;
             
 			int _UseHeight;
             float _HeightMin;
@@ -88,6 +97,7 @@
 			// Globals
 			float3 _FogPoint;
             half4 _FogColor;
+			float4 _LightColor0; // provided by Unity
 			
 			v2f vert (appdata_base v)
 			{
@@ -105,12 +115,35 @@
 				}
 				o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul (unity_ObjectToWorld, v.vertex);
+                
+                float4 normal4 = float4(v.normal, 0.0); // need float4 to mult with 4x4 matrix
+                o.normal = normalize(mul(normal4, unity_WorldToObject).xyz);
 				return o;
 			}
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
 			    fixed4 tex = tex2D (_MainTex, i.uv);
+			    if (_ApplyCel)
+			    {
+                    // convert light direction to world space & normalize
+                    // _WorldSpaceLightPos0 provided by Unity
+                    float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
+    
+                    // finds location on ramp texture that we should sample
+                    // based on angle between surface normal and light direction
+                    float ramp = clamp(dot(i.normal, lightDir), 0.001, 1.0);
+                    float3 lighting = tex2D(_CelRamp, float2(ramp, 0.5)).rgb;
+    
+                    // sample texture for color
+                    float4 albedo = tex2D(_MainTex, i.uv.xy);
+    
+                    // _LightColor0 provided by Unity
+                    float3 rgb = albedo.rgb * _LightColor0.rgb * lighting;
+                    tex = fixed4(rgb, 1.0);
+			    }
+			    
+			    
 			    if (_ApplyTint)
 			    {
 			        tex *= _MultColor;
