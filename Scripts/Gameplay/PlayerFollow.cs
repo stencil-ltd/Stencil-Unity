@@ -1,7 +1,7 @@
 ﻿using System;
 using UI;
 
-namespace Game
+namespace Gameplay
 {
     public class PlayerFollow : Controller<PlayerFollow>
     {
