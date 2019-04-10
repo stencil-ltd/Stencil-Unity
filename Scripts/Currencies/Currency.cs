@@ -63,7 +63,13 @@ namespace Currencies
         [NonSerialized] private bool _dirty;
 
         public UInt128 Total() => GetTotal();
-        public UInt128 Spendable() => Total() - Staged();
+        public UInt128 Spendable()
+        {
+            var total = Total();
+            var staged = Staged();
+            if (staged >= total) return 0;
+            return total - staged;
+        }
         public UInt128 Staged() => GetStaged();
         public UInt128 Lifetime() => GetLifetime();
         
