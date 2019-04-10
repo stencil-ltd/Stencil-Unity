@@ -37,8 +37,6 @@ namespace Currencies
         private void MarkAdded() => _data.HasAdded = true;
         public bool HasAdded() => _data.HasAdded;
 
-        private void SetInfinite(DateTime? until) => _data.InfiniteUntil = until?.ToBinary() ?? 0L;
-
         private void SetTotal(UInt128 total) => _data.Total = total;
         private UInt128 GetTotal() => _data.Total;
 

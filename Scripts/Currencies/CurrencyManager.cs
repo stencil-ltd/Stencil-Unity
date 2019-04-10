@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Scripts.Prefs;
+using UnityEngine;
 
 namespace Currencies
 {
@@ -25,5 +27,13 @@ namespace Currencies
         {
             return _types[name.ToLower()];
         }
+        
+        public CurrencyManager Save()
+        {
+            foreach (var type in Types) type.Save();
+            StencilPrefs.Default.Save();
+            return this;
+        }
+
     }
 }
