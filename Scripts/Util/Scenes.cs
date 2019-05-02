@@ -1,4 +1,5 @@
-﻿using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Plugins.Util
 {
@@ -6,7 +7,9 @@ namespace Plugins.Util
     {
         public static void Reload()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            var scene = SceneManager.GetActiveScene();
+            Debug.Log($"Reset to Scene: ${scene.name}");
+            SceneManager.LoadScene(scene.buildIndex);
         }
         
     }
