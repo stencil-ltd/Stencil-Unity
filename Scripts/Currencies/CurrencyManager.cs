@@ -27,6 +27,12 @@ namespace Currencies
         {
             return _types[name.ToLower()];
         }
+
+        public Currency TryGet(string name)
+        {
+            _types.TryGetValue(name.ToLower(), out var retval);
+            return retval;
+        }
         
         public CurrencyManager Save()
         {
