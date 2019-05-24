@@ -1,3 +1,4 @@
+using System;
 using Prefs;
 
 namespace Scripts.Prefs
@@ -39,6 +40,14 @@ namespace Scripts.Prefs
             current -= amount;
             holder.Set(current);
             return current;
+        }
+        
+
+        public static StencilPrefs TodayOnly(this StencilPrefs prefs)
+        {
+            var config = prefs.config;
+            config.key += $"_{DateTime.Now:MMddYYYY}";
+            return new StencilPrefs(config);
         }
     }
 }
