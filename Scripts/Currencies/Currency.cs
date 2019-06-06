@@ -21,23 +21,31 @@ namespace Currencies
 
         [RemoteField("currency_max")]
         public long Max = -1;
+
         [RemoteField("currency_start")]
         public ulong StartAmount = 0;
+
         [RemoteField("currency_force")]
         public long ForceAmount = -1;
 
         public Sprite ColorSprite;
+
         public Sprite PlainSprite;
+
         public SpriteSpecial[] SpecialSprites;
-        [CanBeNull] public Sprite InfiniteSprite;
+
         [CanBeNull] public GameObject Sprite3D;
 
-        public bool Silent;
-        
+        public CurrencyExchange[] exchanges;
+
         [HideInInspector]
         public StencilPrefs Prefs = StencilPrefs.Default;
 
+        [NonSerialized]
+        private bool Silent = false;
+
         public string GetName() => Name;
+
         public string ProcessRemoteId(string id) => $"{Key.ToLower()}_{id}";
 
         [CanBeNull]
@@ -55,7 +63,13 @@ namespace Currencies
         [NonSerialized] private bool _dirty;
 
         public UInt128 Total() => GetTotal();
-        public UInt128 Spendable() => Total() - Staged();
+        public UInt128 Spendable()
+        {
+            var total = Total();
+            var staged = Staged();
+            if (staged >= total) return 0;
+            return total - staged;
+        }
         public UInt128 Staged() => GetStaged();
         public UInt128 Lifetime() => GetLifetime();
         
@@ -70,6 +84,11 @@ namespace Currencies
         public void Clear()
         {
             InitializeData(true);
+        }
+        
+        public UInt128? Exchange(Currency other)
+        {
+            return exchanges.FirstOrDefault(price => price.currency == other)?.amount;
         }
 
         public CurrencyOperation Add(UInt128 amount, bool raw = false) => Add(amount, false, raw);
@@ -106,7 +125,7 @@ namespace Currencies
             total = Total();
             spendable = Spendable();
             shortCircuit = false;
-            if (amount == 0 || IsInfinite())
+            if (amount == 0)
             {
                 shortCircuit = true;
                 return true;
@@ -160,29 +179,7 @@ namespace Currencies
             if (!Silent) Debug.Log($"Commit {Name} x{amount}");
             return Succeed();
         }
-        
-        public DateTime? InfiniteUntil()
-        {
-            if (!IsValid(_data.InfiniteUntil)) return null;
-            return DateTime.FromBinary(_data.InfiniteUntil);
-        }
 
-        public bool IsInfinite()
-        {
-            return IsValid(_data.InfiniteUntil);
-        }
-
-        public CurrencyOperation AddInfinite(TimeSpan duration)
-        {
-            if (duration.Ticks < 0) return Fail();
-            var inf = InfiniteUntil() ?? DateTime.Now;
-            inf += duration;
-            SetInfinite(inf);
-            AnythingChanged();
-            if (!Silent) Debug.Log($"Infinite {Name} for {duration.Hours} hours");
-            return Succeed();
-        }
-        
         public void Save()
         {
             if (!_dirty) return;

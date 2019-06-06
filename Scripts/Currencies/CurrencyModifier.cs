@@ -10,7 +10,6 @@ namespace Currencies
         public bool HasAdded;
         public UInt128 Total;
         [NonSerialized] public UInt128 Staged;
-        public long InfiniteUntil;
 
         public UInt128 Lifetime
         {

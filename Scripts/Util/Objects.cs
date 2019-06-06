@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -9,6 +10,32 @@ namespace Util
 {
     public static class Objects
     {
+        [Obsolete]
+        public static Animator Animator(this Component component) => component.GetComponent<Animator>();
+        
+        public static bool SetField<T>(
+            this object any,
+            ref T field,
+            T value,
+            [CanBeNull] IPropertyListener onChange = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            onChange?.OnPropertyChanged();
+            return true;
+        }
+
+        public static bool SetField<T>(
+            this object any,
+            ref T field,
+            T value,
+            ref bool dirtyFlag)
+        {
+            var retval = SetField(any, ref field, value);
+            if (retval) dirtyFlag = true;
+            return retval;
+        }
+
         public static bool IsMainThread => UnityMainThreadDispatcher.IsMainThread;
 
         public static string ShortName(this Type t)

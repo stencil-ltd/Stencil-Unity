@@ -5,7 +5,7 @@ namespace Util
 {
     public static class Maths
     {
-        private const float TOLERANCE = 0.0001f;
+        public const float TOLERANCE = 0.0001f;
 
         public static bool SetMax(ref int self, int other)
         {
