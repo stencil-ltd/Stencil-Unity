@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using Stencil.Util;
 using UnityEngine;
 using Util;
 
@@ -78,7 +81,15 @@ namespace Scripts.Prefs
             PlayerPrefsX.SetDateTime(config.Process(key), value);
             return this;
         }
-        
+
+        public Dictionary<K,V> GetDictionary<K,V>(string key, [CanBeNull] Dictionary<K,V> defaultValue = null) => PlayerPrefsX.GetDictionary(config.Process(key), defaultValue);
+
+        public StencilPrefs SetDictionary<K, V>(string key, [CanBeNull] Dictionary<K, V> value)
+        {
+            PlayerPrefsX.SetDictionary(config.Process(key), value);
+            return this;
+        }
+
         #endregion
     }
 }
