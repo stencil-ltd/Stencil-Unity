@@ -3,10 +3,7 @@ using Binding;
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
-
-#if !EXCLUDE_NATSHARE
-using NatShareU;
-#endif
+using Util.UI;
 
 namespace UI
 {
@@ -33,7 +30,7 @@ namespace UI
                 o.SetActive(true);
 
             yield return new WaitForEndOfFrame();
-            yield return StartCoroutine(Capture());
+            yield return StartCoroutine(Screenshots.ShareScreenshotSimple());
             Flash?.SetActive(false);
             Flash?.SetActive(true);
             yield return null;
@@ -41,25 +38,6 @@ namespace UI
                 o.SetActive(true);
             foreach (var o in Show) 
                 o.SetActive(false);
-        }
-
-        public static IEnumerator Capture()
-        {
-            yield return new WaitForEndOfFrame();
-            if (Application.isEditor)
-            {
-                ScreenCapture.CaptureScreenshot("Screenshot.png");
-                Debug.Log("Screenshot Captured");
-            }
-            else
-            {
-                var image = ScreenCapture.CaptureScreenshotAsTexture();
-#if EXCLUDE_NATSHARE
-                Debug.LogWarning("Need to install NatShare!");
-#else
-                NatShare.Share(image);
-#endif
-            }
         }
     }
 }

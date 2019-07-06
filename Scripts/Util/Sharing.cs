@@ -12,7 +12,7 @@ namespace Util
         {
             if (Application.isEditor)
                 Debug.Log($"Share {path} ({mime})");
-            else NativeShare.Share(body, path, mimeType: mime, chooser: true);
+//            else NativeShare.Share(body, path, mimeType: mime, chooser: true);
         }
     }
 }
