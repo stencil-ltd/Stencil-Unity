@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿#if STENCIL_CINEMACHINE
+using Cinemachine;
 
 namespace UI
 {
@@ -14,3 +15,4 @@ namespace UI
         }
     }
 }
+#endif

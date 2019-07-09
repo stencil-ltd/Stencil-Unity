@@ -1,6 +1,5 @@
 using System;
 using Dirichlet.Numerics;
-using Res;
 using UnityEngine;
 
 namespace Currencies
