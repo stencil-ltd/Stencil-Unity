@@ -17,7 +17,21 @@ namespace Purchasing
 
         public static bool HasPurchased(string productId)
         {
-            return IsReady() && GetProduct(productId)?.hasReceipt == true;
+            return CheckPurchase(productId) == true;
+        }
+
+        public static bool? CheckPurchase(string productId)
+        {
+            return CheckPurchase(productId, out _);
+        }
+        
+        public static bool? CheckPurchase(string productId, out Product product)
+        {
+            product = null;
+            if (!IsReady()) return null;
+            product = GetProduct(productId);
+            if (product == null) return null;
+            return product.hasReceipt;
         }
         
         [CanBeNull]
