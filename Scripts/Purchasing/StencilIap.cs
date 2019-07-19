@@ -57,17 +57,25 @@ namespace Purchasing
             return def.payouts?.FirstOrDefault(definition => definition.subtype == name);
         }
 
-        public static int GetInt([CanBeNull] this PayoutDefinition def, int defaultValue = 0)
+        public static int GetInt([CanBeNull] this PayoutDefinition def)
         {
-            var retval = defaultValue;
-            if (def != null) int.TryParse(def.data, out retval);
+            var retval = 0;
+            if (def != null)
+            {
+                if (!int.TryParse(def.data, out retval)) 
+                    retval = (int) def.quantity;
+            }
             return retval;
         }
         
-        public static float GetFloat([CanBeNull] this PayoutDefinition def, float defaultValue = 0)
+        public static float GetFloat([CanBeNull] this PayoutDefinition def)
         {
-            var retval = defaultValue;
-            if (def != null) float.TryParse(def.data, out retval);
+            var retval = 0f;
+            if (def != null)
+            {
+                if (!float.TryParse(def.data, out retval))
+                    retval = (float) def.quantity;
+            }
             return retval;
         }
         
