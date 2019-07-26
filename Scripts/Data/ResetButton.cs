@@ -12,6 +12,7 @@ namespace Plugins.Data
     public class ResetButton : MonoBehaviour
     {
         public static event EventHandler OnGlobalReset;
+        public static bool HasReset = false;
         
         [Bind] 
         private Button _button;
@@ -24,6 +25,7 @@ namespace Plugins.Data
 
         public static void ResetData()
         {
+            HasReset = true;
             foreach (var obj in SceneManager.GetActiveScene().GetRootGameObjects())
                 obj.SetActive(false);
             PlayerPrefs.DeleteAll();
