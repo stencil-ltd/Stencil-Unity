@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using JetBrains.Annotations;
+using Plugins.Data;
 using Stencil.Util;
 using UnityEngine;
 
@@ -97,6 +98,8 @@ namespace Storage
 
             _init = true;
             _lock.ExitWriteLock();
+
+            ResetButton.OnGlobalReset += (sender, args) => ClearAll();
         }
 
         public string Name() => _name;
